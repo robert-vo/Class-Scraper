@@ -1,0 +1,882 @@
+<html class="no-js" lang="en">
+<head>
+    <style>
+
+        .no-margin {
+        margin: 0;
+        }
+
+        .header-underline {
+        border-bottom: 1px solid #ccc;
+        }
+
+        .class--list {
+        list-style: none;
+        margin-left: 0;
+        padding-left: 0;
+        max-width: 900px;
+        margin: auto;
+        }
+
+        .class--item {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 0;
+        }
+
+
+        .class--item:first-child {
+        border-top: 1px solid #eee;
+        }
+
+        .class--item:nth-child(2n+0) {
+        background: #f9f9f9;
+        }
+
+        .class--body {
+        padding: 0 .5em;
+        font-size: .9em;
+        }
+
+        .class-title {
+        margin: 0;
+        padding: .25em 0;
+        cursor: pointer;
+        border-bottom: 1px solid #ccc;
+        font-size: 1.2em;
+        }
+
+        .class-title:before {
+        content: "\e159";
+        font-family: 'Glyphicons Halflings';
+        display: inline-block;
+        vertical-align: top;
+        opacity: .8;
+        }
+
+        .class-title:hover {
+        color: #c00;
+        background: rgba(240,240,240,.8);
+        }
+
+        .class-title--course {
+        }
+
+        .class--info { /* list under .class-title */
+        margin-top: 0;
+        }
+
+        .float-list {
+        margin-top: 0;
+        }
+
+        .float-list--row {
+        display: inline-block;
+        width: 49%;
+        vertical-align: top;
+        font-size: .9em;
+        margin-bottom: 0;
+        }
+
+        .float-list--row ul {
+        margin-top: 0;
+        }
+
+        .float-list--row li {
+        display: inline-block;
+        margin-right: 1.5em;
+        margin-bottom: 0;
+        }
+
+        .float-list--row li:last-child {
+
+        }
+
+        .class-desc--2col {
+        width: 49%;
+        display: inline-block;
+        vertical-align: top;
+        padding-top: 0; /* override FireFox quirk.css which adds 1em to LI > UL:first-node; */
+        }
+
+        .class-info--label {
+        font-weight: bold;
+        display: block;
+        }
+
+        .class-info--body {
+
+        }
+
+        .class--status {
+        font-size: .8em;
+        vertical-align: top;
+        }
+
+        .class--status-open, .class--status-warning {
+        color: #0a0;
+        }
+
+        .class--status-closed {
+        color: #c00;
+        }
+
+        .class--status-warning:after {
+        content: ' *';
+        color: orange;
+        }
+        .class--attributesList {float: right;}
+        .class--attributes { font-style: italic; margin-left:.5em; font-weight: bold}
+        .class--attributes-core {}
+        .class--attributes-offcampus {}
+        .class--attributes-weekendu {}
+
+        .course-notes {
+
+        }
+
+        .course-notes p {
+        margin: 0;
+        padding-bottom: .5em;
+        }
+
+        .course-notes--title {
+        margin: 0;
+        border-bottom: 1px solid #ddd;
+        }
+
+        @media (max-width: 991px){
+
+        .float-list--row {
+
+        }
+
+        .float-list--row li {
+        display: block;
+        }
+
+        .class--status {display: inline-block; min-width: 33%;}
+
+        .class--attributesList {
+        display: block;
+        float: none;
+        }
+
+        .class-info--label {
+        display: inline-block;
+        }
+        .class-info--label:after {
+        content: ':';
+        }
+
+        }
+
+        @media (max-width: 600px){
+        .class--status {}
+
+        .class-title {
+        font-size: .9em;
+        }
+        .float-list--row {
+        display: block;
+        width: 100%;
+        font-size: .8em;
+        }
+        .float-list--row li {
+        margin-bottom: 0;
+        }
+
+
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <title> - University of Houston</title>
+    <meta content="Wed, 24 Jun 2015 09:28:20 -0500" name="date">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <link href="https://ssl.uh.edu/css/uh-main.css?v=20141216" rel="stylesheet">
+    <script src="https://ssl.uh.edu/js/jquery.js"></script>
+    <script src="https://ssl.uh.edu/js/modernizr.js"></script>
+    <script src="https://ssl.uh.edu/js/bootstrap.js"></script>
+    <script src="https://ssl.uh.edu/js/uh-main.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+</head>
+<body>
+<header id="banner" role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <nav role="navigation">
+                <ul>
+                    <li><a class="home" href="http://www.uh.edu/">UH Home</a></li>
+                    <li><a class="apply" href="http://www.uh.edu/admissions/">Apply to UH</a></li>
+                    <li><a class="give" href="http://www.uh.edu/giving/make-a-gift/">Give to UH</a></li>
+                    <li><a class="login" href="https://accessuh.uh.edu/">Login to AccessUH</a></li>
+                </ul>
+            </nav>
+            <form action="http://www.uh.edu/search" class="search" method="get" role="search">
+                <fieldset>
+                    <input class="text" id="q" name="q" placeholder="Search" title="Search" type="text">
+                    <input class="submit" type="submit" value="Search">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="logo">
+        <div class="container">
+            <a href="http://www.uh.edu/"><img src="https://ssl.uh.edu/images/display/logo-uh.svg" alt="University of Houston" width="456" height="48"></a>
+        </div>
+    </div>
+    <nav class="nav-primary alt" role="navigation">
+        <div class="container">
+            <a class="menu-button ir">Menu</a>
+        </div>
+    </nav>
+</header>
+<div class="container" id="wrap" role="document">
+    <section class="row" id="page">
+        <article class="span12" id="main" role="main">
+            <section id="content-well">
+                <h1>Search Results (68) <a href="http://www.uh.edu/sessions/class-search" class="btn">Back to Search</a> </h1>
+                <div class="alert  alert-success">
+                    <p>The following classes match your search criteria:</p>
+                    <span><strong>Session:</strong> 1 </span>
+                    <span><strong>Subject:</strong> COSC </span>
+                    <span><strong>Term:</strong> Fall 2016 </span>
+                </div>
+                <div class="alert  alert-info">
+                    <p>Please note that this is an unofficial class schedule.</p>
+                    <p>For the official UH class schedule, login to your <a href="https://accessuh.uh.edu/">AccessUH</a> account.</p>
+                </div>
+                <ul class="panel-group  list-unstyled" id="accordion">
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1300 (15240)</strong> <span class="class-title--course">Introduction To Computing</span> <span class="class--status  class--status-open">Open (12/35)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> MoWe 04:00 P.M.-05:30 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															rlea@uh.edu
+																"> Robert Lea </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> C 111 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (2-3). May not be used to satisfy any computer science degree requirement. An introduction to computing with emphasis on the practical usage of personal computers; concepts of recorded programs, computer organization, operating systems, mainframes, minicomputers, and personal computer; selected applications of personal computers; word processing, databases, and spreadsheets; societal impact of computers. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 15240</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1304 (19221)</strong> <span class="class-title--course">C Programming</span> <span class="class--status  class--status-open">Open (9/30)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> MoWe 02:30 P.M.-04:00 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															khcheng@uh.edu
+																"> Kam-Hoi Cheng </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> CAM 101 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: MATH 1310 or equivalent. Computer organization and systems software, techniques for designing C language programs, programming in C language. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 19221</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <h3 class="no-margin  header-underline">Notes</h3>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <p><a href="http://www.uh.edu/blackboard">Blackboard</a>, an online course management system, is scheduled to be used for this course and can be accessed via <a href="https://accessuh.uh.edu">AccessUH</a>. For more information, visit the <a href="http://www.uh.edu/blackboard">UH Blackboard site</a>.</p>
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1306 (27509)</strong> <span class="class-title--course">Computer Science &amp; Program</span> <span class="class--status  class--status-open">Open (24/75)</span> <small class="class--attributesList"> <span class="class--attributes  class--attributes-core"> Core </span> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> TuTh 05:30 P.M.-07:00 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															bbal@uh.edu
+																"> Bal Bal </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> SEC 101 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: MATH 1310 or equivalent. May not be applied to a major or minor in computer science. Overview of basic hardware and software concepts of a computer with design, analysis and programming of efficient algorithms to solve computational problems. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 27509</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1306 (27510)</strong> <span class="class-title--course">Computer Science &amp; Program</span> <span class="class--status  class--status-closed">Closed (72/72)</span> <small class="class--attributesList"> <span class="class--attributes  class--attributes-core"> Core </span> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> TuTh 01:00 P.M.-02:30 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															rvilalta@uh.edu
+																"> Ricardo Vilalta </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> CBB 122 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: MATH 1310 or equivalent. May not be applied to a major or minor in computer science. Overview of basic hardware and software concepts of a computer with design, analysis and programming of efficient algorithms to solve computational problems. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 27510</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <h3 class="no-margin  header-underline">Notes</h3>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <p><a href="http://www.uh.edu/blackboard">Blackboard</a>, an online course management system, is scheduled to be used for this course and can be accessed via <a href="https://accessuh.uh.edu">AccessUH</a>. For more information, visit the <a href="http://www.uh.edu/blackboard">UH Blackboard site</a>.</p>
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1306 (19935)</strong> <span class="class-title--course">Computer Science &amp; Program</span> <span class="class--status  class--status-closed">Closed (72/72)</span> <small class="class--attributesList"> <span class="class--attributes  class--attributes-core"> Core </span> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> MoWe 02:30 P.M.-04:00 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															jfparis@uh.edu
+																"> Jehan-Francois Paris </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> CBB 118 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: MATH 1310 or equivalent. May not be applied to a major or minor in computer science. Overview of basic hardware and software concepts of a computer with design, analysis and programming of efficient algorithms to solve computational problems. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 19935</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> <a href="https://fp.my.uh.edu/psc/saprd_fp/EMPLOYEE/HRMS/c/UHS_SS_CUSTOM.UHS_LOAD_SYL.GBL?crse_id=016778&amp;crse_offer_nbr=1&amp;strm=2000&amp;session_code=1&amp;class_section=1&amp;class_nbr=19935&amp;instructor_id=0090040" target="_blank">Syllabus</a> </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1320 (15241)</strong> <span class="class-title--course">Intro Computer Science II</span> <span class="class--status  class--status-open">Open (35/90)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> MoWe 04:00 P.M.-05:30 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															vhilford@uh.edu
+																"> Victoria Hilford </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> PGH 232 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: COSC 1410 or ECE 3331. Object-oriented programming, elementary data structures, and the C++ programming language. Introduction to other languages and GUI programming. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 15241</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> <a href="https://fp.my.uh.edu/psc/saprd_fp/EMPLOYEE/HRMS/c/UHS_SS_CUSTOM.UHS_LOAD_SYL.GBL?crse_id=016780&amp;crse_offer_nbr=1&amp;strm=2000&amp;session_code=1&amp;class_section=01&amp;class_nbr=15241&amp;instructor_id=0101885" target="_blank">Syllabus</a> </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <h3 class="no-margin  header-underline">Notes</h3>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <p><a href="http://www.uh.edu/blackboard">Blackboard</a>, an online course management system, is scheduled to be used for this course and can be accessed via <a href="https://accessuh.uh.edu">AccessUH</a>. For more information, visit the <a href="http://www.uh.edu/blackboard">UH Blackboard site</a>.</p>
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1320 (23754)</strong> <span class="class-title--course">Intro Computer Science II</span> <span class="class--status  class--status-closed">Closed (70/70)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> TuTh 08:30 A.M.-10:00 A.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															hhaberdar@uh.edu
+																"> Hakan Haberdar </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> PGH 232 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Cr. 3. (3-0). Prerequisite: COSC 1410 or ECE 3331. Object-oriented programming, elementary data structures, and the C++ programming language. Introduction to other languages and GUI programming. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 23754</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1430 (27512)</strong> <span class="class-title--course">Introduction to Programming</span> <span class="class--status  class--status-open">Open (64/80)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> TuTh 10:00 A.M.-11:30 A.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															njrizk@uh.edu
+																"> Nouhad Rizk </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> PGH 232 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Prerequisite(s): COSC 1306 and credit for or concurrent enrollment in MATH 1431. Fundamental concepts of structured programming; procedures and elementary data structures with a focus on problem solving strategies and implementation; computer organization, structured procedural programming, C/C++ programming language, and algorithm design. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 27512</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LEC</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1430 (27513)</strong> <span class="class-title--course">Introduction to Programming</span> <span class="class--status  class--status-closed">Closed (40/38)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> Tu 11:30 A.M.-01:00 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															njrizk@uh.edu
+																"> Nouhad Rizk </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> PGH 376 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Prerequisite(s): COSC 1306 and credit for or concurrent enrollment in MATH 1431. Fundamental concepts of structured programming; procedures and elementary data structures with a focus on problem solving strategies and implementation; computer organization, structured procedural programming, C/C++ programming language, and algorithm design. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 27513</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LAB</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <h3 class="no-margin  header-underline">Notes</h3>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <p>This lab section is associated with a lecture. By registering for the associated lecture, the student will be automatically registered for the lab section.</p>
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                    <li class="panel  panel-default">
+                        <div class="panel-heading">
+                            <h3 class="class-title"> <strong>COSC 1430 (27514)</strong> <span class="class-title--course">Introduction to Programming</span> <span class="class--status  class--status-open">Open (24/38)</span> <small class="class--attributesList"> </small> </h3>
+                            <ul class="class--info  list-unstyled">
+                                <li>
+                                    <ul class="float-list  list-unstyled">
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Dates</span> <span class="class-info--body"> Aug 22, 2016 – Dec 15, 2016 </span> </li>
+                                                <li> <span class="class-info--label">Days/Times</span> <span class="class-info--body"> Tu 01:00 P.M.-02:30 P.M. <span> </span></span></li>
+                                            </ul> </li>
+                                        <li class="float-list--row">
+                                            <ul class="list-unstyled">
+                                                <li> <span class="class-info--label">Instructor</span> <span class="class-info--body"> <a href="mailto:
+															njrizk@uh.edu
+																"> Nouhad Rizk </a> </span> </li>
+                                                <li> <span class="class-info--label">Location</span> <span class="class-info-body"> UH </span> </li>
+                                                <li> <span class="class-info--label">Room</span> <span class="class-info-body"> PGH 376 </span> </li>
+                                                <li> <span class="class-info--label">Format</span> <span class="class-info--body">Face to Face</span> </li>
+                                            </ul> </li>
+                                    </ul> </li>
+                            </ul>
+                        </div>
+                        <!--end .panel-heading -->
+                        <div class="panel-collapse  collapse  in  class--body">
+                            <ul class="list-unstyled">
+                                <li> <p><strong>Description:</strong> Prerequisite(s): COSC 1306 and credit for or concurrent enrollment in MATH 1431. Fundamental concepts of structured programming; procedures and elementary data structures with a focus on problem solving strategies and implementation; computer organization, structured procedural programming, C/C++ programming language, and algorithm design. </p> </li>
+                                <li>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Class Number:</strong> 27514</li>
+                                        <li><strong>Session:</strong> Regular Academic Session </li>
+                                        <li><strong>Syllabus:</strong> Unavailable </li>
+                                        <!--<li><strong>Last Day to Add:</strong></li>-->
+                                    </ul>
+                                    <ul class="list-unstyled  class-desc--2col">
+                                        <li><strong>Duration:</strong> 15 weeks </li>
+                                        <li><strong>Class Component:</strong> LAB</li>
+                                        <!--<li><strong>Last Day to Drop:</strong></li>-->
+                                    </ul> </li>
+                            </ul>
+                            <h3 class="no-margin  header-underline">Notes</h3>
+                            <!-- Weekend U Note -->
+                            <!-- Blackboard Note -->
+                            <!-- Non-enrollment LAB note-->
+                            <p>This lab section is associated with a lecture. By registering for the associated lecture, the student will be automatically registered for the lab section.</p>
+                            <!-- online/hybrid notes -->
+                            <!-- Location Notes -->
+                        </div>
+                        <!-- end .panel-collapse --> </li>
+                </ul>
+                <ul class="pagination">
+                    <li class="disabled"><span>«</span></li>
+                    <li class="active"><span>1</span></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=2">2</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=3">3</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=4">4</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=5">5</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=6">6</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=7">7</a></li>
+                    <li><a href="/classes?distance=0&amp;term=2000&amp;session=1&amp;subject=COSC&amp;page=2" rel="next">»</a></li>
+                </ul>
+                <script>
+	$(document).ready(function(){
+		$('.collapse').collapse();
+		$('.panel-heading').on('click', function(){
+			var sel = getSelection().toString();
+			if(!sel){ //don't trigger click if user is highlighting
+			$(this).siblings('.panel-collapse').collapse('toggle');
+			}
+		});
+	});
+</script>
+                <p><strong><span face="Times New Roman" size="3" style="font-family: Times New Roman; font-size: medium;"></span></strong>﻿</p>
+            </section>
+        </article>
+        <!-- /#main -->
+    </section>
+    <!-- /#page -->
+</div>
+<!-- /#wrap -->
+<system-region name="DEFAULT">
+    <!-- start of footer include -->
+    <footer id="content-info" role="contentinfo">
+        <div class="footer-links">
+            <div class="container">
+                <figure>
+                    <a href="http://www.uh.edu/"><img alt="Interlocking UH" src="https://ssl.uh.edu/images/interlocking-uh.png"></a>
+                </figure>
+                <dl>
+                    <dt>
+                        Quick Links
+                    </dt>
+                    <dd>
+                        <a href="http://www.uh.edu/academics/catalog/academic-calendar/">Academic Calendar</a>
+                    </dd>
+                    <dd>
+                        <a href="http://uh.bkstore.com/">Bookstore</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/maps/">Campus Map</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/get-help/">Get Help</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/human-resources/">Human Resources</a>
+                    </dd>
+                    <dd>
+                        <a href="http://info.lib.uh.edu/">Library</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/parking/">Parking</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/financial/">Tuition &amp; Fees</a>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        More UH
+                    </dt>
+                    <dd>
+                        <a href="http://www.uh.edu/resources/">A-Z Index</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/directory/">Directory</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/news-events/emergency/emergency">Emergency</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.houstonpublicmedia.org/">Houston Public Media</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/human-resources/jobs-uh/">Jobs at UH</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/president/">President</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/social-media/">Social Media</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uhsa.uh.edu/">UH System</a>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        Legal Info
+                    </dt>
+                    <dd>
+                        <a href="http://www.uhsa.uh.edu/copyright/">Copyright</a>
+                    </dd>
+                    <dd>
+                        <a href="http://sao.fraud.state.tx.us/">Fraud Reporting</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.txhighereddata.org/approot/resumes/ir_launch.htm">Institutional Résumé</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.mysafecampus.com/">MySafeCampus</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/policies/">Policies</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/legal-affairs/general-counsel/texas-public-information/">Public Information Act</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.uh.edu/finance/pages/State_Report.htm">Required Reports</a>
+                    </dd>
+                    <dd>
+                        <a href="http://www.texas.gov/">State of Texas</a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="bottom-bar">
+            <div class="container">
+                <ul class="social-media">
+                    <li><a class="ir twitter" href="http://twitter.com/UHouston">Twitter</a></li>
+                    <li><a class="ir facebook" href="http://www.facebook.com/universityofhouston">Facebook</a></li>
+                    <li><a class="ir google-plus" href="https://plus.google.com/117521446948751504108?prsrc=3">Google Plus</a></li>
+                    <li><a class="ir linkedin" href="http://www.linkedin.com/edu/school?id=19529">LinkedIn</a></li>
+                    <li><a class="ir instagram" href="http://instagram.com/universityofhouston">Instagram</a></li>
+                    <li><a class="ir pinterest" href="http://pinterest.com/univofhouston/">Pinterest</a></li>
+                    <li><a class="ir tumblr" href="http://universityofhouston.tumblr.com/">Tumblr</a></li>
+                    <li><a class="ir youtube" href="http://www.uh.edu/multimedia">YouTube</a></li>
+                </ul>
+                <p class="copyright"> <span class="vcard"><span class="org">University of Houston</span>&nbsp; <span class="hidden-sm hidden-xs">&nbsp;·&nbsp;</span> <a href="http://maps.google.com/?q=University%20of%20Houston,%20Houston,%20Texas%2077204"> <span class="adr"><span class="locality">Houston</span>, <span class="region">TX</span> <span class="postal-code">77204</span></span></a>&nbsp; <span class="hidden-sm hidden-xs">&nbsp;·&nbsp;</span> <span class="tel"><a href="tel:1-713-743-2255">713-743-2255</a></span></span><br> ©2016 University of Houston.&nbsp; All rights reserved.&nbsp; <a class="problem-link" href="http://www.uh.edu/web-update/report-a-problem/">Report a problem with this page.</a> </p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://ssl.uh.edu/scripts/ga.js" type="text/javascript">
+//
+
+//
+</script>
+    <!-- end of footer include -->
+</system-region>
+</body>
+</html>
