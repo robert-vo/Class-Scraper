@@ -1,5 +1,4 @@
-//package main.java.com.robertvo.scraper;
-
+package scraper;
 import java.util.Scanner;
 
 /**
