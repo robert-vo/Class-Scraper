@@ -66,6 +66,7 @@ public class ScraperGUI extends JFrame {
     private void createAllButtons() {
         startButton = new JButton("Start Scraping");
         stopButton = new JButton("Stop Scraping");
+        stopButton.setEnabled(false);
         closeButton = new JButton("Close Program");
         startButton.addActionListener(e -> onStart());
         stopButton.addActionListener(e -> onStop());
