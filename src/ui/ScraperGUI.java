@@ -72,6 +72,7 @@ public class ScraperGUI extends JFrame {
                 onStart();
             } catch (IOException e1) {
                 loggerTextArea.append(e1.toString());
+                changeStatusOfButtons(false);
             }
         });
         stopButton.addActionListener(e -> onStop());
