@@ -88,8 +88,17 @@ public class ScraperGUI extends JFrame {
 
     private void onStart() throws IOException {
         changeStatusOfButtons(false);
+        scraper = new Scraper((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
-        scraper.startScraper((Term) termOptions.getSelectedItem());
+
+        if(scraper.verifyValidDocument(scraper.getWebsiteToScrape())) {
+            ScraperGUI.appendToLoggerTextArea("valid document");
+            scraper.startScraper((Term) termOptions.getSelectedItem());
+        }
+        else {
+            ScraperGUI.appendToLoggerTextArea("invalid document");
+            onStop();
+        }
     }
 
     private void onStop() {
@@ -111,10 +120,10 @@ public class ScraperGUI extends JFrame {
 
     public static void appendToLoggerTextArea(String message) {
         loggerTextArea.append(message + "\n");
+        System.out.println(message);
     }
 
     public static void main(String[] args) throws IOException {
-        scraper = new Scraper();
         JFrame window = ScraperGUI.createScraperPanel();
         window.setVisible(true);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
