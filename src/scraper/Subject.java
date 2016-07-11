@@ -1,3 +1,5 @@
+package scraper;
+
 public enum Subject {
     AAS  ("African American Studies"),
     ACCT ("Accounting"),

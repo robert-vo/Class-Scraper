@@ -1,3 +1,5 @@
+package scraper;
+
 /**
  * Created by Robert on 6/29/16.
  */

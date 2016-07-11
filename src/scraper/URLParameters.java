@@ -1,4 +1,4 @@
-
+package scraper;
 /*
 
 These are the parameters for the class browser.
