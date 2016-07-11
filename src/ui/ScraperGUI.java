@@ -1,5 +1,6 @@
 package ui;
 
+import scraper.Scraper;
 import scraper.Term;
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +12,13 @@ public class ScraperGUI extends JFrame {
 
     public static final int WIDTH   = 725;
     public static final int HEIGHT  = 700;
-    private JScrollPane loggerScrollPane;
-    private JTextArea   loggerTextArea;
-    private JButton     startButton;
-    private JButton     stopButton;
-    private JButton     closeButton;
-    private JComboBox   termOptions;
-    private JLabel      message;
+    private static  Scraper     scraper;
+    private         JScrollPane loggerScrollPane;
+    private static  JTextArea   loggerTextArea;
+    private         JButton     startButton;
+    private         JButton     stopButton;
+    private         JButton     closeButton;
+    private         JComboBox   termOptions;
 
     private final Term[] termDropDownOptions = Term.values();
 
@@ -30,8 +31,6 @@ public class ScraperGUI extends JFrame {
 
     public ScraperGUI() throws IOException {
         JPanel entirePanel = generateButtons();
-        message = new JLabel("Select an option.");
-        entirePanel.add(message);
         termOptions = new JComboBox<>(termDropDownOptions);
         entirePanel.add(termOptions);
         entirePanel.add(new JSeparator());
@@ -53,7 +52,7 @@ public class ScraperGUI extends JFrame {
         return scrollPane;
     }
 
-    private JPanel generateButtons() {
+    private JPanel generateButtons() throws IOException {
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout());
         createAllButtons();
@@ -63,12 +62,18 @@ public class ScraperGUI extends JFrame {
         return buttons;
     }
 
-    private void createAllButtons() {
+    private void createAllButtons() throws IOException {
         startButton = new JButton("Start Scraping");
         stopButton = new JButton("Stop Scraping");
         stopButton.setEnabled(false);
         closeButton = new JButton("Close Program");
-        startButton.addActionListener(e -> onStart());
+        startButton.addActionListener(e -> {
+            try {
+                onStart();
+            } catch (IOException e1) {
+                loggerTextArea.append(e1.toString());
+            }
+        });
         stopButton.addActionListener(e -> onStop());
         closeButton.addActionListener(e -> onClose());
     }
@@ -80,21 +85,19 @@ public class ScraperGUI extends JFrame {
         termOptions.setEnabled(status);
     }
 
-    private void onStart() {
+    private void onStart() throws IOException {
         changeStatusOfButtons(false);
-        message.setText("Starting the scraper...");
-        loggerTextArea.append("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()) + "\n");
+        appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
+        scraper.startScraper((Term) termOptions.getSelectedItem());
     }
 
     private void onStop() {
         changeStatusOfButtons(true);
-        message.setText("Stopping the scraper...");
-        loggerTextArea.append("Stopping the scraper.\n");
+        appendToLoggerTextArea("Stopping the scraper.");
     }
 
     private void onClose() {
-        message.setText("Closing...");
-        loggerTextArea.append("Closing the program.\n");
+        appendToLoggerTextArea("Closing the program.");
         dispose();
         System.exit(0);
     }
@@ -105,7 +108,12 @@ public class ScraperGUI extends JFrame {
         return scraperGUI;
     }
 
+    public static void appendToLoggerTextArea(String message) {
+        loggerTextArea.append(message + "\n");
+    }
+
     public static void main(String[] args) throws IOException {
+        scraper = new Scraper();
         JFrame window = ScraperGUI.createScraperPanel();
         window.setVisible(true);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
