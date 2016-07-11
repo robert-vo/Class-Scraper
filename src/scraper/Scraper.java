@@ -11,18 +11,23 @@ public class Scraper {
 
     final static private String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
     private int numberOfClasses;
+    final private Document WEBSITE_TO_SCRAPE;
+
+    public Scraper(Term term) throws IOException {
+        WEBSITE_TO_SCRAPE = generateDocumentForTerm(term);
+    }
+
+    public Document getWebsiteToScrape() {
+        return WEBSITE_TO_SCRAPE;
+    }
+
+    public int getNumberOfClasses() {
+        return numberOfClasses;
+    }
 
     public void startScraper(Term term) throws IOException {
-        Document document = generateDocumentForTerm(term);
-
-        if(verifyValidDocument(document)) {
-            ScraperGUI.appendToLoggerTextArea("valid document");
-            numberOfClasses = getNumberOfClasses(document);
-            ScraperGUI.appendToLoggerTextArea("Processing " + numberOfClasses + " classes.");
-        }
-        else {
-            ScraperGUI.appendToLoggerTextArea("invalid document");
-        }
+        numberOfClasses = getNumberOfClasses(WEBSITE_TO_SCRAPE);
+        ScraperGUI.appendToLoggerTextArea("Processing " + numberOfClasses + " classes.");
     }
 
     public static int getNumberOfClasses(Document document) {
@@ -37,7 +42,7 @@ public class Scraper {
         }
     }
 
-    private Document generateDocumentForTerm(Term term) throws IOException{
+    private Document generateDocumentForTerm(Term term) throws IOException {
         String url = URLBuilder.createURLForTermOnly(term);
         return Jsoup.connect(url).get();
     }
