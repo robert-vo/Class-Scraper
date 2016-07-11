@@ -9,4 +9,9 @@
         <artifactId>jsoup</artifactId>
         <version>1.8.3</version>
     </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>1.10.19</version>
+    </dependency>
 </dependencies>
