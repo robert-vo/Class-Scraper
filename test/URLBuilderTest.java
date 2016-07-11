@@ -1,4 +1,7 @@
 import org.junit.Test;
+import scraper.Subject;
+import scraper.Term;
+import scraper.URLBuilder;
 
 import static org.junit.Assert.*;
 
