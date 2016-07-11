@@ -4,31 +4,29 @@ import static org.junit.Assert.*;
 
 public class URLBuilderTest {
 
-    final String TERM_1990                              = "1990";
-    final String TERM_1990_MIN                          = "1990-MIN";
-    final String URL_WITH_TERM_1990                     = "http://classbrowser.uh.edu/classes?term=1990";
-    final String URL_WITH_TERM_1990_MIN                 = "http://classbrowser.uh.edu/classes?term=1990-MIN";
-    final String URL_WITH_TERM_1990_SUBJECT_COSC        = "http://classbrowser.uh.edu/classes?term=1990&subject=COSC";
-    final String URL_WITH_TERM_1990_MIN_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=1990-MIN&subject=COSC";
+    final String URL_WITH_TERM_1990                 = "http://classbrowser.uh.edu/classes?term=1990";
+    final String URL_WITH_TERM_2010                 = "http://classbrowser.uh.edu/classes?term=2010";
+    final String URL_WITH_TERM_1990_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=1990&subject=COSC";
+    final String URL_WITH_TERM_2010_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=2010&subject=COSC";
 
     @Test
-    public void testForTermEqualTo1990() {
-        assertEquals(URLBuilder.createURLForTermOnly(TERM_1990), URL_WITH_TERM_1990);
+    public void testForTermEqualToSummer2016() {
+        assertEquals(URLBuilder.createURLForTermOnly(Term.SUMMER_2016), URL_WITH_TERM_1990);
     }
 
     @Test
-    public void testForTermEqualTo1990Min() {
-        assertEquals(URLBuilder.createURLForTermOnly(TERM_1990_MIN), URL_WITH_TERM_1990_MIN);
+    public void testForTermEqualToSpring2017() {
+        assertEquals(URLBuilder.createURLForTermOnly(Term.SPRING_2017), URL_WITH_TERM_2010);
     }
 
     @Test
-    public void testForTermEqualTo1990AndSubjectEqualToCOSC() {
-        assertEquals(URLBuilder.createURLForTermAndSubject(TERM_1990, Subject.COSC.name()), URL_WITH_TERM_1990_SUBJECT_COSC);
+    public void testForTermEqualToSummer2016AndSubjectEqualToCOSC() {
+        assertEquals(URLBuilder.createURLForTermAndSubject(Term.SUMMER_2016, Subject.COSC.name()), URL_WITH_TERM_1990_SUBJECT_COSC);
     }
 
     @Test
-    public void testForTermEqualTo1990MinAndSubjectEqualToCOSC() {
-        assertEquals(URLBuilder.createURLForTermAndSubject(TERM_1990_MIN, Subject.COSC.name()), URL_WITH_TERM_1990_MIN_SUBJECT_COSC);
+    public void testForTermEqualToSpring2017AndSubjectEqualToCOSC() {
+        assertEquals(URLBuilder.createURLForTermAndSubject(Term.SPRING_2017, Subject.COSC.name()), URL_WITH_TERM_2010_SUBJECT_COSC);
     }
 
 }

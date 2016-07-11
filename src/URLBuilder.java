@@ -11,11 +11,11 @@ public class URLBuilder {
         return new StringBuilder(BASE_URL);
     }
 
-    public static String createURLForTermOnly(String term) {
-        return createNewURL().append(generateParameter(URLParameters.term, term)).toString();
+    public static String createURLForTermOnly(Term term) {
+        return createNewURL().append(generateParameter(URLParameters.term, term.getTermID())).toString();
     }
 
-    public static String createURLForTermAndSubject(String term, String subject) {
+    public static String createURLForTermAndSubject(Term term, String subject) {
         return createURLForTermOnly(term) +
                 generateParameter(URLParameters.subject, subject);
     }
