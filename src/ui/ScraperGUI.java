@@ -91,12 +91,12 @@ public class ScraperGUI extends JFrame {
         scraper = new Scraper((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
 
-        if(scraper.verifyValidDocument(scraper.getWebsiteToScrape())) {
-            ScraperGUI.appendToLoggerTextArea("valid document");
+        if(Scraper.verifyValidDocument(scraper.getWebsiteToScrape())) {
+            appendToLoggerTextArea("valid document");
             scraper.startScraper((Term) termOptions.getSelectedItem());
         }
         else {
-            ScraperGUI.appendToLoggerTextArea("invalid document");
+            appendToLoggerTextArea("invalid document");
             onStop();
         }
     }
