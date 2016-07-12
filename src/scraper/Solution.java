@@ -3,7 +3,10 @@ package scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -11,21 +14,21 @@ import java.io.IOException;
  */
 public class Solution {
     public static void main(String[] args) throws IOException {
-        String url = "http://classbrowser.uh.edu/classes?term=1990-MIN&subject=&location=&mode=&page=2";
-        Document doc = Jsoup.connect(url).get();
+//        String url = "http://classbrowser.uh.edu/classes?term=1990-MIN&subject=&location=&mode=&page=2";
+//        Document doc = Jsoup.connect(url).get();
 //        String url = "http://classbrowser.uh.edu/classes?distance=0&term=2000&session=1&subject=COSC";
-//        File input = new File("resources/coscPageOne.html");
-//        Document doc = Jsoup.parse(input, "UTF-8", "");
+        File input = new File("test/resources/coscPageOne.html");
+        Document doc = Jsoup.parse(input, "UTF-8", "");
 //
         Elements allClasses = doc.select("ul[id=accordion] > li");
 
         if(allClasses.size() != 0) {
             System.out.println("yay classes!");
 
-//            printClassInformation(allClasses.get(0));
-            for(Element aClass : allClasses) {
-                printClassInformation(aClass);
-            }
+            printClassInformation(allClasses.get(0));
+//            for(Element aClass : allClasses) {
+//                printClassInformation(aClass);
+//            }
         }
         else {
             System.out.println("no classes");
@@ -37,8 +40,11 @@ public class Solution {
         System.out.println(String.format("%s: %s", msg, args.text()));
     }
 
+    private static void print(String msg, Node node) {
+        System.out.println(String.format("%s: %s", msg, node.toString().trim()));
+    }
+
     private static void printClassInformation(Element aClass) {
-        //gets class number and section number, e.g. COSC 1300 (15240). use classNumberAndSectionNumber.text() to retrieve text
         Element classNumberAndSectionNumber = aClass.select("h3[class=class-title] > strong").first();
         print("Class Number (Section Number)", classNumberAndSectionNumber);
 
@@ -98,13 +104,13 @@ public class Solution {
 
         Elements classSessionAndSyllabus = classDescriptionSessionAndSyllabus.select("ul[class=list-unstyled  class-desc--2col]");
 
-        Element classNumber = classSessionAndSyllabus.get(0).select("li").get(0);
+        Node classNumber = classDescriptionSessionAndSyllabus.select("ul[class=list-unstyled  class-desc--2col] :eq(0)").first().childNode(1);
         print("Class Number", classNumber);
 
-        Element classSession = classSessionAndSyllabus.get(0).select("li").get(1);
+        Node classSession = classDescriptionSessionAndSyllabus.select("ul[class=list-unstyled  class-desc--2col] :eq(1)").first().childNode(1);
         print("Class Session", classSession);
 
-        Element classSyllabus = classSessionAndSyllabus.get(0).select("li").get(2);
+        Node classSyllabus = classDescriptionSessionAndSyllabus.select("ul[class=list-unstyled  class-desc--2col] :eq(2)").first().childNode(1);
         print("Syllabus", classSyllabus);
 
 
