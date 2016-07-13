@@ -1,5 +1,6 @@
 package scraper;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class ScrapeElements {
@@ -57,7 +58,16 @@ public class ScrapeElements {
     }
 
     public static String getCourseNumber(Element e) {
-        return e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml()).text();
+        try {
+            return e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER
+                    .getHtml())
+                    .first()
+                    .text()
+                    .split(Scraper.REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1];
+        }
+        catch (Exception ex) {
+            return "0";
+        }
     }
 
     public static String getSession(Element e) {
