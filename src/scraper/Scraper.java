@@ -12,7 +12,7 @@ import static scraper.ScrapeElements.*;
 
 public class Scraper {
 
-    final static private String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
+    protected final static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
     private int numberOfClasses;
     final private Document WEBSITE_TO_SCRAPE;
 
@@ -32,9 +32,9 @@ public class Scraper {
     public static int getNumberOfClasses(Document document) {
         try {
             return Integer.parseInt(document.select(HTMLElements.NUMBER_OF_CLASSES.getHtml())
-                    .first()
-                    .text()
-                    .split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1]);
+                                            .first()
+                                            .text()
+                                            .split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1]);
         }
         catch (Exception e) {
             return 0;
