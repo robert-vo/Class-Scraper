@@ -1,6 +1,5 @@
 package scraper;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class ScrapeElements {
@@ -71,7 +70,11 @@ public class ScrapeElements {
     }
 
     public static String getSession(Element e) {
-        return e.select(HTMLElements.CLASS_SESSION.getHtml()).text();
+        return e.select(HTMLElements.CLASS_SESSION.getHtml())
+                .first()
+                .childNode(1)
+                .toString()
+                .trim();
     }
 
     public static String getSyllabus(Element e) {

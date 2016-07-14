@@ -19,10 +19,8 @@ public enum HTMLElements {
     CLASS_FORMAT                (""),
     CLASS_DESCRIPTION           (""),
     CLASS_DURATION              ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Duration)"),
-    CLASS_SESSION               (""),
-
+    CLASS_SESSION               ("div[class=panel-collapse  collapse  in  class--body] > ul > li > ul > li:contains(Session)"),
     CLASS_COMPONENT             ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Component)"),
-
     CLASS_SYLLABUS              (""),
     CLASS_NOTES                 ("");
 
