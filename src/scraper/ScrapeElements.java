@@ -3,7 +3,7 @@ package scraper;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ScrapeElements {
+public class ScrapeElements implements Scraper {
 
     public static String getNameAndCourseNumber(Element e) {
         return e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml()).text();
@@ -46,7 +46,7 @@ public class ScrapeElements {
     }
 
     public static String getRoom(Element e) {
-        return e.select(HTMLElements.CLASS_LOCATION.getHtml()).get(1).text();
+        return e.select(HTMLElements.CLASS_ROOM.getHtml()).get(1).text();
     }
 
     public static String getFormat(Element e) {
@@ -59,11 +59,8 @@ public class ScrapeElements {
 
     public static String getCourseNumber(Element e) {
         try {
-            return e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER
-                    .getHtml())
-                    .first()
-                    .text()
-                    .split(Scraper.REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1];
+            Elements classNameAndCrnNumber = e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
+            return Scraper.extractTextBetweenParentheses(classNameAndCrnNumber);
         }
         catch (Exception ex) {
             return "0";
