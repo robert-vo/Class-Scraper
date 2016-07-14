@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 /**
  * The purpose of this class is to use the internet to scrape the classbrowser pages.
- * This class will use the Scraper class to assist in completing this task.
+ * This class will use the ScraperRunner class to assist in completing this task.
  */
 public class WebScraper {
 
