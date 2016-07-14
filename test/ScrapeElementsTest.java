@@ -4,8 +4,7 @@ import org.jsoup.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 import scraper.HTMLElements;
-import scraper.ScrapeElements;
-import scraper.Scraper;
+import scraper.ScraperRunner;
 import scraper.Term;
 
 import java.io.File;
@@ -19,7 +18,7 @@ import static scraper.ScrapeElements.*;
 
 public class ScrapeElementsTest {
 
-    Scraper mock = mock(Scraper.class);
+    ScraperRunner mock = mock(ScraperRunner.class);
     Element aClass;
     final private String NAME_COURSE_NUMBER = "COSC 1300 (15240)";
     final private String COURSE_TITLE       = "Introduction To Computing";

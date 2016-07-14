@@ -1,8 +1,6 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.junit.Before;
 import org.junit.Test;
-import scraper.Scraper;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +8,8 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static scraper.Scraper.getNumberOfClasses;
-import static scraper.Scraper.verifyValidDocument;
+import static scraper.ScraperRunner.getNumberOfClasses;
+import static scraper.ScraperRunner.verifyValidDocument;
 
 public class ScraperTest {
 
