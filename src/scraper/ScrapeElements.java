@@ -1,6 +1,7 @@
 package scraper;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ScrapeElements {
 
@@ -70,11 +71,8 @@ public class ScrapeElements {
     }
 
     public static String getSession(Element e) {
-        return e.select(HTMLElements.CLASS_SESSION.getHtml())
-                .first()
-                .childNode(1)
-                .toString()
-                .trim();
+        Elements classSession = e.select(HTMLElements.CLASS_SESSION.getHtml());
+        return getFirstChildNodeAndReturnAsString(classSession);
     }
 
     public static String getSyllabus(Element e) {
@@ -86,19 +84,13 @@ public class ScrapeElements {
     }
 
     public static String getClassDuration(Element e) {
-        return e.select(HTMLElements.CLASS_DURATION.getHtml())
-                .first()
-                .childNode(1)
-                .toString()
-                .trim();
+        Elements classDuration = e.select(HTMLElements.CLASS_DURATION.getHtml());
+        return getFirstChildNodeAndReturnAsString(classDuration);
     }
 
     public static String getClassComponent(Element e) {
-        return e.select(HTMLElements.CLASS_COMPONENT.getHtml())
-                .first()
-                .childNode(1)
-                .toString()
-                .trim();
+        Elements classComponent = e.select(HTMLElements.CLASS_COMPONENT.getHtml());
+        return getFirstChildNodeAndReturnAsString(classComponent);
     }
 
     public static String getLastDateToDrop(Element e) {
@@ -106,4 +98,10 @@ public class ScrapeElements {
     }
 
 
+    private static String getFirstChildNodeAndReturnAsString(Elements e) {
+        return e.first()
+                .childNode(1)
+                .toString()
+                .trim();
+    }
 }
