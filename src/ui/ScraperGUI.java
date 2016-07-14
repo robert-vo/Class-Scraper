@@ -1,6 +1,6 @@
 package ui;
 
-import scraper.Scraper;
+import scraper.ScraperRunner;
 import scraper.Term;
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class ScraperGUI extends JFrame {
 
     public static final int WIDTH   = 725;
     public static final int HEIGHT  = 700;
-    private static  Scraper     scraper;
+    private static ScraperRunner scraper;
     private         JScrollPane loggerScrollPane;
     private static  JTextArea   loggerTextArea;
     private         JButton     startButton;
@@ -26,7 +26,7 @@ public class ScraperGUI extends JFrame {
     protected void frameInit() {
         super.frameInit();
         setSize(WIDTH, HEIGHT);
-        setTitle("Classbrowser Scraper");
+        setTitle("Classbrowser ScraperRunner");
     }
 
     public ScraperGUI() throws IOException {
@@ -88,10 +88,10 @@ public class ScraperGUI extends JFrame {
 
     private void onStart() throws IOException {
         changeStatusOfButtons(false);
-        scraper = new Scraper((Term) termOptions.getSelectedItem());
+        scraper = new ScraperRunner((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
 
-        if(Scraper.verifyValidDocument(scraper.getWebsiteToScrape())) {
+        if(ScraperRunner.verifyValidDocument(scraper.getWebsiteToScrape())) {
             appendToLoggerTextArea("valid document");
             scraper.startScraper((Term) termOptions.getSelectedItem());
         }
