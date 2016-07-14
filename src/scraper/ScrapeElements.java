@@ -83,7 +83,11 @@ public class ScrapeElements {
     }
 
     public static String getClassDuration(Element e) {
-        return e.select(HTMLElements.CLASS_DURATION.getHtml()).text();
+        return e.select(HTMLElements.CLASS_DURATION.getHtml())
+                .first()
+                .childNode(1)
+                .toString()
+                .trim();
     }
 
     public static String getClassComponent(Element e) {
