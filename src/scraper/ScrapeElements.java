@@ -91,7 +91,11 @@ public class ScrapeElements {
     }
 
     public static String getClassComponent(Element e) {
-        return e.select(HTMLElements.CLASS_COMPONENT.getHtml()).text();
+        return e.select(HTMLElements.CLASS_COMPONENT.getHtml())
+                .first()
+                .childNode(1)
+                .toString()
+                .trim();
     }
 
     public static String getLastDateToDrop(Element e) {
