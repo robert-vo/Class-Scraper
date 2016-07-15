@@ -19,7 +19,6 @@ public class ScrapeElements implements Scraper {
 
     public static String getClassAttributes(Element e) {
         String attributes = getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_ATTRIBUTES);
-//        String attributes = e.select(HTMLElements.CLASS_ATTRIBUTES.getHtml()).text();
         return attributes.isEmpty() ? "No class attributes" : attributes;
     }
 
