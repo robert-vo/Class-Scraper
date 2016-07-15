@@ -6,51 +6,50 @@ import org.jsoup.select.Elements;
 public class ScrapeElements implements Scraper {
 
     public static String getNameAndCourseNumber(Element e) {
-        return e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_NAME_AND_CRN_NUMBER);
     }
 
     public static String getCourseTitle(Element e) {
-        return e.select(HTMLElements.COURSE_TITLE.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.COURSE_TITLE);
     }
 
     public static String getCourseStatus(Element e) {
-        return e.select(HTMLElements.CLASS_STATUS.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_STATUS);
     }
 
     public static String getClassAttributes(Element e) {
-        String attributes = e.select(HTMLElements.CLASS_ATTRIBUTES.getHtml()).text();
+        String attributes = getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_ATTRIBUTES);
+//        String attributes = e.select(HTMLElements.CLASS_ATTRIBUTES.getHtml()).text();
         return attributes.isEmpty() ? "No class attributes" : attributes;
     }
 
     public static String getClassDates(Element e) {
-        return e.select(HTMLElements.CLASS_DATES.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DATES);
     }
 
     public static String getClassDaysAndTimes(Element e) {
-        return e.select(HTMLElements.CLASS_DAYS_TIMES.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DAYS_TIMES);
     }
 
     public static String getInstructorName(Element e) {
-        return e.select(HTMLElements.CLASS_INSTRUCTOR.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_INSTRUCTOR);
     }
 
     public static String getInstructorEmail(Element e) {
-        return e.select(HTMLElements.CLASS_INSTRUCTOR_EMAIL.getHtml())
-                .attr("href")
-                .replaceAll("[\\t\\n]", "")
-                .substring(7);
+        Elements instructorEmail = e.select(HTMLElements.CLASS_INSTRUCTOR_EMAIL.getHtml());
+        return Scraper.extractEmailFromHREFTag(instructorEmail);
     }
 
     public static String getLocation(Element e) {
-        return e.select(HTMLElements.CLASS_LOCATION.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_LOCATION);
     }
 
     public static String getRoom(Element e) {
-        return e.select(HTMLElements.CLASS_ROOM.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_ROOM);
     }
 
     public static String getFormat(Element e) {
-        return e.select(HTMLElements.CLASS_FORMAT.getHtml()).text();
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_FORMAT);
     }
 
     public static String getDescription(Element e) {
@@ -59,13 +58,8 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getCourseNumber(Element e) {
-        try {
-            Elements classNameAndCrnNumber = e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
-            return Scraper.extractTextBetweenParentheses(classNameAndCrnNumber);
-        }
-        catch (Exception ex) {
-            return "0";
-        }
+        Elements classNameAndCrnNumber = e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
+        return Scraper.extractTextBetweenParentheses(classNameAndCrnNumber);
     }
 
     public static String getSession(Element e) {
@@ -97,5 +91,10 @@ public class ScrapeElements implements Scraper {
                 .childNode(1)
                 .toString()
                 .trim();
+    }
+
+    public static String getClassFromElementUsingHTMLElement(Element e, HTMLElements htmlElement) {
+        return e.select(htmlElement.getHtml())
+                .text();
     }
 }
