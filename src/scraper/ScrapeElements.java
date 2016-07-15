@@ -54,7 +54,8 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getDescription(Element e) {
-        return e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()).text();
+        Elements classDescription = e.select(HTMLElements.CLASS_DESCRIPTION.getHtml());
+        return getFirstChildNodeAndReturnAsString(classDescription);
     }
 
     public static String getCourseNumber(Element e) {
