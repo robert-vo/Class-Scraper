@@ -123,11 +123,6 @@ public class ScrapeElementsTest {
     }
 
     @Test
-    public void testGetLastDayToAddFromAClass() {
-        assertEquals(getLastDayToAdd(aClass), LAST_DAY_TO_ADD);
-    }
-
-    @Test
     public void testGetClassDurationFromAClass() {
         assertEquals(getClassDuration(aClass), CLASS_DURATION);
     }
@@ -135,11 +130,6 @@ public class ScrapeElementsTest {
     @Test
     public void testGetClassComponentFromAClass() {
         assertEquals(getClassComponent(aClass), CLASS_COMPONENT);
-    }
-
-    @Test
-    public void testGetLastDateToDropFromAClass() {
-        assertEquals(getLastDateToDrop(aClass), LAST_DATE_TO_DROP);
     }
 
     private Document returnDocumentFromFileName(String fileName) throws IOException {

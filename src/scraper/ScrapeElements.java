@@ -27,7 +27,7 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getClassDaysAndTimes(Element e) {
-        return e.select(HTMLElements.CLASS_DAYS_TIMES.getHtml()).get(0).text();
+        return e.select(HTMLElements.CLASS_DAYS_TIMES.getHtml()).text();
     }
 
     public static String getInstructorName(Element e) {
@@ -78,10 +78,6 @@ public class ScrapeElements implements Scraper {
         return getFirstChildNodeAndReturnAsString(classSyllabus);
     }
 
-    public static String getLastDayToAdd(Element e) {
-        return e.select(HTMLElements.CLASS_DATES.getHtml()).text();
-    }
-
     public static String getClassDuration(Element e) {
         Elements classDuration = e.select(HTMLElements.CLASS_DURATION.getHtml());
         return getFirstChildNodeAndReturnAsString(classDuration);
@@ -91,11 +87,6 @@ public class ScrapeElements implements Scraper {
         Elements classComponent = e.select(HTMLElements.CLASS_COMPONENT.getHtml());
         return getFirstChildNodeAndReturnAsString(classComponent);
     }
-
-    public static String getLastDateToDrop(Element e) {
-        return e.select(HTMLElements.CLASS_DATES.getHtml()).text();
-    }
-
 
     private static String getFirstChildNodeAndReturnAsString(Elements e) {
         return e.first()
