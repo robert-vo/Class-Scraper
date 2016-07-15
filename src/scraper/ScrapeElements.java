@@ -42,7 +42,7 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getLocation(Element e) {
-        return e.select(HTMLElements.CLASS_LOCATION.getHtml()).get(0).text();
+        return e.select(HTMLElements.CLASS_LOCATION.getHtml()).text();
     }
 
     public static String getRoom(Element e) {
