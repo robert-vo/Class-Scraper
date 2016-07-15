@@ -88,6 +88,10 @@ public class ScrapeElements implements Scraper {
         return getFirstChildNodeAndReturnAsString(classComponent);
     }
 
+//    public static String getClassNotes(Element e) {
+//        return e.select(HTMLElements.CLASS_NOTES.getHtml()).text();
+//    }
+
     private static String getFirstChildNodeAndReturnAsString(Elements e) {
         return e.first()
                 .childNode(1)

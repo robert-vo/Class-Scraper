@@ -34,10 +34,9 @@ public class ScrapeElementsTest {
     final private String COURSE_NUMBER      = "15240";
     final private String SESSION            = "Regular Academic Session";
     final private String SYLLABUS           = "Unavailable";
-    final private String LAST_DAY_TO_ADD    = "No information on last day to add found yet";
     final private String CLASS_DURATION     = "15 weeks";
     final private String CLASS_COMPONENT    = "LEC";
-    final private String LAST_DATE_TO_DROP  = "No information on last day to drop found yet";
+    final private String CLASS_NOTES        = "Blackboard, an online course management system, is scheduled to be used for this course and can be accessed via AccessUH. For more information, visit the UH Blackboard site.";
 
     @Before
     public void setUp() throws IOException {
@@ -131,6 +130,11 @@ public class ScrapeElementsTest {
     public void testGetClassComponentFromAClass() {
         assertEquals(getClassComponent(aClass), CLASS_COMPONENT);
     }
+
+//    @Test
+//    public void testGetClassNotesFromAClassWithNotes() {
+//        assertEquals(getClassNotes(aClass), CLASS_NOTES);
+//    }
 
     private Document returnDocumentFromFileName(String fileName) throws IOException {
         File page = new File("test/resources/" + fileName + ".html");
