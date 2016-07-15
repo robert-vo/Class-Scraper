@@ -23,7 +23,7 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getClassDates(Element e) {
-        return e.select(HTMLElements.CLASS_DATES.getHtml()).get(0).text();
+        return e.select(HTMLElements.CLASS_DATES.getHtml()).text();
     }
 
     public static String getClassDaysAndTimes(Element e) {

@@ -10,7 +10,7 @@ public enum HTMLElements {
     COURSE_TITLE                ("span[class=class-title--course]"),
     CLASS_STATUS                ("span[class^=class--status]"),
     CLASS_ATTRIBUTES            ("small[class=class--attributesList] > span"),
-    CLASS_DATES                 ("li[class=float-list--row] :eq(0) > span[class$=body]"),
+    CLASS_DATES                 ("li[class=float-list--row] :eq(0) > span[class$=body]:not(:has(a))"),
     CLASS_DAYS_TIMES            ("li[class=float-list--row] :eq(1) > span[class$=body]"),
     CLASS_INSTRUCTOR            ("li[class=float-list--row] :eq(0) > span[class$=body] > a"),
     CLASS_INSTRUCTOR_EMAIL      ("li[class=float-list--row] :eq(0) > span[class$=body] > a"),
