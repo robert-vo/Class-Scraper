@@ -73,7 +73,8 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getSyllabus(Element e) {
-        return e.select(HTMLElements.CLASS_SYLLABUS.getHtml()).text();
+        Elements classSyllabus = e.select(HTMLElements.CLASS_SYLLABUS.getHtml());
+        return getFirstChildNodeAndReturnAsString(classSyllabus);
     }
 
     public static String getLastDayToAdd(Element e) {
