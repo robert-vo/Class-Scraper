@@ -46,7 +46,7 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getRoom(Element e) {
-        return e.select(HTMLElements.CLASS_ROOM.getHtml()).get(1).text();
+        return e.select(HTMLElements.CLASS_ROOM.getHtml()).text();
     }
 
     public static String getFormat(Element e) {
