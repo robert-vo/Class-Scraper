@@ -29,13 +29,8 @@ public class ScraperRunner implements Scraper {
     }
 
     public static int getNumberOfClasses(Document document) {
-        try {
-            Elements numberOfClasses = document.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
-            return Integer.parseInt(Scraper.extractTextBetweenParentheses(numberOfClasses));
-        }
-        catch (Exception e) {
-            return 0;
-        }
+        Elements numberOfClassesInHTML = document.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
+        return Integer.parseInt(Scraper.extractTextBetweenParentheses(numberOfClassesInHTML));
     }
 
     public Document generateDocumentForTerm(Term term) throws IOException {
