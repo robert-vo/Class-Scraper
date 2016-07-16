@@ -2,11 +2,14 @@ package ui;
 
 import scraper.ScraperRunner;
 import scraper.Term;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+
+import static scraper.ScraperRunner.run;
 
 public class ScraperGUI extends JFrame {
 
@@ -93,7 +96,7 @@ public class ScraperGUI extends JFrame {
 
         if(ScraperRunner.verifyValidDocument(scraper.getWebsiteToScrape())) {
             appendToLoggerTextArea("valid document");
-            scraper.startScraper((Term) termOptions.getSelectedItem());
+            run();
         }
         else {
             appendToLoggerTextArea("invalid document");
