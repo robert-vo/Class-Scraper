@@ -2,6 +2,7 @@ import org.junit.Test;
 import scraper.Subject;
 import scraper.Term;
 import scraper.URLBuilder;
+import scraper.URLParameters;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +12,8 @@ public class URLBuilderTest {
     final String URL_WITH_TERM_2010                 = "http://classbrowser.uh.edu/classes?term=2010";
     final String URL_WITH_TERM_1990_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=1990&subject=COSC";
     final String URL_WITH_TERM_2010_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=2010&subject=COSC";
+    final String URL_WITH_TERM_2000_PAGE_2          = "http://classbrowser.uh.edu/classes?term=2000&page=2";
+    final String URL_WITH_TERM_2000_PAGE_3          = "http://classbrowser.uh.edu/classes?term=2000&page=3";
 
     @Test
     public void testForTermEqualToSummer2016() {
@@ -30,6 +33,30 @@ public class URLBuilderTest {
     @Test
     public void testForTermEqualToSpring2017AndSubjectEqualToCOSC() {
         assertEquals(URLBuilder.createURLForTermAndSubject(Term.SPRING_2017, Subject.COSC.name()), URL_WITH_TERM_2010_SUBJECT_COSC);
+    }
+
+    @Test
+    public void testForAddingPageNumberToExistingURL() {
+        String initialPage = URLBuilder.createURLForTermOnly(Term.FALL_2016);
+        String secondPage = initialPage + URLBuilder.generateParameter(URLParameters.page, "2");
+        assertEquals(secondPage, URL_WITH_TERM_2000_PAGE_2);
+    }
+
+    @Test
+    public void testIncrementPageNumber() throws Exception {
+        String secondPage = URL_WITH_TERM_2000_PAGE_2;
+        String thirdPage = URLBuilder.incrementPageNumber(secondPage);
+        assertEquals(thirdPage, URL_WITH_TERM_2000_PAGE_3);
+    }
+
+    @Test(expected=Exception.class)
+    public void testIncrementPageNumberFailsForEmptyPage() throws Exception {
+        URLBuilder.incrementPageNumber("");
+    }
+
+    @Test(expected=Exception.class)
+    public void testIncrementPageNumberFailsForPageParameterMissing() throws Exception {
+        URLBuilder.incrementPageNumber(URL_WITH_TERM_1990);
     }
 
 }

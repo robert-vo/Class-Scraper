@@ -35,4 +35,15 @@ public class URLBuilder {
 
         return newParameter.toString();
     }
+
+    public static String incrementPageNumber(String url) throws Exception {
+        if(!url.contains("page")) {
+            throw new Exception("PAGE PARAMETER REQUIRED");
+        }
+        else {
+            int currentPage = Integer.parseInt(url.substring(url.length() - 1));
+            String newURL = url.substring(0, url.length() - 1) + (currentPage + 1);
+            return newURL;
+        }
+    }
 }
