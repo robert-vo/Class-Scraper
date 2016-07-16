@@ -1,6 +1,7 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
 import scraper.HTMLElements;
@@ -9,6 +10,7 @@ import scraper.Term;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -135,6 +137,40 @@ public class ScrapeElementsTest {
 //    public void testGetClassNotesFromAClassWithNotes() {
 //        assertEquals(getClassNotes(aClass), CLASS_NOTES);
 //    }
+
+    @Test
+    public void testDocumentHasTenClasses() throws IOException {
+        assertEquals(mock.generateDocumentForTerm(Term.FALL_2016)
+                         .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
+                         .size(), 10);
+    }
+
+    @Test
+    public void testScrapeDocumentHasCorrectNames() throws IOException {
+        final ArrayList<String> listOfClassNames = new ArrayList<String>() {{
+            add("Introduction To Computing");
+            add("C Programming");
+            add("Computer Science & Program");
+            add("Computer Science & Program");
+            add("Computer Science & Program");
+            add("Intro Computer Science II");
+            add("Intro Computer Science II");
+            add("Introduction to Programming");
+            add("Introduction to Programming");
+            add("Introduction to Programming");
+        }};
+
+        Elements allClasses = mock.generateDocumentForTerm(Term.FALL_2016)
+                                  .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
+
+        ArrayList<String> listOfScrapedNames = new ArrayList<>();
+
+        for (Element e : allClasses) {
+            listOfScrapedNames.add(e.select(HTMLElements.COURSE_TITLE.getHtml()).text());
+        }
+
+        assertEquals(listOfClassNames, listOfScrapedNames);
+    }
 
     private Document returnDocumentFromFileName(String fileName) throws IOException {
         File page = new File("test/resources/" + fileName + ".html");
