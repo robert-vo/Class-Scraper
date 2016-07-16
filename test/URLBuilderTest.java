@@ -11,6 +11,7 @@ public class URLBuilderTest {
     final String URL_WITH_TERM_1990                 = "http://classbrowser.uh.edu/classes?term=1990";
     final String URL_WITH_TERM_2010                 = "http://classbrowser.uh.edu/classes?term=2010";
     final String URL_WITH_TERM_1990_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=1990&subject=COSC";
+    final String URL_WITH_TERM_1990_PAGE_2          = "http://classbrowser.uh.edu/classes?term=1990&page=2";
     final String URL_WITH_TERM_2010_SUBJECT_COSC    = "http://classbrowser.uh.edu/classes?term=2010&subject=COSC";
     final String URL_WITH_TERM_2000_PAGE_2          = "http://classbrowser.uh.edu/classes?term=2000&page=2";
     final String URL_WITH_TERM_2000_PAGE_3          = "http://classbrowser.uh.edu/classes?term=2000&page=3";
@@ -49,14 +50,11 @@ public class URLBuilderTest {
         assertEquals(thirdPage, URL_WITH_TERM_2000_PAGE_3);
     }
 
-    @Test(expected=Exception.class)
-    public void testIncrementPageNumberFailsForEmptyPage() throws Exception {
-        URLBuilder.incrementPageNumber("");
-    }
+    @Test
+    public void testIncrementPageNumberAppendsPageTwo() throws Exception {
+        String newURL = URLBuilder.incrementPageNumber(URL_WITH_TERM_1990);
+        assertEquals(newURL, URL_WITH_TERM_1990_PAGE_2);
 
-    @Test(expected=Exception.class)
-    public void testIncrementPageNumberFailsForPageParameterMissing() throws Exception {
-        URLBuilder.incrementPageNumber(URL_WITH_TERM_1990);
     }
 
 }
