@@ -36,7 +36,7 @@ public class URLBuilder {
         return newParameter.toString();
     }
 
-    public static String incrementPageNumber(String url) throws Exception {
+    public static String incrementPageNumber(String url) {
         if(!url.contains("page")) {
             return url + generateParameter(URLParameters.page, "2");
         }
