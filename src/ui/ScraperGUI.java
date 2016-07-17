@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import static scraper.ScraperRunner.run;
+import static scraper.ScraperRunner.verifyValidDocument;
 
 public class ScraperGUI extends JFrame {
 
@@ -94,14 +95,14 @@ public class ScraperGUI extends JFrame {
         scraper = new ScraperRunner((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
 
-        if(ScraperRunner.verifyValidDocument(scraper.getWebsiteToScrape())) {
-            appendToLoggerTextArea("valid document");
+        if(verifyValidDocument(scraper.getWebsiteToScrape())) {
+            appendToLoggerTextArea("Valid Document.");
             run();
         }
         else {
-            appendToLoggerTextArea("invalid document");
-            onStop();
+            appendToLoggerTextArea("Invalid Document.");
         }
+        onStop();
     }
 
     private void onStop() {
