@@ -21,7 +21,7 @@ public enum HTMLElements {
     CLASS_DURATION              ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Duration)"),
     CLASS_SESSION               ("div[class=panel-collapse  collapse  in  class--body] > ul > li > ul > li:contains(Session)"),
     CLASS_COMPONENT             ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Component)"),
-    CLASS_SYLLABUS              ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Syllabus)"),
+    CLASS_SYLLABUS              ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > ul > li:contains(Syllabus) > a"),
     CLASS_NOTES                 ("");
 
     final private String html;
