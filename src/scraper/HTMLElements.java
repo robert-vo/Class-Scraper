@@ -8,7 +8,7 @@ public enum HTMLElements {
     NUMBER_OF_CLASSES           ("div > section > article > section > h1"),
     CLASS_NAME_AND_CRN_NUMBER   ("h3[class=class-title] > strong"),
     COURSE_TITLE                ("span[class=class-title--course]"),
-    CLASS_STATUS                ("span[class^=class--status]"),
+    CLASS_STATUS_AND_SEATS      ("span[class^=class--status]"),
     CLASS_ATTRIBUTES            ("small[class=class--attributesList] > span"),
     CLASS_DATES                 ("li[class=float-list--row] :eq(0) > span[class$=body]:not(:has(a))"),
     CLASS_DAYS_TIMES            ("li[class=float-list--row] > ul > li:contains(Days) > span[class=class-info--body]"),
