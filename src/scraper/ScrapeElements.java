@@ -73,7 +73,8 @@ public class ScrapeElements implements Scraper {
 
     public static String getSyllabus(Element e) {
         Elements classSyllabus = e.select(HTMLElements.CLASS_SYLLABUS.getHtml());
-        return getFirstChildNodeAndReturnAsString(classSyllabus);
+        return extractSyllabusFromElements(classSyllabus);
+//        return getFirstChildNodeAndReturnAsString(classSyllabus);
     }
 
     public static String getClassDuration(Element e) {
@@ -120,4 +121,7 @@ public class ScrapeElements implements Scraper {
                 .text();
     }
 
+    public static String extractSyllabusFromElements(Elements e) {
+        return e.size() == 0 ? "Unavailable" : e.attr("href");
+    }
 }
