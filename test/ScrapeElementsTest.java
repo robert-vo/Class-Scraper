@@ -4,6 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
+import scraper.Class;
 import scraper.HTMLElements;
 import scraper.ScraperRunner;
 import scraper.Term;
@@ -21,24 +22,25 @@ public class ScrapeElementsTest {
 
     ScraperRunner mock = mock(ScraperRunner.class);
     Element aClass;
-    final private String NAME_COURSE_NUMBER = "COSC 1300 (15240)";
-    final private String COURSE_TITLE       = "Introduction To Computing";
-    final private String COURSE_STATUS      = "Open (12/35)";
-    final private String CLASS_DATES        = "Aug 22, 2016 – Dec 15, 2016";
-    final private String CLASS_ATTRIBUTES   = "No class attributes";
-    final private String CLASS_DAYS_TIMES   = "MoWe 04:00 P.M.-05:30 P.M.";
-    final private String INSTRUCTOR_NAME    = "Robert Lea";
-    final private String INSTRUCTOR_EMAIL   = "rlea@uh.edu";
-    final private String LOCATION           = "UH";
-    final private String FORMAT             = "Face to Face";
-    final private String ROOM               = "C 111";
-    final private String DESCRIPTION        = "Cr. 3. (2-3). May not be used to satisfy any computer science degree requirement. An introduction to computing with emphasis on the practical usage of personal computers; concepts of recorded programs, computer organization, operating systems, mainframes, minicomputers, and personal computer; selected applications of personal computers; word processing, databases, and spreadsheets; societal impact of computers.";
-    final private String COURSE_NUMBER      = "15240";
-    final private String SESSION            = "Regular Academic Session";
-    final private String SYLLABUS           = "Unavailable";
-    final private String CLASS_DURATION     = "15 weeks";
-    final private String CLASS_COMPONENT    = "LEC";
-    final private String CLASS_NOTES        = "Blackboard, an online course management system, is scheduled to be used for this course and can be accessed via AccessUH. For more information, visit the UH Blackboard site.";
+    final private String NAME_COURSE_NUMBER     = "COSC 1300 (15240)";
+    final private String COURSE_NAME            = "COSC 1300";
+    final private String COURSE_NUMBER          = "15240";
+    final private String COURSE_TITLE           = "Introduction To Computing";
+    final private String COURSE_STATUS_SEATS    = "Open (12/35)";
+    final private String CLASS_DATES            = "Aug 22, 2016 – Dec 15, 2016";
+    final private String CLASS_ATTRIBUTES       = "No class attributes";
+    final private String CLASS_DAYS_TIMES       = "MoWe 04:00 P.M.-05:30 P.M.";
+    final private String INSTRUCTOR_NAME        = "Robert Lea";
+    final private String INSTRUCTOR_EMAIL       = "rlea@uh.edu";
+    final private String LOCATION               = "UH";
+    final private String FORMAT                 = "Face to Face";
+    final private String ROOM                   = "C 111";
+    final private String DESCRIPTION            = "Cr. 3. (2-3). May not be used to satisfy any computer science degree requirement. An introduction to computing with emphasis on the practical usage of personal computers; concepts of recorded programs, computer organization, operating systems, mainframes, minicomputers, and personal computer; selected applications of personal computers; word processing, databases, and spreadsheets; societal impact of computers.";
+    final private String SESSION                = "Regular Academic Session";
+    final private String SYLLABUS               = "Unavailable";
+    final private String CLASS_DURATION         = "15 weeks";
+    final private String CLASS_COMPONENT        = "LEC";
+    final private String CLASS_NOTES            = "Blackboard, an online course management system, is scheduled to be used for this course and can be accessed via AccessUH. For more information, visit the UH Blackboard site.";
 
     @Before
     public void setUp() throws IOException {
@@ -54,13 +56,38 @@ public class ScrapeElementsTest {
     }
 
     @Test
+    public void testGetCourseName() {
+        assertEquals(getCourseName(aClass), COURSE_NAME);
+    }
+
+    @Test
+    public void testGetCourseNumberFromAClass() {
+        assertEquals(getCourseNumber(aClass), COURSE_NUMBER);
+    }
+
+    @Test
     public void testGetCourseTitleIntroToComputing() {
         assertEquals(getCourseTitle(aClass), COURSE_TITLE);
     }
 
     @Test
-    public void testGetCourseStatusOpen() {
-        assertEquals(getCourseStatus(aClass), COURSE_STATUS);
+    public void testGetCourseStatusOpenAndSeats() {
+        assertEquals(getCourseStatusAndSeats(aClass), COURSE_STATUS_SEATS);
+    }
+
+    @Test
+    public void testGetcourseStatusOpen() {
+        assertEquals(getCourseStatusOpenOrClosed(aClass), Class.Status.Open);
+    }
+
+    @Test
+    public void testGetNumberOfSeatsTaken12() {
+        assertEquals(getNumberOfSeatsTaken(aClass), 12);
+    }
+
+    @Test
+    public void testGetNumberOfAvailableSeats35() {
+        assertEquals(getNumberOfAvailableSeats(aClass), 35);
     }
 
     @Test
@@ -108,10 +135,6 @@ public class ScrapeElementsTest {
         assertEquals(getDescription(aClass), DESCRIPTION);
     }
 
-    @Test
-    public void testGetCourseNumberFromAClass() {
-        assertEquals(getCourseNumber(aClass), COURSE_NUMBER);
-    }
 
     @Test
     public void testGetSessionFromAClass() {
