@@ -4,7 +4,7 @@ import org.jsoup.select.Elements;
 
 public interface Scraper {
     String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
-    String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n]";
+    String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
 
     static String extractTextBetweenParentheses(Elements e) {
         try {
@@ -26,4 +26,16 @@ public interface Scraper {
         }
     }
 
+    static String extractTextBetweenParentheses(String str) {
+        try {
+            return str.split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1];
+        }
+        catch (Exception e) {
+            return "";
+        }
+    }
+
+    static String extractTextBeforeParentheses(String str) {
+        return str.substring(0, str.indexOf('(') - 1);
+    }
 }
