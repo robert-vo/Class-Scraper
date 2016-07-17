@@ -136,7 +136,6 @@ public class ScraperRunner implements Scraper {
             preparedStatement.setString(8, c.getClassDates());
             preparedStatement.setString(9, c.getDaysTimes());
             preparedStatement.setString(10, c.getInstructorName());
-            System.out.println(c.getInstructorEmail());
             preparedStatement.setString(11, c.getInstructorEmail());
             preparedStatement.setString(12, c.getLocation());
             preparedStatement.setString(13, c.getRoom());
