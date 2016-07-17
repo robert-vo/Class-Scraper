@@ -13,8 +13,8 @@ public class ScrapeElements implements Scraper {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.COURSE_TITLE);
     }
 
-    public static String getCourseStatus(Element e) {
-        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_STATUS);
+    public static String getCourseStatusAndSeats(Element e) {
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_STATUS_AND_SEATS);
     }
 
     public static String getClassAttributes(Element e) {
@@ -56,8 +56,13 @@ public class ScrapeElements implements Scraper {
         return getFirstChildNodeAndReturnAsString(classDescription);
     }
 
+    public static String getCourseName(Element e) {
+        String classNameAndCrnNumber = getNameAndCourseNumber(e);
+        return Scraper.extractTextBeforeParentheses(classNameAndCrnNumber);
+    }
+
     public static String getCourseNumber(Element e) {
-        Elements classNameAndCrnNumber = e.select(HTMLElements.CLASS_NAME_AND_CRN_NUMBER.getHtml());
+        String classNameAndCrnNumber = getNameAndCourseNumber(e);
         return Scraper.extractTextBetweenParentheses(classNameAndCrnNumber);
     }
 
@@ -81,9 +86,27 @@ public class ScrapeElements implements Scraper {
         return getFirstChildNodeAndReturnAsString(classComponent);
     }
 
-//    public static String getClassNotes(Element e) {
-//        return e.select(HTMLElements.CLASS_NOTES.getHtml()).text();
-//    }
+    public static String getSeatInformationFrom(Element e) {
+        String courseStatus = getCourseStatusAndSeats(e);
+        return Scraper.extractTextBetweenParentheses(courseStatus);
+    }
+
+    public static int getNumberOfAvailableSeats(Element e) {
+        String seatInformation = getSeatInformationFrom(e);
+        String availableSeats = seatInformation.substring(seatInformation.indexOf('/') + 1);
+        return Integer.parseInt(availableSeats);
+    }
+
+    public static int getNumberOfSeatsTaken(Element e) {
+        String seatInformation = getSeatInformationFrom(e);
+        String seatsTaken = seatInformation.substring(0, seatInformation.indexOf('/'));
+        return Integer.parseInt(seatsTaken);
+    }
+
+    public static Class.Status getCourseStatusOpenOrClosed(Element e) {
+        String seatInformation = getCourseStatusAndSeats(e);
+        return Class.Status.valueOf(seatInformation.substring(0, seatInformation.indexOf('(') - 1).trim());
+    }
 
     private static String getFirstChildNodeAndReturnAsString(Elements e) {
         return e.first()
@@ -96,4 +119,5 @@ public class ScrapeElements implements Scraper {
         return e.select(htmlElement.getHtml())
                 .text();
     }
+
 }
