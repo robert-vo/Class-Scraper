@@ -54,7 +54,20 @@ public class URLBuilderTest {
     public void testIncrementPageNumberAppendsPageTwo() throws Exception {
         String newURL = URLBuilder.incrementPageNumber(URL_WITH_TERM_1990);
         assertEquals(newURL, URL_WITH_TERM_1990_PAGE_2);
-
     }
 
+    @Test
+    public void testExtractTermParameterNoPage() {
+        assertEquals(URLBuilder.extractTermParameter(URL_WITH_TERM_1990), 1990);
+    }
+
+    @Test
+    public void testExtractTermParameterOnPage2() {
+        assertEquals(URLBuilder.extractTermParameter(URL_WITH_TERM_2000_PAGE_2), 2000);
+    }
+
+    @Test
+    public void testExtractTermParameterWithSubjectCOSC() {
+        assertEquals(URLBuilder.extractTermParameter(URL_WITH_TERM_1990_SUBJECT_COSC), 1990);
+    }
 }

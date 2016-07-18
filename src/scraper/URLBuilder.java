@@ -45,4 +45,8 @@ public class URLBuilder {
             return url.substring(0, url.length() - 1) + (currentPage + 1);
         }
     }
+
+    public static int extractTermParameter(String url) {
+        return Integer.parseInt(url.split("\\?")[1].split("&")[0].split("=")[1]);
+    }
 }
