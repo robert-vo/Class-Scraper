@@ -51,6 +51,25 @@ CREATE TABLE CLASS (
         ON DELETE no action
 );
 
+insert into terms values(1950, 2015, 'Spring');
+insert into terms values(1960, 2015, 'Summer');
+insert into terms values(1970, 2015, 'Fall');
+insert into terms values(1980, 2016, 'Spring');
+insert into terms values(1990, 2016, 'Summer');
+insert into terms values(2000, 2016, 'Fall');
+insert into terms values(2010, 2017, 'Spring');
+insert into terms values(2020, 2017, 'Summer');
+insert into terms values(2030, 2017, 'Fall');
+insert into terms values(2040, 2018, 'Spring');
+insert into terms values(2050, 2018, 'Summer');
+insert into terms values(2060, 2018, 'Fall');
+insert into terms values(2070, 2019, 'Spring');
+insert into terms values(2080, 2019, 'Summer');
+insert into terms values(2090, 2019, 'Fall');
+insert into terms values(2100, 2020, 'Spring');
+insert into terms values(2110, 2020, 'Summer');
+insert into terms values(2120, 2020, 'Fall');
+
 insert into department values("AAS","African American Studies");
 insert into department values("ACCT","Accounting");
 insert into department values("AFSC","Air Force Science");
