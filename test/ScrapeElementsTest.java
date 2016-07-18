@@ -29,6 +29,8 @@ public class ScrapeElementsTest {
     final private String COURSE_TITLE           = "Introduction To Computing";
     final private String COURSE_STATUS_SEATS    = "Open (12/35)";
     final private String CLASS_DATES            = "Aug 22, 2016 – Dec 15, 2016";
+    final private String CLASS_START_DATE       = "Aug 22, 2016";
+    final private String CLASS_END_DATE         = "Dec 15, 2016";
     final private String CLASS_ATTRIBUTES       = "No class attributes";
     final private String CLASS_DAYS_TIMES       = "MoWe 04:00 P.M.-05:30 P.M.";
     final private String INSTRUCTOR_NAME        = "Robert Lea";
@@ -41,7 +43,6 @@ public class ScrapeElementsTest {
     final private String SYLLABUS               = "Unavailable";
     final private String CLASS_DURATION         = "15 weeks";
     final private String CLASS_COMPONENT        = "LEC";
-    final private String CLASS_NOTES            = "Blackboard, an online course management system, is scheduled to be used for this course and can be accessed via AccessUH. For more information, visit the UH Blackboard site.";
 
     @Before
     public void setUp() throws IOException {
@@ -99,6 +100,16 @@ public class ScrapeElementsTest {
     @Test
     public void testGetClassDatesFromAClass() {
         assertEquals(getClassDates(aClass), CLASS_DATES);
+    }
+
+    @Test
+    public void testGetStartDateFromAClass() {
+        assertEquals(getClassStartDate(aClass), CLASS_START_DATE);
+    }
+
+    @Test
+    public void testGetEndDateFromAClass() {
+        assertEquals(getClassEndDate(aClass), CLASS_END_DATE);
     }
 
     @Test
