@@ -3,10 +3,12 @@ package scraper;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ui.ScraperGUI;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScraperRunner implements Scraper {
 
@@ -61,17 +63,14 @@ public class ScraperRunner implements Scraper {
 
     public static void run() throws IOException {
         try {
-
             Document entireWebPage = retrieveWebpage(WEBSITE_URL);
-
             while (verifyValidDocument(entireWebPage)) {
-                Elements allClasses = entireWebPage.select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
+                List<Class> allClasses = convertDocumentToClasses(entireWebPage);
                 DatabaseOperations.performDatabaseActions(allClasses);
                 WEBSITE_URL = URLBuilder.incrementPageNumber(WEBSITE_URL);
                 entireWebPage = retrieveWebpage(WEBSITE_URL);
                 ScraperGUI.appendToLoggerTextArea("Starting next page: " + WEBSITE_URL);
             }
-
             ScraperGUI.appendToLoggerTextArea("Finished Scraping");
         }
         catch (Exception e1) {
@@ -79,8 +78,40 @@ public class ScraperRunner implements Scraper {
         }
     }
 
-    public static List<Class> convertDocumentToClass(Document e) {
-        e.select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml()).stream().map(e -> e).
+    public static List<Class> convertDocumentToClasses(Document doc) {
+        return doc.select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
+                .stream()
+                .map(ScraperRunner::convertElementToAClass)
+                .collect(Collectors.toList());
+    }
+
+    public static Class convertElementToAClass(Element aClass) {
+        Term termID = getTerm();
+        String classTitle = ScrapeElements.getCourseTitle(aClass);
+        String className = ScrapeElements.getCourseName(aClass);
+        Class.Status classStatus = ScrapeElements.getCourseStatusOpenOrClosed(aClass);
+        String courseNumber = ScrapeElements.getCourseNumber(aClass);
+        int seatsTaken = ScrapeElements.getNumberOfSeatsTaken(aClass);
+        int seatsAvailable = ScrapeElements.getNumberOfAvailableSeats(aClass);
+        Semester semester = getTerm().getSemester();
+        String classDates = ScrapeElements.getClassDates(aClass);
+        String attributes = ScrapeElements.getClassAttributes(aClass);
+        String daysTimes = ScrapeElements.getClassDaysAndTimes(aClass);
+        String instructorName = ScrapeElements.getInstructorName(aClass);
+        String instructorEmail = ScrapeElements.getInstructorEmail(aClass);
+        String location = ScrapeElements.getLocation(aClass);
+        String room = ScrapeElements.getRoom(aClass);
+        String format = ScrapeElements.getFormat(aClass);
+        String description = ScrapeElements.getDescription(aClass);
+        String duration = ScrapeElements.getClassDuration(aClass);
+        String session = ScrapeElements.getSession(aClass);
+        String component = ScrapeElements.getClassComponent(aClass);
+        String syllabus = ScrapeElements.getSyllabus(aClass);
+        Class c = new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken,
+                    seatsAvailable, semester, classDates, attributes, daysTimes, instructorName,
+                    instructorEmail, location, room, format, description, duration, session,
+                    component, syllabus);
+        return c;
     }
 
 
