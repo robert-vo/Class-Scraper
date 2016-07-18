@@ -14,7 +14,6 @@ public interface Scraper {
             return "0";
         }
     }
-
     static String extractEmailFromHREFTag(Elements e) {
         try {
             return e.attr("href")
