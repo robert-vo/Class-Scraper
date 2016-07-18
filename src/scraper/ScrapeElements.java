@@ -26,6 +26,16 @@ public class ScrapeElements implements Scraper {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DATES);
     }
 
+    public static String getClassStartDate(Element e) {
+        String classDates = getClassDates(e);
+        return classDates.split("–")[0].trim();
+    }
+
+    public static String getClassEndDate(Element e) {
+        String classDates = getClassDates(e);
+        return classDates.split("–")[1].trim();
+    }
+
     public static String getClassDaysAndTimes(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DAYS_TIMES);
     }
@@ -124,4 +134,6 @@ public class ScrapeElements implements Scraper {
     public static String extractSyllabusFromElements(Elements e) {
         return e.size() == 0 ? "Unavailable" : e.attr("href");
     }
+
+
 }
