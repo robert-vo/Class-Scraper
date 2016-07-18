@@ -7,6 +7,7 @@ import ui.ScraperGUI;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Robert on 7/17/16.
@@ -53,36 +54,56 @@ public class DatabaseOperations {
         }
     }
 
-    public static void performDatabaseActions(Elements e) {
-        for (Element aClass : e) {
-//            Term termID = getTerm();
-            String classTitle = ScrapeElements.getCourseTitle(aClass);
-            String className = ScrapeElements.getCourseName(aClass);
-            Class.Status classStatus = ScrapeElements.getCourseStatusOpenOrClosed(aClass);
-            String courseNumber = ScrapeElements.getCourseNumber(aClass);
-            int seatsTaken = ScrapeElements.getNumberOfSeatsTaken(aClass);
-            int seatsAvailable = ScrapeElements.getNumberOfAvailableSeats(aClass);
-//            Semester semester = getTerm().getSemester();
-            String classDates = ScrapeElements.getClassDates(aClass);
-            String attributes = ScrapeElements.getClassAttributes(aClass);
-            String daysTimes = ScrapeElements.getClassDaysAndTimes(aClass);
-            String instructorName = ScrapeElements.getInstructorName(aClass);
-            String instructorEmail = ScrapeElements.getInstructorEmail(aClass);
-            System.out.println(instructorEmail);
-            String location = ScrapeElements.getLocation(aClass);
-            String room = ScrapeElements.getRoom(aClass);
-            String format = ScrapeElements.getFormat(aClass);
-            String description = ScrapeElements.getDescription(aClass);
-            String duration = ScrapeElements.getClassDuration(aClass);
-            String session = ScrapeElements.getSession(aClass);
-            String component = ScrapeElements.getClassComponent(aClass);
-            String syllabus = ScrapeElements.getSyllabus(aClass);
-//            Class c = new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken,
-//                    seatsAvailable, semester, classDates, attributes, daysTimes, instructorName,
-//                    instructorEmail, location, room, format, description, duration, session,
-//                    component, syllabus);
-//            insertIntoDatabase(c);
-        }
+    public static void performDatabaseActions(List<Class> allClasses) throws SQLException, ClassNotFoundException {
+        //if it exists in database, update information
+
+        //else, insert into database
+        allClasses.stream().forEach((c) -> {
+            try {
+                DatabaseOperations.insertIntoDatabase(c);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }
+
+/*
+CREATE TABLE CLASS (
+	Class_ID            INT     PRIMARY KEY AUTO_INCREMENT,
+    Term_ID             INT,
+    Semester            ENUM('Fall', 'Summer', 'Spring'),
+    Year				INT,
+	Title               VARCHAR(100),
+    CRN                 INT     ,
+    Name                VARCHAR(100)    NOT NULL,
+    Status              ENUM('Open', 'Closed') ,
+    ATTRIBUTES          VARCHAR(100),
+    DATES               VARCHAR(100),
+    DAYS_TIMES          VARCHAR(100),
+    INSTRUCTOR          VARCHAR(100),
+    INSTRUCTOR_EMAIL    VARCHAR(100),
+    LOCATION            VARCHAR(100),
+    ROOM                VARCHAR(100),
+    FORMAT              VARCHAR(100),
+    DESCRIPTION         VARCHAR(500),
+    DURATION            VARCHAR(100),
+    SESSION             VARCHAR(100),
+    COMPONENT           VARCHAR(100),
+    SYLLABUS            VARCHAR(200),
+    SEATS_TAKEN 		INT,
+    SEATS_AVAILABLE		INT,
+    SEATS_TOTAL			INT,
+    MONDAY				BOOLEAN DEFAULT FALSE,
+    TUESDAY				BOOLEAN DEFAULT FALSE,
+    WEDNESDAY			BOOLEAN DEFAULT FALSE,
+    THURSDAY			BOOLEAN DEFAULT FALSE,
+    FRIDAY				BOOLEAN DEFAULT FALSE,
+	SATURDAY			BOOLEAN DEFAULT FALSE,
+    SUNDAY				BOOLEAN DEFAULT FALSE,
+    ONLINE_COURSE		BOOLEAN DEFAULT FALSE
+);
+ */
