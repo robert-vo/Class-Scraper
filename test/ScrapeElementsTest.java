@@ -12,6 +12,7 @@ import scraper.Term;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -156,11 +157,6 @@ public class ScrapeElementsTest {
         assertEquals(getClassComponent(aClass), CLASS_COMPONENT);
     }
 
-//    @Test
-//    public void testGetClassNotesFromAClassWithNotes() {
-//        assertEquals(getClassNotes(aClass), CLASS_NOTES);
-//    }
-
     @Test
     public void testDocumentHasTenClasses() throws IOException {
         assertEquals(mock.generateDocumentForTerm(Term.FALL_2016)
@@ -186,11 +182,9 @@ public class ScrapeElementsTest {
         Elements allClasses = mock.generateDocumentForTerm(Term.FALL_2016)
                                   .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
 
-        ArrayList<String> listOfScrapedNames = new ArrayList<>();
-
-        for (Element e : allClasses) {
-            listOfScrapedNames.add(e.select(HTMLElements.COURSE_TITLE.getHtml()).text());
-        }
+        ArrayList<String> listOfScrapedNames = allClasses.stream()
+                                                         .map(e -> e.select(HTMLElements.COURSE_TITLE.getHtml()).text())
+                                                         .collect(Collectors.toCollection(ArrayList::new));
 
         assertEquals(listOfClassNames, listOfScrapedNames);
     }
