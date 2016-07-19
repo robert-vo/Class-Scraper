@@ -80,39 +80,49 @@ public class ScraperRunner implements Scraper {
 
     public static List<Class> convertDocumentToClasses(Document doc) {
         return doc.select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
-                .stream()
-                .map(ScraperRunner::convertElementToAClass)
-                .collect(Collectors.toList());
+                  .stream()
+                  .map(ScraperRunner::convertElementToAClass)
+                  .collect(Collectors.toList());
     }
 
     public static Class convertElementToAClass(Element aClass) {
-        Term termID = getTerm();
-        String classTitle = ScrapeElements.getCourseTitle(aClass);
-        String className = ScrapeElements.getCourseName(aClass);
-        Class.Status classStatus = ScrapeElements.getCourseStatusOpenOrClosed(aClass);
-        String courseNumber = ScrapeElements.getCourseNumber(aClass);
-        int seatsTaken = ScrapeElements.getNumberOfSeatsTaken(aClass);
-        int seatsAvailable = ScrapeElements.getNumberOfAvailableSeats(aClass);
-        Semester semester = getTerm().getSemester();
-        String classDates = ScrapeElements.getClassDates(aClass);
-        String attributes = ScrapeElements.getClassAttributes(aClass);
-        String daysTimes = ScrapeElements.getClassDaysAndTimes(aClass);
-        String instructorName = ScrapeElements.getInstructorName(aClass);
-        String instructorEmail = ScrapeElements.getInstructorEmail(aClass);
-        String location = ScrapeElements.getLocation(aClass);
-        String room = ScrapeElements.getRoom(aClass);
-        String format = ScrapeElements.getFormat(aClass);
-        String description = ScrapeElements.getDescription(aClass);
-        String duration = ScrapeElements.getClassDuration(aClass);
-        String session = ScrapeElements.getSession(aClass);
-        String component = ScrapeElements.getClassComponent(aClass);
-        String syllabus = ScrapeElements.getSyllabus(aClass);
-        Class c = new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken,
-                    seatsAvailable, semester, classDates, attributes, daysTimes, instructorName,
-                    instructorEmail, location, room, format, description, duration, session,
-                    component, syllabus);
-        return c;
+        Term            termID              = getTerm();
+        String          classTitle          = ScrapeElements.getCourseTitle(aClass);
+        String          className           = ScrapeElements.getCourseName(aClass);
+        Class.Status    classStatus         = ScrapeElements.getCourseStatusOpenOrClosed(aClass);
+        String          courseNumber        = ScrapeElements.getCourseNumber(aClass);
+        int             seatsTaken          = ScrapeElements.getNumberOfSeatsTaken(aClass);
+        int             seatsTotal          = ScrapeElements.getNumberOfTotalSeats(aClass);
+        int             seatsAvailable      = seatsTotal - seatsTaken;
+        Semester        semester            = getTerm().getSemester();
+        String          classStartDate      = ScrapeElements.getClassStartDate(aClass);
+        String          classEndDate        = ScrapeElements.getClassEndDate(aClass);
+        String          attributes          = ScrapeElements.getClassAttributes(aClass);
+        String          classStartTime      = ScrapeElements.getClassStartTime(aClass);
+        String          classEndTime        = ScrapeElements.getClassEndTime(aClass);
+        boolean         isMondayClass       = ScrapeElements.isMondayClass(aClass);
+        boolean         isTuesdayClass      = ScrapeElements.isTuesdayClass(aClass);
+        boolean         isWednesdayClass    = ScrapeElements.isWednesdayClass(aClass);
+        boolean         isThursdayClass     = ScrapeElements.isThursdayClass(aClass);
+        boolean         isFridayClass       = ScrapeElements.isFridayClass(aClass);
+        boolean         isSaturdayClass     = ScrapeElements.isSaturdayClass(aClass);
+        boolean         isSundayClass       = ScrapeElements.isSundayClass(aClass);
+        boolean         isOnlineClass       = ScrapeElements.isOnlineClass(aClass);
+        String          instructorName      = ScrapeElements.getInstructorName(aClass);
+        String          instructorEmail     = ScrapeElements.getInstructorEmail(aClass);
+        String          location            = ScrapeElements.getLocation(aClass);
+        String          room                = ScrapeElements.getRoom(aClass);
+        String          format              = ScrapeElements.getFormat(aClass);
+        String          description         = ScrapeElements.getDescription(aClass);
+        String          duration            = ScrapeElements.getClassDuration(aClass);
+        String          session             = ScrapeElements.getSession(aClass);
+        String          component           = ScrapeElements.getClassComponent(aClass);
+        String          syllabus            = ScrapeElements.getSyllabus(aClass);
+        return new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken, seatsAvailable,
+                seatsTotal, semester, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
+                isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
+                isSundayClass, isOnlineClass, instructorName, instructorEmail, location, room, format,
+                description, duration, session, component, syllabus);
     }
-
 
 }
