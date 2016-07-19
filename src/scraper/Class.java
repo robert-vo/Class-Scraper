@@ -9,59 +9,78 @@ public class Class {
         Open, Closed
     }
 
-    private String classID;
-    private Term termID;
-    private String classTitle;
-    private String className;
-    private Status classStatus;
-    private String courseNumber;
-    private int seatsTaken;
-    private int seatsAvailable;
-    private Semester semester;
-    private String classDates;
-    private String attributes;
-    private String daysTimes;
-    private String instructorName;
-    private String instructorEmail;
-    private String location;
-    private String room;
-    private String format;
-    private String description;
-    private String duration;
-    private String session;
-    private String component;
-    private String syllabus;
+    private Term            termID;
+    private String          classTitle;
+    private String          className;
+    private Class.Status    classStatus;
+    private String          courseNumber;
+    private int             seatsTaken;
+    private int             seatsAvailable;
+    private int             seatsTotal;
+    private Semester        semester;
+    private String          classStartDate;
+    private String          classEndDate;
+    private String          attributes;
+    private String          classStartTime;
+    private String          classEndTime;
+    private boolean         isMondayClass;
+    private boolean         isTuesdayClass;
+    private boolean         isWednesdayClass;
+    private boolean         isThursdayClass;
+    private boolean         isFridayClass;
+    private boolean         isSaturdayClass;
+    private boolean         isSundayClass;
+    private boolean         isOnlineClass;
+    private String          instructorName;
+    private String          instructorEmail;
+    private String          location;
+    private String          room;
+    private String          format;
+    private String          description;
+    private String          duration;
+    private String          session;
+    private String          component;
+    private String          syllabus;
 
-    public Class(Term termID, String classTitle, String className, Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable, Semester semester, String classDates, String attributes, String daysTimes, String instructorName, String instructorEmail, String location, String room, String format, String description, String duration, String session, String component, String syllabus) {
-        this.termID = termID;
-        this.classTitle = classTitle;
-        this.className = className;
-        this.classStatus = classStatus;
-        this.courseNumber = courseNumber;
-        this.seatsTaken = seatsTaken;
-        this.seatsAvailable = seatsAvailable;
-        this.semester = semester;
-        this.classDates = classDates;
-        this.attributes = attributes;
-        this.daysTimes = daysTimes;
-        this.instructorName = instructorName;
-        this.instructorEmail = instructorEmail;
-        this.location = location;
-        this.room = room;
-        this.format = format;
-        this.description = description;
-        this.duration = duration;
-        this.session = session;
-        this.component = component;
-        this.syllabus = syllabus;
-    }
-
-    public String getClassID() {
-        return classID;
-    }
-
-    public void setClassID(String classID) {
-        this.classID = classID;
+    public Class(Term termID, String classTitle, String className, Status classStatus, String courseNumber,
+                 int seatsTaken, int seatsAvailable, int seatsTotal, Semester semester, String classStartDate, String classEndDate,
+                 String attributes, String classStartTime, String classEndTime, boolean isMondayClass,
+                 boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass, boolean isFridayClass,
+                 boolean isSaturdayClass, boolean isSundayClass, boolean isOnlineClass, String instructorName,
+                 String instructorEmail, String location, String room, String format, String description,
+                 String duration, String session, String component, String syllabus) {
+        this.termID             = termID;
+        this.classTitle         = classTitle;
+        this.className          = className;
+        this.classStatus        = classStatus;
+        this.courseNumber       = courseNumber;
+        this.seatsTaken         = seatsTaken;
+        this.seatsAvailable     = seatsAvailable;
+        this.seatsTotal         = seatsTotal;
+        this.semester           = semester;
+        this.classStartDate     = classStartDate;
+        this.classEndDate       = classEndDate;
+        this.attributes         = attributes;
+        this.classStartTime     = classStartTime;
+        this.classEndTime       = classEndTime;
+        this.isMondayClass      = isMondayClass;
+        this.isTuesdayClass     = isTuesdayClass;
+        this.isWednesdayClass   = isWednesdayClass;
+        this.isThursdayClass    = isThursdayClass;
+        this.isFridayClass      = isFridayClass;
+        this.isSaturdayClass    = isSaturdayClass;
+        this.isSundayClass      = isSundayClass;
+        this.isOnlineClass      = isOnlineClass;
+        this.instructorName     = instructorName;
+        this.instructorEmail    = instructorEmail;
+        this.location           = location;
+        this.room               = room;
+        this.format             = format;
+        this.description        = description;
+        this.duration           = duration;
+        this.session            = session;
+        this.component          = component;
+        this.syllabus           = syllabus;
     }
 
     public Term getTermID() {
@@ -120,6 +139,14 @@ public class Class {
         this.seatsAvailable = seatsAvailable;
     }
 
+    public int getSeatsTotal() {
+        return seatsTotal;
+    }
+
+    public void setSeatsTotal(int seatsTotal) {
+        this.seatsTotal = seatsTotal;
+    }
+
     public Semester getSemester() {
         return semester;
     }
@@ -128,12 +155,20 @@ public class Class {
         this.semester = semester;
     }
 
-    public String getClassDates() {
-        return classDates;
+    public String getClassStartDate() {
+        return classStartDate;
     }
 
-    public void setClassDates(String classDates) {
-        this.classDates = classDates;
+    public void setClassStartDate(String classStartDate) {
+        this.classStartDate = classStartDate;
+    }
+
+    public String getClassEndDate() {
+        return classEndDate;
+    }
+
+    public void setClassEndDate(String classEndDate) {
+        this.classEndDate = classEndDate;
     }
 
     public String getAttributes() {
@@ -144,12 +179,84 @@ public class Class {
         this.attributes = attributes;
     }
 
-    public String getDaysTimes() {
-        return daysTimes;
+    public String getClassStartTime() {
+        return classStartTime;
     }
 
-    public void setDaysTimes(String daysTimes) {
-        this.daysTimes = daysTimes;
+    public void setClassStartTime(String classStartTime) {
+        this.classStartTime = classStartTime;
+    }
+
+    public String getClassEndTime() {
+        return classEndTime;
+    }
+
+    public void setClassEndTime(String classEndTime) {
+        this.classEndTime = classEndTime;
+    }
+
+    public boolean isMondayClass() {
+        return isMondayClass;
+    }
+
+    public void setMondayClass(boolean mondayClass) {
+        isMondayClass = mondayClass;
+    }
+
+    public boolean isTuesdayClass() {
+        return isTuesdayClass;
+    }
+
+    public void setTuesdayClass(boolean tuesdayClass) {
+        isTuesdayClass = tuesdayClass;
+    }
+
+    public boolean isWednesdayClass() {
+        return isWednesdayClass;
+    }
+
+    public void setWednesdayClass(boolean wednesdayClass) {
+        isWednesdayClass = wednesdayClass;
+    }
+
+    public boolean isThursdayClass() {
+        return isThursdayClass;
+    }
+
+    public void setThursdayClass(boolean thursdayClass) {
+        isThursdayClass = thursdayClass;
+    }
+
+    public boolean isFridayClass() {
+        return isFridayClass;
+    }
+
+    public void setFridayClass(boolean fridayClass) {
+        isFridayClass = fridayClass;
+    }
+
+    public boolean isSaturdayClass() {
+        return isSaturdayClass;
+    }
+
+    public void setSaturdayClass(boolean saturdayClass) {
+        isSaturdayClass = saturdayClass;
+    }
+
+    public boolean isSundayClass() {
+        return isSundayClass;
+    }
+
+    public void setSundayClass(boolean sundayClass) {
+        isSundayClass = sundayClass;
+    }
+
+    public boolean isOnlineClass() {
+        return isOnlineClass;
+    }
+
+    public void setOnlineClass(boolean onlineClass) {
+        isOnlineClass = onlineClass;
     }
 
     public String getInstructorName() {
@@ -233,28 +340,3 @@ public class Class {
     }
 }
 
-/*
-CLASS 1234 (12345) CLASS_NAME √
-OPEN/CLOSED (Seats Taken / Seats Available) √
-Class Attributes (if applicable) √
-Dates: start dates - end dates √
-Days/Times: MoFr 9am-5pm √
-Instructor: Teacher √
-Instructor Email: e@e.e √
-Location: UH √
-Room: Roomroom √
-Format: OnlineOrNot √
-
-Description: Something (remove the word 'Description')
-Class Number: Something (remove the word 'Class Number')
-Duration: 123123 Weeks √ (remove the word 'Duration')
-Session: 1 (remove the word 'Session')
-Class Component: LEC √ (remove the words 'Class Component')
-Syllabus: Link (remove the word 'Syllabus')
-Notes:
-*/
-
-/*
-
-
- */
