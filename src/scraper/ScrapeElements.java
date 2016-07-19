@@ -188,8 +188,4 @@ public class ScrapeElements implements Scraper {
         return isClassOnCertainDay(aClass, SUNDAY_ABBREVIATION);
     }
 
-    public static boolean isOnlineClass(Element aClass) {
-        String classAttributes = getClassAttributes(aClass);
-        return classAttributes.contains("Distance");
-    }
 }

@@ -107,7 +107,6 @@ public class ScraperRunner implements Scraper {
         boolean         isFridayClass       = ScrapeElements.isFridayClass(aClass);
         boolean         isSaturdayClass     = ScrapeElements.isSaturdayClass(aClass);
         boolean         isSundayClass       = ScrapeElements.isSundayClass(aClass);
-        boolean         isOnlineClass       = ScrapeElements.isOnlineClass(aClass);
         String          instructorName      = ScrapeElements.getInstructorName(aClass);
         String          instructorEmail     = ScrapeElements.getInstructorEmail(aClass);
         String          location            = ScrapeElements.getLocation(aClass);
@@ -121,7 +120,7 @@ public class ScraperRunner implements Scraper {
         return new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken, seatsAvailable,
                 seatsTotal, semester, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
                 isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
-                isSundayClass, isOnlineClass, instructorName, instructorEmail, location, room, format,
+                isSundayClass, instructorName, instructorEmail, location, room, format,
                 description, duration, session, component, syllabus);
     }
 

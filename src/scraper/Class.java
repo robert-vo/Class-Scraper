@@ -30,7 +30,6 @@ public class Class {
     private boolean         isFridayClass;
     private boolean         isSaturdayClass;
     private boolean         isSundayClass;
-    private boolean         isOnlineClass;
     private String          instructorName;
     private String          instructorEmail;
     private String          location;
@@ -46,7 +45,7 @@ public class Class {
                  int seatsTaken, int seatsAvailable, int seatsTotal, Semester semester, String classStartDate, String classEndDate,
                  String attributes, String classStartTime, String classEndTime, boolean isMondayClass,
                  boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass, boolean isFridayClass,
-                 boolean isSaturdayClass, boolean isSundayClass, boolean isOnlineClass, String instructorName,
+                 boolean isSaturdayClass, boolean isSundayClass, String instructorName,
                  String instructorEmail, String location, String room, String format, String description,
                  String duration, String session, String component, String syllabus) {
         this.termID             = termID;
@@ -70,7 +69,6 @@ public class Class {
         this.isFridayClass      = isFridayClass;
         this.isSaturdayClass    = isSaturdayClass;
         this.isSundayClass      = isSundayClass;
-        this.isOnlineClass      = isOnlineClass;
         this.instructorName     = instructorName;
         this.instructorEmail    = instructorEmail;
         this.location           = location;
@@ -249,14 +247,6 @@ public class Class {
 
     public void setSundayClass(boolean sundayClass) {
         isSundayClass = sundayClass;
-    }
-
-    public boolean isOnlineClass() {
-        return isOnlineClass;
-    }
-
-    public void setOnlineClass(boolean onlineClass) {
-        isOnlineClass = onlineClass;
     }
 
     public String getInstructorName() {
