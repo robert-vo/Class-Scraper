@@ -23,8 +23,10 @@ CREATE TABLE CLASS (
     Name                VARCHAR(100)    NOT NULL,
     Status              ENUM('Open', 'Closed') ,
     ATTRIBUTES          VARCHAR(100),
-    DATES               VARCHAR(100),
-    DAYS_TIMES          VARCHAR(100),
+    START_DATE          DATE,
+    END_DATE            DATE,
+    START_TIME          TIME,
+    END_TIME            TIME,
     INSTRUCTOR          VARCHAR(100),
     INSTRUCTOR_EMAIL    VARCHAR(100),
     LOCATION            VARCHAR(100),
@@ -45,7 +47,6 @@ CREATE TABLE CLASS (
     FRIDAY				BOOLEAN DEFAULT FALSE,
 	SATURDAY			BOOLEAN DEFAULT FALSE,
     SUNDAY				BOOLEAN DEFAULT FALSE,
-    ONLINE_COURSE		BOOLEAN DEFAULT FALSE,
     foreign key (Term_ID)
 		REFERENCES TERMS(Term_ID)
         ON DELETE no action
