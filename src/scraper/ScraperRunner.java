@@ -94,7 +94,6 @@ public class ScraperRunner implements Scraper {
         int             seatsTaken          = ScrapeElements.getNumberOfSeatsTaken(aClass);
         int             seatsTotal          = ScrapeElements.getNumberOfTotalSeats(aClass);
         int             seatsAvailable      = seatsTotal - seatsTaken;
-        Semester        semester            = getTerm().getSemester();
         String          classStartDate      = ScrapeElements.getClassStartDate(aClass);
         String          classEndDate        = ScrapeElements.getClassEndDate(aClass);
         String          attributes          = ScrapeElements.getClassAttributes(aClass);
@@ -118,7 +117,7 @@ public class ScraperRunner implements Scraper {
         String          component           = ScrapeElements.getClassComponent(aClass);
         String          syllabus            = ScrapeElements.getSyllabus(aClass);
         return new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken, seatsAvailable,
-                seatsTotal, semester, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
+                seatsTotal, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
                 isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
                 isSundayClass, instructorName, instructorEmail, location, room, format,
                 description, duration, session, component, syllabus);

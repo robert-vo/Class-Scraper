@@ -17,7 +17,6 @@ public class Class {
     private int             seatsTaken;
     private int             seatsAvailable;
     private int             seatsTotal;
-    private Semester        semester;
     private String          classStartDate;
     private String          classEndDate;
     private String          attributes;
@@ -42,7 +41,7 @@ public class Class {
     private String          syllabus;
 
     public Class(Term termID, String classTitle, String className, Status classStatus, String courseNumber,
-                 int seatsTaken, int seatsAvailable, int seatsTotal, Semester semester, String classStartDate, String classEndDate,
+                 int seatsTaken, int seatsAvailable, int seatsTotal, String classStartDate, String classEndDate,
                  String attributes, String classStartTime, String classEndTime, boolean isMondayClass,
                  boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass, boolean isFridayClass,
                  boolean isSaturdayClass, boolean isSundayClass, String instructorName,
@@ -56,7 +55,6 @@ public class Class {
         this.seatsTaken         = seatsTaken;
         this.seatsAvailable     = seatsAvailable;
         this.seatsTotal         = seatsTotal;
-        this.semester           = semester;
         this.classStartDate     = classStartDate;
         this.classEndDate       = classEndDate;
         this.attributes         = attributes;
@@ -143,14 +141,6 @@ public class Class {
 
     public void setSeatsTotal(int seatsTotal) {
         this.seatsTotal = seatsTotal;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
     }
 
     public String getClassStartDate() {
