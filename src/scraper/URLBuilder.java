@@ -41,10 +41,12 @@ public class URLBuilder {
             return url + generateParameter(URLParameters.page, "2");
         }
         else {
-            int currentPage = Integer.parseInt(url.substring(url.length() - 1));
-            return url.substring(0, url.length() - 1) + (currentPage + 1);
+            //TODO - Clean up this mess
+            int currentPage = Integer.parseInt(url.substring(url.indexOf("page")).split("=")[1]);
+            return url.substring(0, url.indexOf("page"))  + "page=" + (currentPage + 1);
         }
     }
+
 
     public static int extractTermParameter(String url) {
         return Integer.parseInt(url.split("\\?")[1].split("&")[0].split("=")[1]);
