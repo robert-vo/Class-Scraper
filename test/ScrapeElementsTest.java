@@ -224,11 +224,6 @@ public class ScrapeElementsTest {
     }
 
     @Test
-    public void testIsOnlineClass() throws Exception {
-        assertFalse(isOnlineClass(aClass));
-    }
-
-    @Test
     public void testScrapeDocumentHasCorrectNames() throws IOException {
         final ArrayList<String> listOfClassNames = new ArrayList<String>() {{
             add("Introduction To Computing");
