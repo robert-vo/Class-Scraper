@@ -3,6 +3,8 @@ package scraper;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.Optional;
+
 public class ScrapeElements implements Scraper {
 
     final static private String MONDAY_ABBREVIATION    = "Mo";
@@ -34,6 +36,7 @@ public class ScrapeElements implements Scraper {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DATES);
     }
 
+    // TODO - Format these two methods, getClassStartDate and getClassEndDate
     public static String getClassStartDate(Element e) {
         String classDates = getClassDates(e);
         return classDates.split("–")[0].trim();
@@ -70,11 +73,12 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getDescription(Element e) {
-        try {
-            Elements classDescription = e.select(HTMLElements.CLASS_DESCRIPTION.getHtml());
-            return getFirstChildNodeAndReturnAsString(classDescription);
+        Optional<Elements> classDescription = Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()));
+
+        if(classDescription.isPresent()) {
+            return getFirstChildNodeAndReturnAsString(classDescription.get());
         }
-        catch (Exception ex) {
+        else {
             return "No description available.";
         }
     }
