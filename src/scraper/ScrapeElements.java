@@ -70,8 +70,13 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getDescription(Element e) {
-        Elements classDescription = e.select(HTMLElements.CLASS_DESCRIPTION.getHtml());
-        return getFirstChildNodeAndReturnAsString(classDescription);
+        try {
+            Elements classDescription = e.select(HTMLElements.CLASS_DESCRIPTION.getHtml());
+            return getFirstChildNodeAndReturnAsString(classDescription);
+        }
+        catch (Exception ex) {
+            return "No description available.";
+        }
     }
 
     public static String getCourseName(Element e) {
@@ -145,14 +150,23 @@ public class ScrapeElements implements Scraper {
 
 
     public static String getClassEndTime(Element aClass) {
-        String classTimes = getClassDaysAndTimes(aClass);
-        return classTimes.substring(classTimes.indexOf(" ")).split("-")[1].trim();
+        try {
+            String classTimes = getClassDaysAndTimes(aClass);
+           return classTimes.substring(classTimes.indexOf(" ")).split("-")[1].trim();
+        }
+        catch (IndexOutOfBoundsException e) {
+            return "--";
+        }
     }
 
     public static String getClassStartTime(Element aClass) {
-        String classTimes = getClassDaysAndTimes(aClass);
-
-        return classTimes.substring(classTimes.indexOf(" ")).split("-")[0].trim();
+        try {
+            String classTimes = getClassDaysAndTimes(aClass);
+            return classTimes.substring(classTimes.indexOf(" ")).split("-")[0].trim();
+        }
+        catch (IndexOutOfBoundsException e) {
+            return "--";
+        }
     }
 
     private static boolean isClassOnCertainDay(Element aClass, String classDay) {
