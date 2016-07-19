@@ -70,4 +70,11 @@ public class URLBuilderTest {
     public void testExtractTermParameterWithSubjectCOSC() {
         assertEquals(URLBuilder.extractTermParameter(URL_WITH_TERM_1990_SUBJECT_COSC), 1990);
     }
+
+    @Test
+    public void testIncrementPageURLFrom119To120() {
+        assertEquals(URLBuilder.incrementPageNumber("http://classbrowser.uh.edu/classes?term=1970&page=119"),
+                "http://classbrowser.uh.edu/classes?term=1970&page=120");
+    }
+
 }
