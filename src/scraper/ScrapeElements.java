@@ -5,6 +5,14 @@ import org.jsoup.select.Elements;
 
 public class ScrapeElements implements Scraper {
 
+    final static private String MONDAY_ABBREVIATION    = "Mo";
+    final static private String TUESDAY_ABBREVIATION   = "Tu";
+    final static private String WEDNESDAY_ABBREVIATION = "We";
+    final static private String THURSDAY_ABBREVIATION  = "Th";
+    final static private String FRIDAY_ABBREVIATION    = "Fr";
+    final static private String SATURDAY_ABBREVIATION  = "Sa";
+    final static private String SUNDAY_ABBREVIATION    = "Sun";
+
     public static String getNameAndCourseNumber(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_NAME_AND_CRN_NUMBER);
     }
@@ -102,10 +110,10 @@ public class ScrapeElements implements Scraper {
         return Scraper.extractTextBetweenParentheses(courseStatus);
     }
 
-    public static int getNumberOfAvailableSeats(Element e) {
+    public static int getNumberOfTotalSeats(Element e) {
         String seatInformation = getSeatInformationFrom(e);
-        String availableSeats = seatInformation.substring(seatInformation.indexOf('/') + 1);
-        return Integer.parseInt(availableSeats);
+        String totalSeats = seatInformation.substring(seatInformation.indexOf('/') + 1);
+        return Integer.parseInt(totalSeats);
     }
 
     public static int getNumberOfSeatsTaken(Element e) {
@@ -136,4 +144,52 @@ public class ScrapeElements implements Scraper {
     }
 
 
+    public static String getClassEndTime(Element aClass) {
+        String classTimes = getClassDaysAndTimes(aClass);
+        return classTimes.substring(classTimes.indexOf(" ")).split("-")[1].trim();
+    }
+
+    public static String getClassStartTime(Element aClass) {
+        String classTimes = getClassDaysAndTimes(aClass);
+
+        return classTimes.substring(classTimes.indexOf(" ")).split("-")[0].trim();
+    }
+
+    private static boolean isClassOnCertainDay(Element aClass, String classDay) {
+        String classDays = getClassDaysAndTimes(aClass);
+        return classDays.contains(classDay);
+    }
+
+    public static boolean isMondayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, MONDAY_ABBREVIATION);
+    }
+
+    public static boolean isTuesdayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, TUESDAY_ABBREVIATION);
+    }
+
+    public static boolean isWednesdayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, WEDNESDAY_ABBREVIATION);
+    }
+
+    public static boolean isThursdayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, THURSDAY_ABBREVIATION);
+    }
+
+    public static boolean isFridayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, FRIDAY_ABBREVIATION);
+    }
+
+    public static boolean isSaturdayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, SATURDAY_ABBREVIATION);
+    }
+
+    public static boolean isSundayClass(Element aClass) {
+        return isClassOnCertainDay(aClass, SUNDAY_ABBREVIATION);
+    }
+
+    public static boolean isOnlineClass(Element aClass) {
+        String classAttributes = getClassAttributes(aClass);
+        return classAttributes.contains("Distance");
+    }
 }
