@@ -1,13 +1,11 @@
+package scraper;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
-import scraper.Class;
-import scraper.HTMLElements;
-import scraper.ScraperRunner;
-import scraper.Term;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static scraper.ScrapeElements.*;
@@ -24,7 +21,6 @@ public class ScrapeElementsTest {
 
     ScraperRunner mock = mock(ScraperRunner.class);
     Element aClass;
-    Element mockedNullElement = mock(Element.class);
 
     final private String NAME_COURSE_NUMBER     = "COSC 1300 (15240)";
     final private String COURSE_NAME            = "COSC 1300";
@@ -53,13 +49,6 @@ public class ScrapeElementsTest {
         aClass = mock.generateDocumentForTerm(Term.FALL_2016)
                      .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                      .get(0);
-
-        when(mockedNullElement.select(any())).thenReturn(null);
-    }
-
-    @Test
-    public void testGetNullDescription() {
-        assertEquals(getDescription(mockedNullElement), "No description available.");
     }
 
     @Test
