@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static scraper.ScrapeElements.*;
@@ -88,8 +90,8 @@ public class ScrapeElementsTest {
     }
 
     @Test
-    public void testGetNumberOfAvailableSeats35() {
-        assertEquals(getNumberOfAvailableSeats(aClass), 35);
+    public void testGetNumberOfTotalSeats35() {
+        assertEquals(getNumberOfTotalSeats(aClass), 35);
     }
 
     @Test
@@ -173,6 +175,57 @@ public class ScrapeElementsTest {
         assertEquals(mock.generateDocumentForTerm(Term.FALL_2016)
                          .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                          .size(), 10);
+    }
+
+    @Test
+    public void testGetClassStartTime() throws Exception {
+        assertEquals(getClassStartTime(aClass), "04:00 P.M.");
+    }
+
+    @Test
+    public void testGetClassEndTime() throws Exception {
+        assertEquals(getClassEndTime(aClass), "05:30 P.M.");
+    }
+
+
+    @Test
+    public void testIsMondayClass() throws Exception {
+        assertTrue(isMondayClass(aClass));
+    }
+
+    @Test
+    public void testIsTuesdayClass() throws Exception {
+        assertFalse(isTuesdayClass(aClass));
+    }
+
+    @Test
+    public void testIsWednesdayClass() throws Exception {
+        assertTrue(isWednesdayClass(aClass));
+    }
+
+    @Test
+    public void testIsThursdayClass() throws Exception {
+        assertFalse(isThursdayClass(aClass));
+    }
+
+    @Test
+    public void testIsFridayClass() throws Exception {
+        assertFalse(isFridayClass(aClass));
+    }
+
+    @Test
+    public void testIsSaturdayClass() throws Exception {
+        assertFalse(isSaturdayClass(aClass));
+    }
+
+    @Test
+    public void testIsSundayClass() throws Exception {
+        assertFalse(isSundayClass(aClass));
+    }
+
+    @Test
+    public void testIsOnlineClass() throws Exception {
+        assertFalse(isOnlineClass(aClass));
     }
 
     @Test
