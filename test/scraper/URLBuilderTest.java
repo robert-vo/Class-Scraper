@@ -1,10 +1,8 @@
-import org.junit.Test;
-import scraper.Subject;
-import scraper.Term;
-import scraper.URLBuilder;
-import scraper.URLParameters;
+package scraper;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class URLBuilderTest {
 
