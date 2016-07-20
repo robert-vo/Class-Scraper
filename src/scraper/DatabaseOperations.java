@@ -5,9 +5,7 @@ import ui.ScraperGUI;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,31 +22,29 @@ public class DatabaseOperations {
         try (java.sql.Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
 
             final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
-                    "Title, CRN, Name, Status, ATTRIBUTES, START_DATE, END_DATE, " +
+                    "Title, CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
                     "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, ROOM, " +
                     "FORMAT, DESCRIPTION, DURATION, SESSION, COMPONENT, SYLLABUS, SEATS_TAKEN, " +
                     "SEATS_AVAILABLE, SEATS_TOTAL, MONDAY, TUESDAY, WEDNESDAY, " +
                     "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
-                    ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = conn.prepareStatement(insertClassIntoDatabase);
             preparedStatement.setInt    (1, Integer.parseInt(c.getTermID().getTermID()));
             preparedStatement.setString (2, c.getClassTitle());
             preparedStatement.setString (3, c.getCourseNumber());
-            preparedStatement.setString (4, c.getClassName());
-            preparedStatement.setString (5, c.getClassStatus().toString());
-            preparedStatement.setString (6, c.getAttributes());
+            preparedStatement.setString (4, c.getDepartmentAbbv());
+            preparedStatement.setString (5, c.getDepartmentCourseNumber());
+            preparedStatement.setString (6, c.getClassStatus().toString());
+            preparedStatement.setString (7, c.getAttributes());
 
             String startDate = c.getClassStartDate();
             String endDate = c.getClassEndDate();
 
-            DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-            Date startDate1 = format.parse(startDate);
-            Date endDate1 = format.parse(endDate);
+            preparedStatement.setDate (8, DateTimeUtilities.transformStringDateIntoSQLFormat(startDate));
+            preparedStatement.setDate (9, DateTimeUtilities.transformStringDateIntoSQLFormat(endDate));
 
-            preparedStatement.setDate (7, new java.sql.Date(startDate1.getTime()));
-            preparedStatement.setDate (8, new java.sql.Date(endDate1.getTime()));
-
+            // TODO - Refactor this mess. Include the logic in Class?
             SimpleDateFormat format1 = new SimpleDateFormat("HH:mm a", Locale.ENGLISH); // 12 hour format
             java.sql.Time ppstime1 = null;
             java.sql.Time ppstime2 = null;
@@ -65,29 +61,29 @@ public class DatabaseOperations {
                 ScraperGUI.appendToLoggerTextArea("Invalid date");
             }
 
-            preparedStatement.setTime (9, ppstime1);
-            preparedStatement.setTime (10, ppstime2);
+            preparedStatement.setTime (10, ppstime1);
+            preparedStatement.setTime (11, ppstime2);
 
-            preparedStatement.setString (11, c.getInstructorName());
-            preparedStatement.setString (12, c.getInstructorEmail());
-            preparedStatement.setString (13, c.getLocation());
-            preparedStatement.setString (14, c.getRoom());
-            preparedStatement.setString (15, c.getFormat());
-            preparedStatement.setString (16, c.getDescription());
-            preparedStatement.setString (17, c.getDuration());
-            preparedStatement.setString (18, c.getSession());
-            preparedStatement.setString (19, c.getComponent());
-            preparedStatement.setString (20, c.getSyllabus());
-            preparedStatement.setInt    (21, c.getSeatsTaken());
-            preparedStatement.setInt    (22, c.getSeatsAvailable());
-            preparedStatement.setInt    (23, c.getSeatsTotal());
-            preparedStatement.setBoolean(24, c.isMondayClass());
-            preparedStatement.setBoolean(25, c.isTuesdayClass());
-            preparedStatement.setBoolean(26, c.isWednesdayClass());
-            preparedStatement.setBoolean(27, c.isThursdayClass());
-            preparedStatement.setBoolean(28, c.isFridayClass());
-            preparedStatement.setBoolean(29, c.isSaturdayClass());
-            preparedStatement.setBoolean(30, c.isSundayClass());
+            preparedStatement.setString (12, c.getInstructorName());
+            preparedStatement.setString (13, c.getInstructorEmail());
+            preparedStatement.setString (14, c.getLocation());
+            preparedStatement.setString (15, c.getRoom());
+            preparedStatement.setString (16, c.getFormat());
+            preparedStatement.setString (17, c.getDescription());
+            preparedStatement.setString (18, c.getDuration());
+            preparedStatement.setString (19, c.getSession());
+            preparedStatement.setString (20, c.getComponent());
+            preparedStatement.setString (21, c.getSyllabus());
+            preparedStatement.setInt    (22, c.getSeatsTaken());
+            preparedStatement.setInt    (23, c.getSeatsAvailable());
+            preparedStatement.setInt    (24, c.getSeatsTotal());
+            preparedStatement.setBoolean(25, c.isMondayClass());
+            preparedStatement.setBoolean(26, c.isTuesdayClass());
+            preparedStatement.setBoolean(27, c.isWednesdayClass());
+            preparedStatement.setBoolean(28, c.isThursdayClass());
+            preparedStatement.setBoolean(29, c.isFridayClass());
+            preparedStatement.setBoolean(30, c.isSaturdayClass());
+            preparedStatement.setBoolean(31, c.isSundayClass());
 
             preparedStatement.executeUpdate();
             ScraperGUI.appendToLoggerTextArea(preparedStatement.toString());
@@ -103,9 +99,7 @@ public class DatabaseOperations {
         allClasses.stream().forEach((c) -> {
             try {
                 DatabaseOperations.insertIntoDatabase(c);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
