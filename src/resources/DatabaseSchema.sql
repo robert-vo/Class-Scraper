@@ -20,8 +20,8 @@ CREATE TABLE CLASS (
     Term_ID             INT,
 	Title               VARCHAR(100),
     CRN                 INT     ,
-    Name                VARCHAR(100)    NOT NULL, -- Add department
-    -- Add 4 digit course number
+    Department          VARCHAR(5)    NOT NULL,
+    Department_CRN      VARCHAR(5)    NOT NULL,
     Status              ENUM('Open', 'Closed') ,
     ATTRIBUTES          VARCHAR(100),
     START_DATE          DATE,
@@ -50,6 +50,9 @@ CREATE TABLE CLASS (
     SUNDAY				BOOLEAN DEFAULT FALSE,
     foreign key (Term_ID)
 		REFERENCES TERMS(Term_ID)
+        ON DELETE no action,
+    foreign key (Department)
+        REFERENCES DEPARTMENT(Department_Abbreviation)
         ON DELETE no action
 );
 
