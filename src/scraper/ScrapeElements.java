@@ -2,8 +2,8 @@ package scraper;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import java.util.Optional;
+import static scraper.StringUtilities.*;
 
 public class ScrapeElements implements Scraper {
 
@@ -49,7 +49,7 @@ public class ScrapeElements implements Scraper {
     public static String getClassDate(Optional<String> classDate, boolean isStart) {
         if(classDate.isPresent() && !classDate.get().equals("")) {
             String bothClassTimes = classDate.get();
-            return Scraper.splitByHyphenAndExtractHalf(bothClassTimes, isStart);
+            return splitByHyphenAndExtractHalf(bothClassTimes, isStart);
         }
         else {
             return "";
@@ -66,7 +66,7 @@ public class ScrapeElements implements Scraper {
 
     public static String getInstructorEmail(Element e) {
         Elements instructorEmail = e.select(HTMLElements.CLASS_INSTRUCTOR_EMAIL.getHtml());
-        return Scraper.extractEmailFromHREFTag(instructorEmail);
+        return extractEmailFromHREFTag(instructorEmail);
     }
 
     public static String getLocation(Element e) {
@@ -85,7 +85,6 @@ public class ScrapeElements implements Scraper {
         Optional<Elements> classDescription = Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()));
 
         if(classDescription.isPresent() && !(classDescription.get().size() == 0)) {
-
             return getFirstChildNodeAndReturnAsString(classDescription.get());
         }
         else {
@@ -95,12 +94,12 @@ public class ScrapeElements implements Scraper {
 
     public static String getCourseName(Element e) {
         String classNameAndCrnNumber = getNameAndCourseNumber(e);
-        return Scraper.extractTextBeforeParentheses(classNameAndCrnNumber);
+        return extractTextBeforeParentheses(classNameAndCrnNumber);
     }
 
     public static String getCourseNumber(Element e) {
         String classNameAndCrnNumber = getNameAndCourseNumber(e);
-        return Scraper.extractTextBetweenParentheses(classNameAndCrnNumber);
+        return extractTextBetweenParentheses(classNameAndCrnNumber);
     }
 
     public static String getSession(Element e) {
@@ -125,7 +124,7 @@ public class ScrapeElements implements Scraper {
 
     public static String getSeatInformationFrom(Element e) {
         String courseStatus = getCourseStatusAndSeats(e);
-        return Scraper.extractTextBetweenParentheses(courseStatus);
+        return extractTextBetweenParentheses(courseStatus);
     }
 
     public static int getNumberOfTotalSeats(Element e) {
@@ -171,7 +170,7 @@ public class ScrapeElements implements Scraper {
         if(classTime.isPresent() && !classTime.get().equals("") && !classTime.get().equals("--") && !classTime.get().equals("-")) {
             String bothClassTimes = classTime.get();
             String wholeString = bothClassTimes.substring(bothClassTimes.indexOf(" "));
-            return Scraper.splitByHyphenAndExtractHalf(wholeString, isStart);
+            return splitByHyphenAndExtractHalf(wholeString, isStart);
         }
         else {
             return "";
@@ -181,23 +180,13 @@ public class ScrapeElements implements Scraper {
     public static String getClassEndTime(Element aClass) {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
         Optional<String> endTime = Optional.ofNullable(getClassTime(classTimesFromHtml, false));
-        if(endTime.isPresent()) {
-            return endTime.get();
-        }
-        else {
-            return "";
-        }
+        return endTime.isPresent() ? endTime.get() : "";
     }
 
     public static String getClassStartTime(Element aClass) {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
         Optional<String> startTime = Optional.ofNullable(getClassTime(classTimesFromHtml, true));
-        if(startTime.isPresent()) {
-            return startTime.get();
-        }
-        else {
-            return "";
-        }
+        return startTime.isPresent() ? startTime.get() : "";
     }
 
     private static boolean isClassOnCertainDay(Element aClass, String classDay) {
@@ -233,4 +222,11 @@ public class ScrapeElements implements Scraper {
         return isClassOnCertainDay(aClass, SUNDAY_ABBREVIATION);
     }
 
+    public static String getDepartmentCourseNumber(String courseName) {
+        return StringUtilities.splitBySpaceAndExtractHalf(courseName, false);
+    }
+
+    public static String getDepartment(String courseName) {
+        return StringUtilities.splitBySpaceAndExtractHalf(courseName, true);
+    }
 }
