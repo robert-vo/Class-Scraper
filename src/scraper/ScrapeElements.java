@@ -36,15 +36,24 @@ public class ScrapeElements implements Scraper {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_DATES);
     }
 
-    // TODO - Format these two methods, getClassStartDate and getClassEndDate
     public static String getClassStartDate(Element e) {
-        String classDates = getClassDates(e);
-        return classDates.split("–")[0].trim();
+        Optional<String> classDatesFromHtml = Optional.ofNullable(getClassDates(e));
+        return getClassDate(classDatesFromHtml, true);
     }
 
     public static String getClassEndDate(Element e) {
-        String classDates = getClassDates(e);
-        return classDates.split("–")[1].trim();
+        Optional<String> classDatesFromHtml = Optional.ofNullable(getClassDates(e));
+        return getClassDate(classDatesFromHtml, false);
+    }
+
+    public static String getClassDate(Optional<String> classDate, boolean isStart) {
+        if(classDate.isPresent() && !classDate.get().equals("")) {
+            String bothClassTimes = classDate.get();
+            return Scraper.splitByHyphenAndExtractHalf(bothClassTimes, isStart);
+        }
+        else {
+            return "";
+        }
     }
 
     public static String getClassDaysAndTimes(Element e) {
@@ -101,7 +110,6 @@ public class ScrapeElements implements Scraper {
     public static String getSyllabus(Element e) {
         Elements classSyllabus = e.select(HTMLElements.CLASS_SYLLABUS.getHtml());
         return extractSyllabusFromElements(classSyllabus);
-//        return getFirstChildNodeAndReturnAsString(classSyllabus);
     }
 
     public static String getClassDuration(Element e) {
@@ -144,33 +152,39 @@ public class ScrapeElements implements Scraper {
     }
 
     public static String getClassFromElementUsingHTMLElement(Element e, HTMLElements htmlElement) {
-        return e.select(htmlElement.getHtml())
-                .text();
+        Optional<Elements> scrapedElement = Optional.ofNullable(e.select(htmlElement.getHtml()));
+
+        if(scrapedElement.isPresent()) {
+            return scrapedElement.get().text();
+        }
+        else {
+            return "";
+        }
     }
 
     public static String extractSyllabusFromElements(Elements e) {
         return e.size() == 0 ? "Unavailable" : e.attr("href");
     }
 
-
-    public static String getClassEndTime(Element aClass) {
-        try {
-            String classTimes = getClassDaysAndTimes(aClass);
-           return classTimes.substring(classTimes.indexOf(" ")).split("-")[1].trim();
+    private static String getClassTime(Optional<String> classTime, boolean isStart) {
+        if(classTime.isPresent() && !classTime.get().equals("") && !classTime.get().equals("--") && !classTime.get().equals("-")) {
+            String bothClassTimes = classTime.get();
+            String wholeString = bothClassTimes.substring(bothClassTimes.indexOf(" "));
+            return Scraper.splitByHyphenAndExtractHalf(wholeString, isStart);
         }
-        catch (IndexOutOfBoundsException e) {
-            return "--";
+        else {
+            return "";
         }
     }
 
+    public static String getClassEndTime(Element aClass) {
+        Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
+        return getClassTime(classTimesFromHtml, false);
+    }
+
     public static String getClassStartTime(Element aClass) {
-        try {
-            String classTimes = getClassDaysAndTimes(aClass);
-            return classTimes.substring(classTimes.indexOf(" ")).split("-")[0].trim();
-        }
-        catch (IndexOutOfBoundsException e) {
-            return "--";
-        }
+        Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
+        return getClassTime(classTimesFromHtml, true);
     }
 
     private static boolean isClassOnCertainDay(Element aClass, String classDay) {
