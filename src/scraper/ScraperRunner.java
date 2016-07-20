@@ -9,6 +9,7 @@ import ui.ScraperGUI;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import static scraper.StringUtilities.*;
 
 public class ScraperRunner implements Scraper {
 
@@ -32,7 +33,7 @@ public class ScraperRunner implements Scraper {
 
     public static int getNumberOfClasses(Document document) {
         Elements numberOfClassesInHTML = document.select(HTMLElements.NUMBER_OF_CLASSES.getHtml());
-        return Integer.parseInt(Scraper.extractTextBetweenParentheses(numberOfClassesInHTML));
+        return Integer.parseInt(extractTextBetweenParentheses(numberOfClassesInHTML));
     }
 
     public Document generateDocumentForTerm(Term term) throws IOException {
@@ -86,9 +87,12 @@ public class ScraperRunner implements Scraper {
     }
 
     public static Class convertElementToAClass(Element aClass) {
+        //TODO - turn time/date fields to their appropriate data types
         Term            termID              = getTerm();
         String          classTitle          = ScrapeElements.getCourseTitle(aClass);
         String          className           = ScrapeElements.getCourseName(aClass);
+        String          departmentName      = StringUtilities.splitBySpaceAndExtractHalf(className, true);
+        String          departmentCourseNum = StringUtilities.splitBySpaceAndExtractHalf(className, false);
         Class.Status    classStatus         = ScrapeElements.getCourseStatusOpenOrClosed(aClass);
         String          courseNumber        = ScrapeElements.getCourseNumber(aClass);
         int             seatsTaken          = ScrapeElements.getNumberOfSeatsTaken(aClass);
@@ -116,7 +120,7 @@ public class ScraperRunner implements Scraper {
         String          session             = ScrapeElements.getSession(aClass);
         String          component           = ScrapeElements.getClassComponent(aClass);
         String          syllabus            = ScrapeElements.getSyllabus(aClass);
-        return new Class(termID, classTitle, className, classStatus, courseNumber, seatsTaken, seatsAvailable,
+        return new Class(termID, classTitle, departmentName, departmentCourseNum, classStatus, courseNumber, seatsTaken, seatsAvailable,
                 seatsTotal, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
                 isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
                 isSundayClass, instructorName, instructorEmail, location, room, format,
