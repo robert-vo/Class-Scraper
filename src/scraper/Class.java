@@ -1,5 +1,8 @@
 package scraper;
 
+import java.sql.Date;
+import java.sql.Time;
+
 /**
  * Created by Robert on 6/29/16.
  */
@@ -18,11 +21,11 @@ public class Class {
     private int             seatsTaken;
     private int             seatsAvailable;
     private int             seatsTotal;
-    private String          classStartDate;
-    private String          classEndDate;
+    private Date            classStartDate;
+    private Date            classEndDate;
     private String          attributes;
-    private String          classStartTime;
-    private String          classEndTime;
+    private Time            classStartTime;
+    private Time            classEndTime;
     private boolean         isMondayClass;
     private boolean         isTuesdayClass;
     private boolean         isWednesdayClass;
@@ -41,13 +44,15 @@ public class Class {
     private String          component;
     private String          syllabus;
 
-    public Class(Term termID, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
-                 Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable, int seatsTotal,
-                 String classStartDate, String classEndDate, String attributes, String classStartTime,
-                 String classEndTime, boolean isMondayClass, boolean isTuesdayClass, boolean isWednesdayClass,
-                 boolean isThursdayClass, boolean isFridayClass, boolean isSaturdayClass, boolean isSundayClass,
-                 String instructorName, String instructorEmail, String location, String room, String format,
-                 String description, String duration, String session, String component, String syllabus) {
+    public Class(Term termID, String classTitle, String departmentAbbreviation,
+                 String departmentCourseNumber, Status classStatus, String courseNumber,
+                 int seatsTaken, int seatsAvailable, int seatsTotal, Date classStartDate,
+                 Date classEndDate, String attributes, Time classStartTime, Time classEndTime,
+                 boolean isMondayClass, boolean isTuesdayClass, boolean isWednesdayClass,
+                 boolean isThursdayClass, boolean isFridayClass, boolean isSaturdayClass,
+                 boolean isSundayClass, String instructorName, String instructorEmail,
+                 String location, String room, String format, String description,
+                 String duration, String session, String component, String syllabus) {
         this.termID = termID;
         this.classTitle = classTitle;
         this.departmentAbbreviation = departmentAbbreviation;
@@ -97,12 +102,12 @@ public class Class {
         this.classTitle = classTitle;
     }
 
-    public String getDepartmentAbbv() {
+    public String getDepartmentAbbreviation() {
         return departmentAbbreviation;
     }
 
-    public void setDepartmentAbbv(String departmentAbbv) {
-        this.departmentAbbreviation = departmentAbbv;
+    public void setDepartmentAbbreviation(String departmentAbbreviation) {
+        this.departmentAbbreviation = departmentAbbreviation;
     }
 
     public String getDepartmentCourseNumber() {
@@ -153,19 +158,19 @@ public class Class {
         this.seatsTotal = seatsTotal;
     }
 
-    public String getClassStartDate() {
+    public Date getClassStartDate() {
         return classStartDate;
     }
 
-    public void setClassStartDate(String classStartDate) {
+    public void setClassStartDate(Date classStartDate) {
         this.classStartDate = classStartDate;
     }
 
-    public String getClassEndDate() {
+    public Date getClassEndDate() {
         return classEndDate;
     }
 
-    public void setClassEndDate(String classEndDate) {
+    public void setClassEndDate(Date classEndDate) {
         this.classEndDate = classEndDate;
     }
 
@@ -177,19 +182,19 @@ public class Class {
         this.attributes = attributes;
     }
 
-    public String getClassStartTime() {
+    public Time getClassStartTime() {
         return classStartTime;
     }
 
-    public void setClassStartTime(String classStartTime) {
+    public void setClassStartTime(Time classStartTime) {
         this.classStartTime = classStartTime;
     }
 
-    public String getClassEndTime() {
+    public Time getClassEndTime() {
         return classEndTime;
     }
 
-    public void setClassEndTime(String classEndTime) {
+    public void setClassEndTime(Time classEndTime) {
         this.classEndTime = classEndTime;
     }
 
