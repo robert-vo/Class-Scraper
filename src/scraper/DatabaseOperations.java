@@ -5,9 +5,7 @@ import ui.ScraperGUI;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class DatabaseOperations {
 
@@ -33,37 +31,14 @@ public class DatabaseOperations {
             preparedStatement.setInt    (1, Integer.parseInt(c.getTermID().getTermID()));
             preparedStatement.setString (2, c.getClassTitle());
             preparedStatement.setString (3, c.getCourseNumber());
-            preparedStatement.setString (4, c.getDepartmentAbbv());
+            preparedStatement.setString (4, c.getDepartmentAbbreviation());
             preparedStatement.setString (5, c.getDepartmentCourseNumber());
             preparedStatement.setString (6, c.getClassStatus().toString());
             preparedStatement.setString (7, c.getAttributes());
-
-            String startDate = c.getClassStartDate();
-            String endDate = c.getClassEndDate();
-
-            preparedStatement.setDate (8, DateTimeUtilities.transformStringDateIntoSQLFormat(startDate));
-            preparedStatement.setDate (9, DateTimeUtilities.transformStringDateIntoSQLFormat(endDate));
-
-            // TODO - Refactor this mess. Include the logic in Class?
-            SimpleDateFormat format1 = new SimpleDateFormat("HH:mm a", Locale.ENGLISH); // 12 hour format
-            java.sql.Time ppstime1 = null;
-            java.sql.Time ppstime2 = null;
-
-            SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
-
-            SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
-
-            try {
-                ppstime1 = new java.sql.Time(date12Format.parse(c.getClassStartTime().replace(".", "")).getTime());
-                ppstime2 = new java.sql.Time(date12Format.parse(c.getClassEndTime().replace(".", "")).getTime());
-            }
-            catch (Exception e) {
-                ScraperGUI.appendToLoggerTextArea("Invalid date");
-            }
-
-            preparedStatement.setTime (10, ppstime1);
-            preparedStatement.setTime (11, ppstime2);
-
+            preparedStatement.setDate   (8, c.getClassStartDate());
+            preparedStatement.setDate   (9, c.getClassEndDate());
+            preparedStatement.setTime   (10, c.getClassStartTime());
+            preparedStatement.setTime   (11, c.getClassEndTime());
             preparedStatement.setString (12, c.getInstructorName());
             preparedStatement.setString (13, c.getInstructorEmail());
             preparedStatement.setString (14, c.getLocation());
