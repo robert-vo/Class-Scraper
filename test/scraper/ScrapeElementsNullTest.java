@@ -24,8 +24,23 @@ public class ScrapeElementsNullTest {
     }
 
     @Test
-    public void testGetNullTime() {
-        assertEquals(getClassStartTime(mockedNullElement), "--");
+    public void testGetNullStartTime() {
+        assertEquals(getClassStartTime(mockedNullElement), "");
+    }
+
+    @Test
+    public void testGetNullEndTime() {
+        assertEquals(getClassEndTime(mockedNullElement), "");
+    }
+
+    @Test
+    public void testGetNullStartDate() {
+        assertEquals(getClassStartDate(mockedNullElement), "");
+    }
+
+    @Test
+    public void testGetNullEndDate() {
+        assertEquals(getClassEndDate(mockedNullElement), "");
     }
 
 }
