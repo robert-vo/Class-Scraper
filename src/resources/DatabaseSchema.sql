@@ -20,7 +20,8 @@ CREATE TABLE CLASS (
     Term_ID             INT,
 	Title               VARCHAR(100),
     CRN                 INT     ,
-    Name                VARCHAR(100)    NOT NULL,
+    Name                VARCHAR(100)    NOT NULL, -- Add department
+    -- Add 4 digit course number
     Status              ENUM('Open', 'Closed') ,
     ATTRIBUTES          VARCHAR(100),
     START_DATE          DATE,
@@ -32,7 +33,7 @@ CREATE TABLE CLASS (
     LOCATION            VARCHAR(100),
     ROOM                VARCHAR(100),
     FORMAT              VARCHAR(100),
-    DESCRIPTION         VARCHAR(500),
+    DESCRIPTION         VARCHAR(1000),
     DURATION            VARCHAR(100),
     SESSION             VARCHAR(100),
     COMPONENT           VARCHAR(100),
