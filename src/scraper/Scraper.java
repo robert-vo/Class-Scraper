@@ -41,6 +41,11 @@ public interface Scraper {
 
     static String splitByHyphenAndExtractHalf(String wholeString, boolean half) {
         String[] splitString = wholeString.split(REGEX_FOR_BOTH_HYPHENS);
-        return half ? splitString[0].trim() : splitString[1].trim();
+        if(splitString.length != 2) {
+            return half ? splitString[0].trim() : "";
+        }
+        else {
+            return half ? splitString[0].trim() : splitString[1].trim();
+        }
     }
 }
