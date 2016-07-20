@@ -1,12 +1,19 @@
-use class;
+	use class;
 
-DROP TABLE IF EXISTS DEPARTMENT;
 DROP TABLE IF EXISTS CLASS;
 DROP TABLE IF EXISTS TERMS;
+DROP TABLE IF EXISTS DEPARTMENT;
+DROP TABLE IF EXISTS BUILDING;
 
 CREATE TABLE DEPARTMENT (
 	Department_Abbreviation	VARCHAR(5) PRIMARY KEY,
     Department_Name			varchar(75) NOT NULL
+);
+
+CREATE TABLE BUILDING (
+	Building_ID				INT,
+	Building_Abbreviation	VARCHAR(5) PRIMARY KEY,
+    Building_Name			VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE TERMS (
@@ -31,7 +38,7 @@ CREATE TABLE CLASS (
     INSTRUCTOR          VARCHAR(100),
     INSTRUCTOR_EMAIL    VARCHAR(100),
     LOCATION            VARCHAR(100),
-    ROOM                VARCHAR(100),
+    BUILDING_ABBV       VARCHAR(10),
     FORMAT              VARCHAR(100),
     DESCRIPTION         VARCHAR(1000),
     DURATION            VARCHAR(100),
@@ -53,6 +60,9 @@ CREATE TABLE CLASS (
         ON DELETE no action,
     foreign key (Department)
         REFERENCES DEPARTMENT(Department_Abbreviation)
+        ON DELETE no action,
+	foreign key (Building_Abbv)
+		REFERENCES BUILDING(Building_Abbreviation)
         ON DELETE no action
 );
 
@@ -227,3 +237,189 @@ insert into department values("UNIV","University Studies");
 insert into department values("VIET","Vietnamese");
 insert into department values("WCL","World Cultures & Lit");
 insert into department values("WGSS","WomenGendSexualitySt");
+
+
+insert into building values(0101, 'CRW', 'Chancellor\'s Residence Wortham House');
+insert into building values(0104, 'P2', 'KUHT Fiber Optics Building');
+insert into building values(0105, 'TVTE', 'KUHT Telephone Equipment');
+insert into building values(0106, 'TV', 'Texas Learning & Computational Center Annex');
+insert into building values(0108, 'P1', 'Cullen Annex Laboratory');
+insert into building values(0111, 'DYN', 'Dynamometer Test Laboratory');
+insert into building values(0115, 'OFGR', 'Office of Governmental Relations');
+insert into building values(0116, 'ACT', 'Safety, Human Factors & Ergonomic Laboratory');
+insert into building values(0117, 'TVFB', 'KUHT TV at Fort Bend - Tower');
+insert into building values(0118, 'WRCH', 'Wortham Residence Coach House');
+insert into building values(0119, 'ACTA', 'Texas Manufacturing Assistance Center');
+insert into building values(0120, 'UHFB', 'Albert and Mamie George Building');
+insert into building values(0121, 'FBA2', 'Brazos Hall');
+insert into building values(0122, 'UBL', 'University Branch Library (UHS-Sugar Land)');
+insert into building values(0125, 'WHS', 'Wortham House Storage');
+insert into building values(0126, 'SA1', 'Sugar Land Annex 1');
+insert into building values(0127, 'SA2', 'Sugar Land Annex 2');
+insert into building values(0128, 'SA3', 'Sugar Land Annex 3');
+insert into building values(0199, 'CRSA', 'Clinical Research Services Annex');
+insert into building values(0400, 'CSS', 'Cougar Sub-Station');
+insert into building values(0401, 'ERP1', 'Energy Research Park 01');
+insert into building values(0402, 'ERP2', 'Energy Research Park 02');
+insert into building values(0403, 'ERP3', 'Energy Research Park 03');
+insert into building values(0404, 'ERP4', 'Conference & Research Building');
+insert into building values(0405, 'ERP5', 'Energy Research Park 05');
+insert into building values(0406, 'ERP6', 'Energy Research Park 06');
+insert into building values(0407, 'ERP7', 'Energy Research Park 07');
+insert into building values(0408, 'ERP8', 'Energy Research Park 08');
+insert into building values(0409, 'ERP9', 'ConocoPhillips Petroleum Engineering Building');
+insert into building values(0410, 'ERP10', 'Energy Research Park 10');
+insert into building values(0411, 'ERP11', 'Energy Research Park 11');
+insert into building values(0413, 'ERP13', 'Energy Research Park 13');
+insert into building values(0414, 'ERP14', 'Energy Research Park 14');
+insert into building values(0415, 'ERP15', 'Energy Device Fabrication Laboratory');
+insert into building values(0419, 'ERPA', 'Energy Research Park Annex');
+insert into building values(0420, 'ERP20', 'Energy Research Park Storage');
+insert into building values(0485, 'STAD', 'TDECU Stadium');
+insert into building values(0486, 'ATL', 'Atmospheric Testing Laboratory');
+insert into building values(0487, 'UCN', 'Student Center North');
+insert into building values(0488, 'SCP1', 'Central Plant Satellite');
+insert into building values(0489, 'KUHA2', 'KUHA - Renters Building');
+insert into building values(0490, 'WCSG', 'Welcome Center Student Garage');
+insert into building values(0491, 'KUHA', 'KUHA - Transmitter Building');
+insert into building values(0492, 'SST', 'Cougar Softball Stadium Ticket Booth');
+insert into building values(0493, 'SS', 'Cougar Softball Stadium');
+insert into building values(0494, 'AAA', 'Agnes Arnold Auditorium');
+insert into building values(0495, 'CPH', 'Cougar Place');
+insert into building values(0496, 'CV2', 'Cougar Village 2');
+insert into building values(0498, 'DTF', 'Bulk Fueling Diesel Tank Farm');
+insert into building values(0499, 'CBB', 'Classroom and Business Building');
+insert into building values(0500, 'BOA', 'Bayou Oaks Apartments');
+insert into building values(0501, 'C', 'Roy G. Cullen');
+insert into building values(0502, 'S', 'Science Building');
+insert into building values(0503, 'T', 'Technology Annex');
+insert into building values(0504, 'CCC', 'Child Care Center');
+insert into building values(0505, 'JDA', 'J. Davis Armistead');
+insert into building values(0506, 'COM', 'Jack J. Valenti School of Communication');
+insert into building values(0507, 'WT', 'Cynthia Woods Mitchell Center for the Arts/Wortham Theatre');
+insert into building values(0508, 'T2', 'College of Technology Building');
+insert into building values(0509, 'L', 'M. D. Anderson Library');
+insert into building values(0513, 'INF2', 'Visitor Information Booth 2');
+insert into building values(0514, 'EPS2', 'Fire & Life Safety - Storage');
+insert into building values(0515, 'PP', 'Central Power Plant');
+insert into building values(0516, 'E', 'Ezekiel W. Cullen');
+insert into building values(0517, 'A', 'Cullen Performance Hall');
+insert into building values(0518, 'CLA', 'Calhoun Lofts Apartments');
+insert into building values(0519, 'UHPD', 'Department of Public Safety - UH Police');
+insert into building values(0520, 'MSM', 'Rebecca & John J. Moores School of Music');
+insert into building values(0521, 'GS', 'Grounds Storage Building');
+insert into building values(0522, 'CRWC', 'Campus Recreation & Wellness Center');
+insert into building values(0523, 'AGL', 'Science & Engineering Annex');
+insert into building values(0524, 'SSC', 'Student Service Center 1');
+insert into building values(0525, 'HC', 'Health Center');
+insert into building values(0526, 'SS2', 'Student Service Center 2');
+insert into building values(0527, 'EPS3', 'EHRM1');
+insert into building values(0528, 'MH', 'LeRoy & Lucile Melcher Hall');
+insert into building values(0529, 'SEC', 'Science & Engineering Classroom Building');
+insert into building values(0531, 'HP', 'Hofheinz Pavilion');
+insert into building values(0532, 'GAR', 'Susanna Garrison Gymnasium');
+insert into building values(0533, 'MEL', 'Melcher Gymnasium/Charter School');
+insert into building values(0534, 'H', 'Fred J. Heyne');
+insert into building values(0535, 'EPS1', 'EHRM2');
+insert into building values(0536, 'CPB', 'LeRoy & Lucile Melcher Center for Public Broadcasting');
+insert into building values(0537, 'BL', 'Bates Law');
+insert into building values(0538, 'TU2', 'Teaching Unit 2 Building');
+insert into building values(0539, 'KH', 'Max Krost Hall');
+insert into building values(0540, 'LL', 'John M. O\'Quinn Law Library');
+insert into building values(0541, 'UTS', 'Utility Tunnel System');
+insert into building values(0542, 'SPA', 'South Park Annex');
+insert into building values(0543, 'ARC', 'Gerald D. Hines College of Architecture');
+insert into building values(0544, 'CEMO', 'Michael J. Cemo Hall');
+insert into building values(0545, 'SERC', 'Science & Engineering Research Center');
+insert into building values(0546, 'EPG', 'East Parking Garage');
+insert into building values(0547, 'PGH', 'Philip Guthrie Hoffman Hall');
+insert into building values(0548, 'AMB', 'Athletics Maintenance Building');
+insert into building values(0549, 'SW', 'Graduate College of Social Work');
+insert into building values(0550, 'SR', 'Science and Research 1');
+insert into building values(0551, 'SR2', 'Science and Research 2');
+insert into building values(0552, 'BKD', 'Burdette Keeland Jr. Design & Exploration Center');
+insert into building values(0553, 'WC', 'Welcome Center & Parking Garage');
+insert into building values(0555, 'LH', 'Law Residence Hall');
+insert into building values(0556, 'SH', 'Settegast Residence Hall');
+insert into building values(0557, 'BH', 'Bates Residence Hall');
+insert into building values(0558, 'TH', 'Taub Residence Hall');
+insert into building values(0559, 'OB', 'E. E. Oberholtzer Residence Hall');
+insert into building values(0560, 'UPD', 'UH-DPS Parking Enforcement');
+insert into building values(0561, 'CRWA', 'CRWC Annex');
+insert into building values(0562, 'ADB', 'A. D. Bruce Religion Center');
+insert into building values(0563, 'CV', 'Cougar Village');
+insert into building values(0564, 'F', 'Lamar Fleming, Jr.');
+insert into building values(0565, 'UC', 'Student Center South');
+insert into building values(0567, 'UCS', 'Student Center Satellite');
+insert into building values(0568, 'CSD', 'Justin Dart Jr. Center for Students with DisABILITIES');
+insert into building values(0569, 'CULLO', 'Cullen Oaks Apartments');
+insert into building values(0570, 'BATC', 'Athletics Batting Cage');
+insert into building values(0572, 'GSS', 'General Services Storage Building');
+insert into building values(0573, 'ALUM', 'Alumni Center');
+insert into building values(0574, 'ATH2', 'Athletic Center');
+insert into building values(0575, 'CO', 'Cambridge Oaks Apartments');
+insert into building values(0576, 'STL', 'Science Teaching Laboratory Building');
+insert into building values(0578, 'AH', 'Agnes Arnold Hall');
+insert into building values(0579, 'D', 'Cullen College of Engineering 1');
+insert into building values(0580, 'D2', 'Engineering Lecture Hall');
+insert into building values(0581, 'D3', 'Cullen College of Engineering 2');
+insert into building values(0582, 'BF', 'Cougar Baseball Field');
+insert into building values(0583, 'BFT', 'Cougar Baseball Field Ticket Booth');
+insert into building values(0584, 'MR', 'Moody Towers Residence Halls');
+insert into building values(0585, 'GEN', 'General Services Building');
+insert into building values(0586, 'CAM', 'Isabel C. Cameron');
+insert into building values(0587, 'FH', 'Stephen Power Farish Hall');
+insert into building values(0588, 'M', 'Charles F. McElhinney Hall');
+insert into building values(0589, 'FA', 'Fine Arts Building');
+insert into building values(0590, 'CHC', 'Conrad Hilton College of Hotel & Restaurant Management');
+insert into building values(0591, 'INF', 'Visitor Information Booth 1');
+insert into building values(0592, 'HBS', 'Health and Biomedical Sciences Center');
+insert into building values(0593, 'HSC', 'University of Houston Science Center');
+insert into building values(0594, 'EERC', 'Engineering Education Resource Center');
+insert into building values(0595, 'RES', 'Chinese Star Restaurant');
+insert into building values(0596, 'CC', 'Computing Center');
+insert into building values(0597, 'SPG', 'Stadium Parking Garage');
+insert into building values(0598, 'CRS', 'Clinical Research Services Center');
+insert into building values(0599, 'CLTF', 'Carl Lewis International Track & Field Complex');
+insert into building values(0701, 'PHA', 'College of Pharmacy Texas Medical Center');
+insert into building values(0702, 'ABC', 'KUHF Transmitter Tower - ABC');
+insert into building values(0703, 'KMJQ', 'KMJQ/KUHT Transmitter Building');
+insert into building values(0704, 'TMC', 'Texas Medical Center - 2151 Holcomb');
+insert into building values(0705, 'NWC', 'Northwest Campus');
+insert into building values(0706, 'FB1', 'Small Business Development Center - Rosenberg');
+insert into building values(0707, 'FB2', 'Small Business Development Center - Missouri City');
+insert into building values(0708, 'FB3', 'Small Business Development Center - Katy');
+insert into building values(0709, 'BV', 'Small Business Development Center - Bryan');
+insert into building values(0710, 'SBD', 'Small Business Development Center');
+insert into building values(0711, 'ROCK', '4520 Rockwood - University Oak');
+insert into building values(0713, 'CP1', 'Small Business Development Center - Bay City');
+insert into building values(0714, 'TMC2', 'Texas Medical Center 2');
+insert into building values(0715, 'NWC10', 'Northwest Campus 10');
+insert into building values(0750, 'COCM', 'Coastal Center Caretaker Mobile Home');
+insert into building values(0751, 'COEL', 'Coastal Center Environmental Laboratory');
+insert into building values(0752, 'CORL', 'Coastal Center Research Laboratory');
+insert into building values(0753, 'COES', 'Coastal Center Equipment Storage');
+insert into building values(0756, 'COIT', 'Coastal Center Residential IT Equipment');
+insert into building values(0757, 'GEOC', 'Geosciences Coastal Center IT Equipment');
+insert into building values(0758, 'CROK', 'Coastal Center Rock Saw Facility');
+insert into building values(0759, 'CRST', 'Coastal Center Rock Storage');
+insert into building values(0760, 'CGRS', 'Coastal Center Greenhouse Service');
+insert into building values(0762, 'WHI', 'West Houston Institute (UHS-Cinco Ranch)');
+insert into building values(0800, 'CW', 'Campus Wide');
+insert into building values(0801, 'LEP', 'Lynn Eusan Park');
+insert into building values(0802, 'CFP', 'Cullen Family Plaza');
+insert into building values(0803, 'BMG', 'Dr. Barnett Memorial Garden');
+insert into building values(0804, 'CCG', 'The Cougar Community Garden');
+insert into building values(0805, 'MP', 'Meditation Pond');
+insert into building values(0806, 'LAG', 'Dena and Guy V. Lewis Azalea Garden');
+insert into building values(0807, 'SRG', 'Margaret Sharpe Antique Rose Garden');
+insert into building values(0808, 'TEN', 'Tennis Courts');
+insert into building values(0809, 'SF', 'Soccer Field');
+insert into building values(0820, 'SK4A', 'Security Kiosk Lot 4A');
+insert into building values(0821, 'SK9C', 'Security Kiosk Lot 9C');
+insert into building values(0822, 'SK12A', 'Security Kiosk Lot 12A');
+insert into building values(0823, 'SK41', 'Security Kiosk Lot 41 (ERP)');
+insert into building values(0824, 'SK42', 'Security Kiosk Lot 42 (ERP)');
+insert into building values(0482, 'BPF', 'New Basketball Practice Facility');
+insert into building values(0483, 'HBS2', 'Health and Biomedical Sciences Center 2');
+insert into building values(0484, 'MREB', 'Multidisciplinary Research and Engineering Building');
