@@ -10,6 +10,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static scraper.Scraper.splitByHyphenAndExtractHalf;
 import static scraper.ScraperRunner.getNumberOfClasses;
 import static scraper.ScraperRunner.verifyValidDocument;
 
@@ -59,6 +60,26 @@ public class ScraperTest {
     public void testReturnNumberOfClasses0ForValidPage() throws IOException {
         Document document = returnDocumentFromFileName("empty");
         assertEquals(getNumberOfClasses(document), 0);
+    }
+
+    @Test
+    public void testSplitByHyphenWithOnlyOneHalf() {
+        assertEquals(splitByHyphenAndExtractHalf("12:00 A.M.-", false), "");
+    }
+
+    @Test
+    public void testSplitByHyphenWithOnlyOneHalfRequestingTime() {
+        assertEquals(splitByHyphenAndExtractHalf("12:00 A.M.-", true), "12:00 A.M.");
+    }
+
+    @Test
+    public void testSplitByHyphenWithCorrectStartTime() {
+        assertEquals(splitByHyphenAndExtractHalf("09:00 A.M.-12:00 P.M.", true), "09:00 A.M.");
+    }
+
+    @Test
+    public void testSplitByHyphenWithCorrectEndTime() {
+        assertEquals(splitByHyphenAndExtractHalf("Sa 09:00 A.M.-12:00 P.M.", false), "12:00 P.M.");
     }
 
 }
