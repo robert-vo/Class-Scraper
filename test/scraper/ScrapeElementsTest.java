@@ -24,6 +24,8 @@ public class ScrapeElementsTest {
 
     final private String NAME_COURSE_NUMBER     = "COSC 1300 (15240)";
     final private String COURSE_NAME            = "COSC 1300";
+    final private String DEPARTMENT_NAME        = "COSC";
+    final private String DEPARTMENT_COURSE_NUM  = "1300";
     final private String COURSE_NUMBER          = "15240";
     final private String COURSE_TITLE           = "Introduction To Computing";
     final private String COURSE_STATUS_SEATS    = "Open (12/35)";
@@ -62,6 +64,36 @@ public class ScrapeElementsTest {
     }
 
     @Test
+    public void testGetDepartmentCoscFromCourseName() {
+        assertEquals(getDepartment(COURSE_NAME), DEPARTMENT_NAME);
+    }
+
+    @Test
+    public void testGetDepartmentCourseNumber1300FromCourseName() {
+        assertEquals(getDepartmentCourseNumber(COURSE_NAME), DEPARTMENT_COURSE_NUM);
+    }
+
+    @Test
+    public void testGetDepartmentABCDFromCourseName() {
+        assertEquals(getDepartment("ABCD 1234"), "ABCD");
+    }
+
+    @Test
+    public void testGetDepartmentCourseNumber1234FromCourseName() {
+        assertEquals(getDepartmentCourseNumber("ABCD 1234"), "1234");
+    }
+
+    @Test
+    public void testGetDepartmentXYZFromCourseName() {
+        assertEquals(getDepartment("XYZ 1234"), "XYZ");
+    }
+
+    @Test
+    public void testGetDepartmentCourseNumber123FromCourseName() {
+        assertEquals(getDepartmentCourseNumber("XYZ 123"), "123");
+    }
+
+    @Test
     public void testGetCourseNumberFromAClass() {
         assertEquals(getCourseNumber(aClass), COURSE_NUMBER);
     }
@@ -77,7 +109,7 @@ public class ScrapeElementsTest {
     }
 
     @Test
-    public void testGetcourseStatusOpen() {
+    public void testGetCourseStatusOpen() {
         assertEquals(getCourseStatusOpenOrClosed(aClass), Class.Status.Open);
     }
 
@@ -183,7 +215,6 @@ public class ScrapeElementsTest {
     public void testGetClassEndTime() throws Exception {
         assertEquals(getClassEndTime(aClass), "05:30 P.M.");
     }
-
 
     @Test
     public void testIsMondayClass() throws Exception {
