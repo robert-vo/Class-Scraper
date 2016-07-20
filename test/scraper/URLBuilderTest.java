@@ -75,4 +75,27 @@ public class URLBuilderTest {
                 "http://classbrowser.uh.edu/classes?term=1970&page=120");
     }
 
+    @Test
+    public void testChangePageNumberTo1000() {
+        assertEquals(URLBuilder.changePageNumber(URL_WITH_TERM_1990_SUBJECT_COSC, 1000),
+                URL_WITH_TERM_1990_SUBJECT_COSC + "&page=1000");
+    }
+
+    @Test
+    public void testChangePageNumberFrom1To1000() {
+        assertEquals(URLBuilder.changePageNumber("http://classbrowser.uh.edu/classes?term=1970&page=1", 1000),
+                "http://classbrowser.uh.edu/classes?term=1970&page=1000");
+    }
+
+    @Test
+    public void testChangePageNumberFrom1000To1() {
+        assertEquals(URLBuilder.changePageNumber("http://classbrowser.uh.edu/classes?term=1970&page=1000", 1),
+                "http://classbrowser.uh.edu/classes?term=1970&page=1");
+    }
+
+    @Test
+    public void testChangePageNumberFromNoPageTo123123() {
+        assertEquals(URLBuilder.changePageNumber(URL_WITH_TERM_2010_SUBJECT_COSC, 123123),
+                URL_WITH_TERM_2010_SUBJECT_COSC + "&page=123123");
+    }
 }
