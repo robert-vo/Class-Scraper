@@ -11,7 +11,8 @@ public class Class {
 
     private Term            termID;
     private String          classTitle;
-    private String          className;
+    private String          departmentAbbreviation;
+    private String          departmentCourseNumber;
     private Class.Status    classStatus;
     private String          courseNumber;
     private int             seatsTaken;
@@ -40,43 +41,44 @@ public class Class {
     private String          component;
     private String          syllabus;
 
-    public Class(Term termID, String classTitle, String className, Status classStatus, String courseNumber,
-                 int seatsTaken, int seatsAvailable, int seatsTotal, String classStartDate, String classEndDate,
-                 String attributes, String classStartTime, String classEndTime, boolean isMondayClass,
-                 boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass, boolean isFridayClass,
-                 boolean isSaturdayClass, boolean isSundayClass, String instructorName,
-                 String instructorEmail, String location, String room, String format, String description,
-                 String duration, String session, String component, String syllabus) {
-        this.termID             = termID;
-        this.classTitle         = classTitle;
-        this.className          = className;
-        this.classStatus        = classStatus;
-        this.courseNumber       = courseNumber;
-        this.seatsTaken         = seatsTaken;
-        this.seatsAvailable     = seatsAvailable;
-        this.seatsTotal         = seatsTotal;
-        this.classStartDate     = classStartDate;
-        this.classEndDate       = classEndDate;
-        this.attributes         = attributes;
-        this.classStartTime     = classStartTime;
-        this.classEndTime       = classEndTime;
-        this.isMondayClass      = isMondayClass;
-        this.isTuesdayClass     = isTuesdayClass;
-        this.isWednesdayClass   = isWednesdayClass;
-        this.isThursdayClass    = isThursdayClass;
-        this.isFridayClass      = isFridayClass;
-        this.isSaturdayClass    = isSaturdayClass;
-        this.isSundayClass      = isSundayClass;
-        this.instructorName     = instructorName;
-        this.instructorEmail    = instructorEmail;
-        this.location           = location;
-        this.room               = room;
-        this.format             = format;
-        this.description        = description;
-        this.duration           = duration;
-        this.session            = session;
-        this.component          = component;
-        this.syllabus           = syllabus;
+    public Class(Term termID, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
+                 Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable, int seatsTotal,
+                 String classStartDate, String classEndDate, String attributes, String classStartTime,
+                 String classEndTime, boolean isMondayClass, boolean isTuesdayClass, boolean isWednesdayClass,
+                 boolean isThursdayClass, boolean isFridayClass, boolean isSaturdayClass, boolean isSundayClass,
+                 String instructorName, String instructorEmail, String location, String room, String format,
+                 String description, String duration, String session, String component, String syllabus) {
+        this.termID = termID;
+        this.classTitle = classTitle;
+        this.departmentAbbreviation = departmentAbbreviation;
+        this.departmentCourseNumber = departmentCourseNumber;
+        this.classStatus = classStatus;
+        this.courseNumber = courseNumber;
+        this.seatsTaken = seatsTaken;
+        this.seatsAvailable = seatsAvailable;
+        this.seatsTotal = seatsTotal;
+        this.classStartDate = classStartDate;
+        this.classEndDate = classEndDate;
+        this.attributes = attributes;
+        this.classStartTime = classStartTime;
+        this.classEndTime = classEndTime;
+        this.isMondayClass = isMondayClass;
+        this.isTuesdayClass = isTuesdayClass;
+        this.isWednesdayClass = isWednesdayClass;
+        this.isThursdayClass = isThursdayClass;
+        this.isFridayClass = isFridayClass;
+        this.isSaturdayClass = isSaturdayClass;
+        this.isSundayClass = isSundayClass;
+        this.instructorName = instructorName;
+        this.instructorEmail = instructorEmail;
+        this.location = location;
+        this.room = room;
+        this.format = format;
+        this.description = description;
+        this.duration = duration;
+        this.session = session;
+        this.component = component;
+        this.syllabus = syllabus;
     }
 
     public Term getTermID() {
@@ -95,12 +97,20 @@ public class Class {
         this.classTitle = classTitle;
     }
 
-    public String getClassName() {
-        return className;
+    public String getDepartmentAbbv() {
+        return departmentAbbreviation;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setDepartmentAbbv(String departmentAbbv) {
+        this.departmentAbbreviation = departmentAbbv;
+    }
+
+    public String getDepartmentCourseNumber() {
+        return departmentCourseNumber;
+    }
+
+    public void setDepartmentCourseNumber(String departmentCourseNumber) {
+        this.departmentCourseNumber = departmentCourseNumber;
     }
 
     public Status getClassStatus() {
