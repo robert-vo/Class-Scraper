@@ -9,6 +9,7 @@ public class StringUtilities extends Object {
     static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
     static String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
     static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";
+    static String REGEX_FOR_SPACES                       = "[ ]";
 
     static String extractTextBetweenParentheses(Elements e) {
         try {
@@ -43,24 +44,28 @@ public class StringUtilities extends Object {
         return str.substring(0, str.indexOf('(') - 1);
     }
 
-    static String splitByHyphenAndExtractHalf(String wholeString, boolean half) {
-        String[] splitString = wholeString.split(REGEX_FOR_BOTH_HYPHENS);
+    private static String splitByCharacterAndExtractHalf(String wholeString, boolean half, String splitQualifier) {
+        if(isNullOrEmpty(wholeString)) {
+            return "";
+        }
+        String[] splitString = wholeString.split(splitQualifier);
         if(splitString.length != 2) {
             return half ? splitString[0].trim() : "";
         }
         else {
             return half ? splitString[0].trim() : splitString[1].trim();
         }
+    }
+
+    static String splitByHyphenAndExtractHalf(String wholeString, boolean half) {
+        return splitByCharacterAndExtractHalf(wholeString, half, REGEX_FOR_BOTH_HYPHENS);
     }
 
     static String splitBySpaceAndExtractHalf(String wholeString, boolean half) {
-        String[] splitString = wholeString.split(" ");
-        if(splitString.length != 2) {
-            return half ? splitString[0].trim() : "";
-        }
-        else {
-            return half ? splitString[0].trim() : splitString[1].trim();
-        }
+        return splitByCharacterAndExtractHalf(wholeString, half, REGEX_FOR_SPACES);
     }
 
+    static boolean isNullOrEmpty(String str) {
+        return str == null || str.equals("");
+    }
 }
