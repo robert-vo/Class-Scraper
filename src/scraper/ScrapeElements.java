@@ -84,7 +84,8 @@ public class ScrapeElements implements Scraper {
     public static String getDescription(Element e) {
         Optional<Elements> classDescription = Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()));
 
-        if(classDescription.isPresent()) {
+        if(classDescription.isPresent() && !(classDescription.get().size() == 0)) {
+
             return getFirstChildNodeAndReturnAsString(classDescription.get());
         }
         else {
@@ -179,12 +180,24 @@ public class ScrapeElements implements Scraper {
 
     public static String getClassEndTime(Element aClass) {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
-        return getClassTime(classTimesFromHtml, false);
+        Optional<String> endTime = Optional.ofNullable(getClassTime(classTimesFromHtml, false));
+        if(endTime.isPresent()) {
+            return endTime.get();
+        }
+        else {
+            return "";
+        }
     }
 
     public static String getClassStartTime(Element aClass) {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
-        return getClassTime(classTimesFromHtml, true);
+        Optional<String> startTime = Optional.ofNullable(getClassTime(classTimesFromHtml, true));
+        if(startTime.isPresent()) {
+            return startTime.get();
+        }
+        else {
+            return "";
+        }
     }
 
     private static boolean isClassOnCertainDay(Element aClass, String classDay) {
