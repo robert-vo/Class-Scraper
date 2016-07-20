@@ -42,7 +42,7 @@ public class URLBuilder {
         }
         else {
             int currentPage = Integer.parseInt(url.substring(url.indexOf("page")).split("=")[1]);
-            return url.substring(0, url.indexOf("page"))  + "page=" + (currentPage + 1);
+            return changePageNumber(url, currentPage + 1);
         }
     }
 
