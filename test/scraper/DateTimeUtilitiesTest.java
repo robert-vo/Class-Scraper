@@ -9,7 +9,7 @@ import static scraper.DateTimeUtilities.*;
 public class DateTimeUtilitiesTest {
 
     @Test
-    public void testTransformDateIntoSQLFormatForNullDate() throws Exception {
+    public void testTransformDateIntoSQLFormatForNullDate() {
         assertNull(transformStringDateIntoSQLFormat(null));
     }
 
