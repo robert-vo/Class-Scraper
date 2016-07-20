@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static scraper.ScraperRunner.run;
 import static scraper.ScraperRunner.verifyValidDocument;
@@ -95,13 +97,29 @@ public class ScraperGUI extends JFrame {
         scraper = new ScraperRunner((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
 
+        long currentTime = System.currentTimeMillis();
+
         if(verifyValidDocument(scraper.getWebsiteToScrape())) {
             appendToLoggerTextArea("Valid Document.");
+
+            Date date=new Date(currentTime);
+            SimpleDateFormat df2 = new SimpleDateFormat("HH:MM:SS");
+            String dateText = df2.format(currentTime);
+            appendToLoggerTextArea("Start time is: " + dateText);
+
             run();
         }
         else {
             appendToLoggerTextArea("Invalid Document.");
         }
+
+        long elapsedTime = System.currentTimeMillis();
+        Date date=new Date(elapsedTime);
+        SimpleDateFormat df2 = new SimpleDateFormat("HH:MM:SS");
+        String dateText = df2.format(elapsedTime);
+        appendToLoggerTextArea("End time is: " + dateText);
+        appendToLoggerTextArea("Time taken is " + String.valueOf(elapsedTime - currentTime) + "ms.");
+
         onStop();
     }
 
