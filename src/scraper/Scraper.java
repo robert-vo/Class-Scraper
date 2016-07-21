@@ -12,6 +12,7 @@ public interface Scraper {
     void advanceToNextPage();
     void setTerm(Term term);
     void print(String message);
+    void retrieveAllClasses();
     int getNumberOfClasses();
     boolean isValidWebSiteWithClasses();
 
