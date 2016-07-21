@@ -1,5 +1,6 @@
 package ui;
 
+import scraper.ClassScraper;
 import scraper.ScraperRunner;
 import scraper.Term;
 
@@ -9,9 +10,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-
-import static scraper.ScraperRunner.run;
-import static scraper.ScraperRunner.verifyValidDocument;
 
 public class ScraperGUI extends JFrame {
 
@@ -96,18 +94,13 @@ public class ScraperGUI extends JFrame {
 
     private void onStart() throws IOException {
         changeStatusOfButtons(false);
+        ClassScraper classScraperAPI = new ClassScraper((Term) termOptions.getSelectedItem());
+
         scraper = new ScraperRunner((Term) termOptions.getSelectedItem());
         appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
-
         startAndPrintTimer();
 
-        if(verifyValidDocument(scraper.getWebsiteToScrape())) {
-            appendToLoggerTextArea("Valid Document.");
-            run();
-        }
-        else {
-            appendToLoggerTextArea("Invalid Document.");
-        }
+        classScraperAPI.startScraper();
 
         endAndPrintTimer();
         appendToLoggerTextArea("Time taken is " + String.valueOf(endTime - startTime) + "ms.");
