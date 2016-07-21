@@ -1,7 +1,6 @@
 package ui;
 
 import scraper.ClassScraper;
-import scraper.ScraperRunner;
 import scraper.Term;
 
 import javax.swing.*;
@@ -15,7 +14,7 @@ public class ScraperGUI extends JFrame {
 
     public  static final int                WIDTH               = 725;
     public  static final int                HEIGHT              = 700;
-    private static       ScraperRunner      scraper;
+    private static       ClassScraper       classScraper;
     private              JScrollPane        loggerScrollPane;
     private static       JTextArea          loggerTextArea;
     private              JButton            startButton;
@@ -94,18 +93,18 @@ public class ScraperGUI extends JFrame {
 
     private void onStart() throws IOException {
         changeStatusOfButtons(false);
-        ClassScraper classScraperAPI = new ClassScraper((Term) termOptions.getSelectedItem());
+        classScraper = new ClassScraper(2016, "Fall");
+        appendToLoggerTextArea("Starting the scraper for " + classScraper.getTerm());
 
-        scraper = new ScraperRunner((Term) termOptions.getSelectedItem());
-        appendToLoggerTextArea("Starting the scraper for " + String.valueOf(termOptions.getSelectedItem()));
-        startAndPrintTimer();
+        Thread thread = new Thread () {
+            @Override public void run () {
+                startAndPrintTimer();
+                classScraper.startScraper();
+                endAndPrintTimer();
+            }
+        };
 
-        classScraperAPI.startScraper();
-
-        endAndPrintTimer();
-        appendToLoggerTextArea("Time taken is " + String.valueOf(endTime - startTime) + "ms.");
-
-        onStop();
+        thread.start();
     }
 
     private void startAndPrintTimer() {
@@ -118,6 +117,7 @@ public class ScraperGUI extends JFrame {
         endTime = System.currentTimeMillis();
         String dateText = simpleDateFormat.format(startTime);
         appendToLoggerTextArea("End time is: " + dateText);
+        appendToLoggerTextArea("Time taken is " + String.valueOf(endTime - startTime) + "ms.");
     }
 
     private void onStop() {
