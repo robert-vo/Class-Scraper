@@ -36,7 +36,8 @@ public class Class {
     private String          instructorName;
     private String          instructorEmail;
     private String          location;
-    private String          room;
+    private String          buildingAbbreviation;
+    private String          buildingRoomNumber;
     private String          format;
     private String          description;
     private String          duration;
@@ -44,14 +45,14 @@ public class Class {
     private String          component;
     private String          syllabus;
 
-    public Class(Term termID, String classTitle, String departmentAbbreviation,
-                 String departmentCourseNumber, Status classStatus, String courseNumber,
-                 int seatsTaken, int seatsAvailable, int seatsTotal, Date classStartDate,
-                 Date classEndDate, String attributes, Time classStartTime, Time classEndTime,
-                 boolean isMondayClass, boolean isTuesdayClass, boolean isWednesdayClass,
-                 boolean isThursdayClass, boolean isFridayClass, boolean isSaturdayClass,
-                 boolean isSundayClass, String instructorName, String instructorEmail,
-                 String location, String room, String format, String description,
+    public Class(Term termID, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
+                 Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable,
+                 int seatsTotal, Date classStartDate, Date classEndDate, String attributes,
+                 Time classStartTime, Time classEndTime, boolean isMondayClass,
+                 boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass,
+                 boolean isFridayClass, boolean isSaturdayClass, boolean isSundayClass,
+                 String instructorName, String instructorEmail, String location,
+                 String buildingAbbreviation, String buildingRoomNumber, String format, String description,
                  String duration, String session, String component, String syllabus) {
         this.termID = termID;
         this.classTitle = classTitle;
@@ -77,7 +78,8 @@ public class Class {
         this.instructorName = instructorName;
         this.instructorEmail = instructorEmail;
         this.location = location;
-        this.room = room;
+        this.buildingAbbreviation = buildingAbbreviation;
+        this.buildingRoomNumber = buildingRoomNumber;
         this.format = format;
         this.description = description;
         this.duration = duration;
@@ -278,12 +280,20 @@ public class Class {
         this.location = location;
     }
 
-    public String getRoom() {
-        return room;
+    public String getBuildingAbbreviation() {
+        return buildingAbbreviation;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setBuildingAbbreviation(String buildingAbbreviation) {
+        this.buildingAbbreviation = buildingAbbreviation;
+    }
+
+    public String getBuildingRoomNumber() {
+        return buildingRoomNumber;
+    }
+
+    public void setBuildingRoomNumber(String buildingRoomNumber) {
+        this.buildingRoomNumber = buildingRoomNumber;
     }
 
     public String getFormat() {
