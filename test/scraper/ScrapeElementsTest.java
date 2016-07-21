@@ -54,6 +54,24 @@ public class ScrapeElementsTest {
     }
 
     @Test
+    public void testReturnNumberOfClasses68ForValidPage() throws IOException {
+        Document document = returnDocumentFromFileName("coscPageOne");
+        assertEquals(getNumberOfClasses(document), 68);
+    }
+
+    @Test
+    public void testReturnNumberOfClasses37ForValidPage() throws IOException {
+        Document document = returnDocumentFromFileName("validPageWithNoClasses");
+        assertEquals(getNumberOfClasses(document), 37);
+    }
+
+    @Test
+    public void testReturnNumberOfClasses0ForValidPage() throws IOException {
+        Document document = returnDocumentFromFileName("empty");
+        assertEquals(getNumberOfClasses(document), 0);
+    }
+
+    @Test
     public void testGetNameAndCourseNumberForCosc1300() {
         assertEquals(getNameAndCourseNumber(aClass), NAME_COURSE_NUMBER);
     }
