@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import ui.ScraperGUI;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,19 @@ public class ClassScraper implements Scraper {
     String      websiteURL;
     Document    currentWebSiteDocument;
     List<Class> allClassesForAGivenDocument;
+    List<Class> allClasses = new ArrayList<>();
 
     public ClassScraper(Term term) {
         this.term = term;
+    }
+
+    public ClassScraper(int year, String semester) {
+        String termValue = semester.toUpperCase() + "_" + year;
+        this.term = Term.valueOf(termValue);
+    }
+
+    public Term getTerm() {
+        return term;
     }
 
     @Override
@@ -30,15 +41,10 @@ public class ClassScraper implements Scraper {
         try {
             if(isValidWebSiteWithClasses()) {
                 print("Starting scraper for " + getNumberOfClasses() + " classes.");
-                do {
-                    scrapeCurrentPageAndReturnAsListOfClass();
-                    DatabaseOperations.performDatabaseActions(allClassesForAGivenDocument);
-                    print("Modified the database with the scraped classes. Advancing to the next page.");
-                    advanceToNextPage();
-                    retrieveWebPage();
-                    print("Retrieved the following website: " + websiteURL);
-                } while(isValidWebSiteWithClasses());
-                print("Scraping finished. Please check the database to see the results of the scraping.");
+                retrieveAllClasses();
+                print("Scraping finished. Retrieved " + allClasses.size() + " classes. Updating the database.");
+                DatabaseOperations.performDatabaseActions(allClasses);
+                print("Database updated. Please check the database to see the results of the scraping.");
             }
             else {
                 print("Invalid website. Stopping scraper.");
@@ -51,12 +57,10 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void setWebSiteFromTerm() {
-        if(term.getTermID().length() > 0) {
+        if(term.getTermID().length() > 0)
             websiteURL = URLBuilder.createURLForTermOnly(term);
-        }
-        else {
+        else
             print("Invalid term. Please validate that the term is set.");
-        }
     }
 
     @Override
@@ -109,7 +113,13 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void print(String message) {
-        ScraperGUI.appendToLoggerTextArea(message);
+        try {
+            java.lang.Class.forName("ui.ScraperGUI");
+            ScraperGUI.appendToLoggerTextArea(message);
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println(message);
+        }
     }
 
     @Override
@@ -117,5 +127,15 @@ public class ClassScraper implements Scraper {
         return ScrapeElements.getNumberOfClasses(currentWebSiteDocument);
     }
 
+    @Override
+    public void retrieveAllClasses() {
+        do {
+            scrapeCurrentPageAndReturnAsListOfClass();
+            allClasses.addAll(allClassesForAGivenDocument);
+            advanceToNextPage();
+            retrieveWebPage();
+            print("Retrieved the following website: " + websiteURL);
+        } while (isValidWebSiteWithClasses());
+    }
 
 }
