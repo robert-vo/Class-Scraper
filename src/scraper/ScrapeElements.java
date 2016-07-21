@@ -1,11 +1,18 @@
 package scraper;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.sql.Date;
+import java.sql.Time;
 import java.util.Optional;
+
+import static scraper.DateTimeUtilities.transformStringDateIntoSQLFormat;
+import static scraper.DateTimeUtilities.transformStringTimeIntoSQLFormat;
 import static scraper.StringUtilities.*;
 
-public class ScrapeElements implements Scraper {
+public class ScrapeElements {
 
     final static private String MONDAY_ABBREVIATION    = "Mo";
     final static private String TUESDAY_ABBREVIATION   = "Tu";
@@ -130,13 +137,22 @@ public class ScrapeElements implements Scraper {
     public static int getNumberOfTotalSeats(Element e) {
         String seatInformation = getSeatInformationFrom(e);
         String totalSeats = seatInformation.substring(seatInformation.indexOf('/') + 1);
-        return Integer.parseInt(totalSeats);
+        return parseInt(totalSeats);
     }
 
     public static int getNumberOfSeatsTaken(Element e) {
         String seatInformation = getSeatInformationFrom(e);
         String seatsTaken = seatInformation.substring(0, seatInformation.indexOf('/'));
-        return Integer.parseInt(seatsTaken);
+        return parseInt(seatsTaken);
+    }
+
+    public static int parseInt(String str) {
+        try {
+            return Integer.parseInt(str);
+        }
+        catch (NumberFormatException nfe) {
+            return 0;
+        }
     }
 
     public static Class.Status getCourseStatusOpenOrClosed(Element e) {
@@ -228,5 +244,52 @@ public class ScrapeElements implements Scraper {
 
     public static String getDepartment(String courseName) {
         return StringUtilities.splitBySpaceAndExtractHalf(courseName, true);
+    }
+
+    public static int getNumberOfClasses(Document doc) {
+        Elements allClasses = doc.select(HTMLElements.NUMBER_OF_CLASSES.getHtml());
+        return parseInt(extractTextBetweenParentheses(allClasses));
+    }
+
+    public static Class convertElementToAClass(Element aClass) {
+        Term            termID                  = null;/* term*/
+        String          classTitle              = getCourseTitle(aClass);
+        String          className               = getCourseName(aClass);
+        String          departmentName          = splitBySpaceAndExtractHalf(className, true);
+        String          departmentCourseNumber  = splitBySpaceAndExtractHalf(className, false);
+        Class.Status    classStatus             = getCourseStatusOpenOrClosed(aClass);
+        String          courseNumber            = getCourseNumber(aClass);
+        int             seatsTaken              = getNumberOfSeatsTaken(aClass);
+        int             seatsTotal              = getNumberOfTotalSeats(aClass);
+        int             seatsAvailable          = seatsTotal - seatsTaken;
+        Date            classStartDate          = transformStringDateIntoSQLFormat(getClassStartDate(aClass));
+        Date            classEndDate            = transformStringDateIntoSQLFormat(getClassEndDate(aClass));
+        String          attributes              = getClassAttributes(aClass);
+        Time            classStartTime          = transformStringTimeIntoSQLFormat(getClassStartTime(aClass));
+        Time            classEndTime            = transformStringTimeIntoSQLFormat(getClassEndTime(aClass));
+        boolean         isMondayClass           = isMondayClass(aClass);
+        boolean         isTuesdayClass          = isTuesdayClass(aClass);
+        boolean         isWednesdayClass        = isWednesdayClass(aClass);
+        boolean         isThursdayClass         = isThursdayClass(aClass);
+        boolean         isFridayClass           = isFridayClass(aClass);
+        boolean         isSaturdayClass         = isSaturdayClass(aClass);
+        boolean         isSundayClass           = isSundayClass(aClass);
+        String          instructorName          = getInstructorName(aClass);
+        String          instructorEmail         = getInstructorEmail(aClass);
+        String          location                = getLocation(aClass);
+        String          room                    = getRoom(aClass);
+        String          buildingAbbreviation    = splitBySpaceAndExtractHalf(room, true);
+        String          buildingRoomNumber      = splitBySpaceAndExtractHalf(room, false);
+        String          format                  = getFormat(aClass);
+        String          description             = getDescription(aClass);
+        String          duration                = getClassDuration(aClass);
+        String          session                 = getSession(aClass);
+        String          component               = getClassComponent(aClass);
+        String          syllabus                = getSyllabus(aClass);
+        return new Class(termID, classTitle, departmentName, departmentCourseNumber, classStatus, courseNumber, seatsTaken, seatsAvailable,
+                seatsTotal, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
+                isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
+                isSundayClass, instructorName, instructorEmail, location, buildingAbbreviation, buildingRoomNumber, format,
+                description, duration, session, component, syllabus);
     }
 }
