@@ -56,7 +56,7 @@ CREATE TABLE CLASS (
     FRIDAY				BOOLEAN DEFAULT FALSE,
 	SATURDAY			BOOLEAN DEFAULT FALSE,
     SUNDAY				BOOLEAN DEFAULT FALSE,
-    LAST_UPDATED_AT			TIMESTAMP default current_timestamp 
+    LAST_UPDATED_AT		TIMESTAMP default current_timestamp 
 		on update current_timestamp,
     foreign key (Term_ID)
 		REFERENCES TERMS(Term_ID)
