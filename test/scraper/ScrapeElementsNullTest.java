@@ -43,4 +43,18 @@ public class ScrapeElementsNullTest {
         assertEquals(getClassEndDate(mockedNullElement), "");
     }
 
+    @Test
+    public void testParseIntForEmptyString() {
+        assertEquals(parseInt(""), 0);
+    }
+
+    @Test
+    public void testParseIntForNullString() {
+        assertEquals(parseInt(null), 0);
+    }
+
+    @Test
+    public void testParseIntForInvalidString() {
+        assertEquals(parseInt("abc"), 0);
+    }
 }
