@@ -252,7 +252,7 @@ public class ScrapeElements {
     }
 
     public static Class convertElementToAClass(Element aClass) {
-        Term            termID                  = null;/* term*/
+        Term            termID                  = Term.returnTermFromString(String.valueOf(URLBuilder.extractTermParameter(aClass.baseUri())));
         String          classTitle              = getCourseTitle(aClass);
         String          className               = getCourseName(aClass);
         String          departmentName          = splitBySpaceAndExtractHalf(className, true);
