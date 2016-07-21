@@ -30,4 +30,15 @@ public enum Term {
     public Semester getSemester() {
         return semester;
     }
+
+    public static Term returnTermFromString(String text) {
+        if (text != null) {
+            for (Term t : Term.values()) {
+                if (text.equalsIgnoreCase(t.termID)) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
 }
