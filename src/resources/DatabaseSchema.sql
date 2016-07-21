@@ -39,6 +39,7 @@ CREATE TABLE CLASS (
     INSTRUCTOR_EMAIL    VARCHAR(100),
     LOCATION            VARCHAR(100),
     BUILDING_ABBV       VARCHAR(10),
+    BUILDING_ROOM_NUM   VARCHAR(15),
     FORMAT              VARCHAR(100),
     DESCRIPTION         VARCHAR(1000),
     DURATION            VARCHAR(100),
@@ -55,6 +56,8 @@ CREATE TABLE CLASS (
     FRIDAY				BOOLEAN DEFAULT FALSE,
 	SATURDAY			BOOLEAN DEFAULT FALSE,
     SUNDAY				BOOLEAN DEFAULT FALSE,
+    UPDATED_AT			TIMESTAMP default current_timestamp 
+		on update current_timestamp,
     foreign key (Term_ID)
 		REFERENCES TERMS(Term_ID)
         ON DELETE no action,
@@ -145,6 +148,7 @@ insert into department values("FREN","French");
 insert into department values("GENB","General Business Admin");
 insert into department values("GEOL","Geosciences");
 insert into department values("GERM","German");
+insert into department values("GIS" ,"Global and International Studies");
 insert into department values("GREK","Greek");
 insert into department values("GRET","Global Retailing");
 insert into department values("HDCS","Hum Develop & Consum Sc");
@@ -238,7 +242,7 @@ insert into department values("VIET","Vietnamese");
 insert into department values("WCL","World Cultures & Lit");
 insert into department values("WGSS","WomenGendSexualitySt");
 
-
+insert into building values(0000, '', '');
 insert into building values(0101, 'CRW', 'Chancellor\'s Residence Wortham House');
 insert into building values(0104, 'P2', 'KUHT Fiber Optics Building');
 insert into building values(0105, 'TVTE', 'KUHT Telephone Equipment');
