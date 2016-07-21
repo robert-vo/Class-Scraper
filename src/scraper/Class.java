@@ -12,7 +12,7 @@ public class Class {
         Open, Closed
     }
 
-    private Term            termID;
+    private Term            term;
     private String          classTitle;
     private String          departmentAbbreviation;
     private String          departmentCourseNumber;
@@ -45,7 +45,7 @@ public class Class {
     private String          component;
     private String          syllabus;
 
-    public Class(Term termID, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
+    public Class(Term term, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
                  Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable,
                  int seatsTotal, Date classStartDate, Date classEndDate, String attributes,
                  Time classStartTime, Time classEndTime, boolean isMondayClass,
@@ -54,7 +54,7 @@ public class Class {
                  String instructorName, String instructorEmail, String location,
                  String buildingAbbreviation, String buildingRoomNumber, String format, String description,
                  String duration, String session, String component, String syllabus) {
-        this.termID = termID;
+        this.term = term;
         this.classTitle = classTitle;
         this.departmentAbbreviation = departmentAbbreviation;
         this.departmentCourseNumber = departmentCourseNumber;
@@ -88,12 +88,12 @@ public class Class {
         this.syllabus = syllabus;
     }
 
-    public Term getTermID() {
-        return termID;
+    public Term getTerm() {
+        return term;
     }
 
-    public void setTermID(Term termID) {
-        this.termID = termID;
+    public void setTerm(Term term) {
+        this.term = term;
     }
 
     public String getClassTitle() {
