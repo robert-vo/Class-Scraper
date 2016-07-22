@@ -16,7 +16,7 @@ public class ScraperGUI extends JFrame {
 
     public  static final int                WIDTH               = 725;
     public  static final int                HEIGHT              = 700;
-    private static       ClassScraper classScraper;
+    private static       ClassScraper       classScraper;
     private              JScrollPane        loggerScrollPane;
     private static       JTextArea          loggerTextArea;
     private              JButton            startButton;

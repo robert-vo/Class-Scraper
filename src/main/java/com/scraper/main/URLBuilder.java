@@ -1,8 +1,8 @@
 package com.scraper.main;
 
 /*
-For the classbrowser api, there must be a term parameter passed through the URL.
-Attempting to pass anything else will result in 0 objects returned.
+    For the classbrowser api, there must be a term parameter passed through the URL.
+    Attempting to pass anything else will result in 0 objects returned.
 */
 
 public class URLBuilder {
