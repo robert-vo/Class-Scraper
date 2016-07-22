@@ -1,4 +1,4 @@
-package scraper;
+package main.java.scraper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class ClassScraper implements Scraper {
 
     Term        term;
-    String      websiteURL;
-    Document    currentWebSiteDocument;
+    public String      websiteURL;
+    public Document    currentWebSiteDocument;
     List<Class> allClassesForAGivenDocument;
     List<Class> allClasses = new ArrayList<>();
 

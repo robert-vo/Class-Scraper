@@ -1,5 +1,7 @@
 package scraper;
 
+import main.java.scraper.ClassScraper;
+import main.java.scraper.Term;
 import org.junit.Before;
 import org.junit.Test;
 

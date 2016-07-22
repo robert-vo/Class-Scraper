@@ -1,4 +1,4 @@
-package scraper;
+package main.java.scraper;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -9,7 +9,7 @@ public class StringUtilities {
     static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";
     static String REGEX_FOR_SPACES                       = "[ ]";
 
-    static String extractTextBetweenParentheses(Elements e) {
+    public static String extractTextBetweenParentheses(Elements e) {
         return e.stream()
                 .findFirst()
                 .map(Element::text)
@@ -17,7 +17,7 @@ public class StringUtilities {
                 .orElse(new String[]{"0", "0"})[1];
     }
 
-    static String extractEmailFromHREFTag(Elements e) {
+    public static String extractEmailFromHREFTag(Elements e) {
         return e.stream()
                 .map(e1 -> e1.attr("href"))
                 .map(e1 -> e1.replaceAll(REGEX_TO_GET_EMAIL_FROM_HREF_TAG, ""))
@@ -53,15 +53,15 @@ public class StringUtilities {
         }
     }
 
-    static String splitByHyphenAndExtractHalf(String wholeString, boolean half) {
+    public static String splitByHyphenAndExtractHalf(String wholeString, boolean half) {
         return splitByCharacterAndExtractHalf(wholeString, half, REGEX_FOR_BOTH_HYPHENS);
     }
 
-    static String splitBySpaceAndExtractHalf(String wholeString, boolean half) {
+    public static String splitBySpaceAndExtractHalf(String wholeString, boolean half) {
         return splitByCharacterAndExtractHalf(wholeString, half, REGEX_FOR_SPACES);
     }
 
-    static boolean isNullOrEmpty(String str) {
+    public static boolean isNullOrEmpty(String str) {
         return str == null || str.equals("");
     }
 }

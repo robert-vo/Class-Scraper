@@ -1,8 +1,8 @@
 package ui;
 
-import scraper.ClassScraper;
-import scraper.DatabaseOperations;
-import scraper.Term;
+import main.java.scraper.ClassScraper;
+import main.java.scraper.DatabaseOperations;
+import main.java.scraper.Term;
 
 import javax.swing.*;
 import java.awt.*;

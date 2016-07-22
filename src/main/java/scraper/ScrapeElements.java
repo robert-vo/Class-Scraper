@@ -1,4 +1,4 @@
-package scraper;
+package main.java.scraper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,9 +10,9 @@ import java.sql.Time;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static scraper.DateTimeUtilities.transformStringDateIntoSQLFormat;
-import static scraper.DateTimeUtilities.transformStringTimeIntoSQLFormat;
-import static scraper.StringUtilities.*;
+import static main.java.scraper.DateTimeUtilities.transformStringDateIntoSQLFormat;
+import static main.java.scraper.DateTimeUtilities.transformStringTimeIntoSQLFormat;
+import static main.java.scraper.StringUtilities.*;
 
 public class ScrapeElements {
 

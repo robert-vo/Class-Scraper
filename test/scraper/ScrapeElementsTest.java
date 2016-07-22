@@ -1,5 +1,9 @@
 package scraper;
 
+import main.java.scraper.Class;
+import main.java.scraper.ClassScraper;
+import main.java.scraper.HTMLElements;
+import main.java.scraper.Term;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -12,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static resources.DocumentUtility.returnDocumentFromFileName;
-import static scraper.ScrapeElements.*;
+import static main.java.scraper.ScrapeElements.*;
 
 public class ScrapeElementsTest {
 

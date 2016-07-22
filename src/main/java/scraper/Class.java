@@ -1,18 +1,15 @@
-package scraper;
+package main.java.scraper;
 
 import java.sql.Date;
 import java.sql.Time;
 
-/**
- * Created by Robert on 6/29/16.
- */
 public class Class {
 
     public enum Status {
         Open, Closed
     }
 
-    private Term            term;
+    private Term term;
     private String          classTitle;
     private String          departmentAbbreviation;
     private String          departmentCourseNumber;

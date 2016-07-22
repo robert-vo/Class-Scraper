@@ -1,5 +1,9 @@
 package scraper;
 
+import main.java.scraper.Subject;
+import main.java.scraper.Term;
+import main.java.scraper.URLBuilder;
+import main.java.scraper.URLParameters;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
