@@ -1,6 +1,7 @@
 package ui;
 
 import scraper.ClassScraper;
+import scraper.DatabaseOperations;
 import scraper.Term;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 public class ScraperGUI extends JFrame {
@@ -93,13 +95,21 @@ public class ScraperGUI extends JFrame {
 
     private void onStart() throws IOException {
         changeStatusOfButtons(false);
-        classScraper = new ClassScraper(2016, "Fall");
+        classScraper = new ClassScraper((Term) termOptions.getSelectedItem());
+//        classScraper = new ClassScraper(2016, "Fall");
         appendToLoggerTextArea("Starting the scraper for " + classScraper.getTerm());
 
         Thread thread = new Thread () {
             @Override public void run () {
                 startAndPrintTimer();
                 classScraper.startScraper();
+                try {
+                    appendToLoggerTextArea("The program will now attempt to insert/update the database with the classes.");
+                    DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
+                } catch (SQLException | ClassNotFoundException e) {
+                    appendToLoggerTextArea(e.getMessage());
+                }
+                appendToLoggerTextArea("Database updated. Please check the database to see the results of the scraping.");
                 endAndPrintTimer();
             }
         };
