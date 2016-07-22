@@ -8,10 +8,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static scraper.ScraperRunner.isValidDocument;
+import static org.junit.Assert.*;
 
 public class ClassScraperTest {
 
@@ -23,7 +20,7 @@ public class ClassScraperTest {
     ClassScraper classScraper;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         classScraper = new ClassScraper(Term.FALL_2016);
     }
 
@@ -34,20 +31,20 @@ public class ClassScraperTest {
 
     @Test
     public void testValidDocumentReturnsFalseForEmptyPage() throws IOException {
-        Document document = returnDocumentFromFileName("empty");
-        assertFalse(isValidDocument(document));
+        classScraper.currentWebSiteDocument = returnDocumentFromFileName("empty");
+        assertFalse(classScraper.isValidWebSiteWithClasses());
     }
 
     @Test
     public void testValidDocumentReturnsTrueForValidPage() throws IOException {
-        Document document = returnDocumentFromFileName("coscPageOne");
-        assertTrue(isValidDocument(document));
+        classScraper.currentWebSiteDocument = returnDocumentFromFileName("coscPageOne");
+        assertTrue(classScraper.isValidWebSiteWithClasses());
     }
 
     @Test
     public void testValidDocumentReturnsFalseForInvalidPage() throws IOException {
-        Document document = returnDocumentFromFileName("validPageWithNoClasses");
-        assertFalse(isValidDocument(document));
+        classScraper.currentWebSiteDocument = returnDocumentFromFileName("validPageWithNoClasses");
+        assertFalse(classScraper.isValidWebSiteWithClasses());
     }
 
     @Test
@@ -68,7 +65,5 @@ public class ClassScraperTest {
         classScraper.setTerm(null);
         classScraper.setWebSiteFromTerm();
     }
-
-
 
 }
