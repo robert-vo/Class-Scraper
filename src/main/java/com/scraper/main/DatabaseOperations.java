@@ -155,7 +155,7 @@ public class DatabaseOperations {
 
     private static void print(String message) {
         try {
-            java.lang.Class.forName("ui.ScraperGUI");
+            java.lang.Class.forName("com.scraper.ui.ScraperGUI");
             ScraperGUI.appendToLoggerTextArea(message);
         }
         catch (ClassNotFoundException e) {

@@ -133,7 +133,7 @@ public class ClassScraper implements Scraper {
     @Override
     public void print(String message) {
         try {
-            java.lang.Class.forName("ui.ScraperGUI");
+            java.lang.Class.forName("com.scraper.ui.ScraperGUI");
             ScraperGUI.appendToLoggerTextArea(message);
         }
         catch (ClassNotFoundException e) {
