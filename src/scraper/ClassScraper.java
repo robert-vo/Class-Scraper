@@ -33,6 +33,7 @@ public class ClassScraper implements Scraper {
         this.term = term;
     }
 
+    @Override
     public Term getTerm() {
         return term;
     }
@@ -41,7 +42,6 @@ public class ClassScraper implements Scraper {
     public List<Class> getAllClasses() {
         return allClasses;
     }
-
 
     @Override
     public void startScraper() {

@@ -21,5 +21,6 @@ public interface Scraper {
     int getNumberOfClasses();
     boolean isValidWebSiteWithClasses();
     List<Class> getAllClasses();
-    
+    Term getTerm();
+
 }
