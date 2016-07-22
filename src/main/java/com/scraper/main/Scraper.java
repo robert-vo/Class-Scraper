@@ -23,5 +23,5 @@ public interface Scraper {
     boolean isValidWebSiteWithClasses();
     List<Class> getAllClasses();
     Term getTerm();
-
+    void setPageLimit(int pageLimit);
 }
