@@ -2,19 +2,35 @@ package com.scraper.main;
 
 import com.scraper.ui.ScraperGUI;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 public class DatabaseOperations {
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL      = "jdbc:mysql://localhost/class?useSSL=false";
-    static final String USER        = "root";
-    static final String PASS        = "password";
+    static Properties properties = new Properties();
+    static String jdbcDriver;
+    static String databaseURL;
+    static String databaseTable;
+    static String userName;
+    static String passWord;
+
+    private static void loadPropertiesFile() throws IOException {
+        InputStream input = new FileInputStream("config.properties");
+        properties.load(input);
+        jdbcDriver      = properties.getProperty("jdbcDriver");
+        databaseTable   = properties.getProperty("databaseTable");
+        databaseURL     = properties.getProperty("databaseURL") +  "/" + databaseTable;
+        userName        = properties.getProperty("userName");
+        passWord        = properties.getProperty("passWord");
+    }
 
     public static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
@@ -29,7 +45,7 @@ public class DatabaseOperations {
         ps.executeUpdate();
     }
 
-    public static void performDatabaseActions(List<Class> allClasses) throws SQLException, ClassNotFoundException {
+    public static void performDatabaseActions(List<Class> allClasses) {
         allClasses.stream().forEach((c) -> {
             try {
                 initializeDatabaseActions(c);
@@ -56,8 +72,8 @@ public class DatabaseOperations {
     }
 
     private static boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
-        boolean doesClassExist = false;
 
+        boolean doesClassExist = false;
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
         PreparedStatement preparedStatement = conn.prepareStatement(getNumberOfOccurrences);
@@ -78,8 +94,13 @@ public class DatabaseOperations {
     }
 
     private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
-        java.lang.Class.forName(JDBC_DRIVER);
-        try (java.sql.Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+        try {
+            loadPropertiesFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        java.lang.Class.forName(jdbcDriver);
+        try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
             print("Checking if the class, " + c.getClassTitle() + " is already in the database.");
             if(isClassInDatabase(c, conn)) {
                 print("Class, " + c.getClassTitle() + " exists in database. Updating class.");
