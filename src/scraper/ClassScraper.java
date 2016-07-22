@@ -28,9 +28,20 @@ public class ClassScraper implements Scraper {
         this.term = Term.valueOf(termValue);
     }
 
+    @Override
+    public void setTerm(Term term) {
+        this.term = term;
+    }
+
     public Term getTerm() {
         return term;
     }
+
+    @Override
+    public List<Class> getAllClasses() {
+        return allClasses;
+    }
+
 
     @Override
     public void startScraper() {
@@ -63,11 +74,6 @@ public class ClassScraper implements Scraper {
     }
 
     @Override
-    public void setTerm(Term term) {
-        this.term = term;
-    }
-
-    @Override
     public boolean isValidWebSiteWithClasses() {
         try {
             Elements allClasses = currentWebSiteDocument.select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
@@ -90,7 +96,7 @@ public class ClassScraper implements Scraper {
             Connection.Response response = Jsoup.connect(websiteURL)
                 .ignoreContentType(true)
                 .userAgent(USER_AGENT_STRING)
-                .referrer(REFFERAL_URL)
+                .referrer(REFERRAL_URL)
                 .timeout(12000)
                 .followRedirects(true)
                 .execute();
@@ -140,10 +146,6 @@ public class ClassScraper implements Scraper {
             retrieveWebPage();
             print("Retrieved the following website: " + websiteURL);
         } while (isValidWebSiteWithClasses());
-    }
-
-    public List<Class> getAllClasses() {
-        return allClasses;
     }
 
 }
