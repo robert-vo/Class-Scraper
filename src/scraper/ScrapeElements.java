@@ -2,11 +2,13 @@ package scraper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static scraper.DateTimeUtilities.transformStringDateIntoSQLFormat;
 import static scraper.DateTimeUtilities.transformStringTimeIntoSQLFormat;
@@ -21,6 +23,8 @@ public class ScrapeElements {
     final static private String FRIDAY_ABBREVIATION    = "Fr";
     final static private String SATURDAY_ABBREVIATION  = "Sa";
     final static private String SUNDAY_ABBREVIATION    = "Sun";
+    final static private Predicate<String> isNotEmpty = e -> !e.isEmpty();
+    final static private Predicate<Elements> isNotEmptyElement = e -> !e.isEmpty();
 
     public static String getNameAndCourseNumber(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_NAME_AND_CRN_NUMBER);
@@ -54,13 +58,11 @@ public class ScrapeElements {
     }
 
     public static String getClassDate(Optional<String> classDate, boolean isStart) {
-        if(classDate.isPresent() && !classDate.get().equals("")) {
-            String bothClassTimes = classDate.get();
-            return splitByHyphenAndExtractHalf(bothClassTimes, isStart);
-        }
-        else {
-            return "";
-        }
+        return classDate
+                    .filter(isNotEmpty)
+                    .filter(e -> !e.equals(""))
+                    .map(e -> splitByHyphenAndExtractHalf(e, isStart))
+                    .orElse("");
     }
 
     public static String getClassDaysAndTimes(Element e) {
@@ -89,14 +91,11 @@ public class ScrapeElements {
     }
 
     public static String getDescription(Element e) {
-        Optional<Elements> classDescription = Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()));
-
-        if(classDescription.isPresent() && !(classDescription.get().size() == 0)) {
-            return getFirstChildNodeAndReturnAsString(classDescription.get());
-        }
-        else {
-            return "No description available.";
-        }
+        return Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()))
+                .filter(isNotEmptyElement)
+                .filter(e1 -> e1.size() != 0)
+                .map(ScrapeElements::getFirstChildNodeAndReturnAsString)
+                .orElse("No description available.");
     }
 
     public static String getCourseName(Element e) {
@@ -161,15 +160,19 @@ public class ScrapeElements {
     }
 
     private static String getFirstChildNodeAndReturnAsString(Elements e) {
-        return e.first()
-                .childNode(1)
-                .toString()
-                .trim();
+        return e.stream()
+                .findFirst()
+                .map(e1 -> e1.childNode(1))
+                .map(Node::toString)
+                .map(String::trim)
+                .get();
     }
 
     public static String getClassFromElementUsingHTMLElement(Element e, HTMLElements htmlElement) {
-        return Optional.ofNullable(e.select(htmlElement.getHtml()))
-                       .orElse(new Elements(1)).text();
+        return Optional
+                .ofNullable(e.select(htmlElement.getHtml()))
+                .orElse(new Elements(1))
+                .text();
     }
 
     public static String extractSyllabusFromElements(Elements e) {
@@ -178,7 +181,7 @@ public class ScrapeElements {
 
     private static String getClassTime(Optional<String> classTime, boolean isStart) {
         return classTime
-                .filter(e -> !e.isEmpty())
+                .filter(isNotEmpty)
                 .filter(e -> !e.equals(""))
                 .filter(e -> !e.equals("--"))
                 .filter(e -> !e.equals("-"))
@@ -189,16 +192,20 @@ public class ScrapeElements {
                 .orElse("");
     }
 
-    public static String getClassEndTime(Element aClass) {
+    private static String getRequestedClassTime(Element aClass, boolean half) {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
-        Optional<String> endTime = Optional.ofNullable(getClassTime(classTimesFromHtml, false));
-        return endTime.isPresent() ? endTime.get() : "";
+        Optional<String> time = Optional.ofNullable(getClassTime(classTimesFromHtml, half));
+        return time
+                .filter(isNotEmpty)
+                .orElse("");
+    }
+
+    public static String getClassEndTime(Element aClass) {
+        return getRequestedClassTime(aClass, false);
     }
 
     public static String getClassStartTime(Element aClass) {
-        Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
-        Optional<String> startTime = Optional.ofNullable(getClassTime(classTimesFromHtml, true));
-        return startTime.isPresent() ? startTime.get() : "";
+        return getRequestedClassTime(aClass, true);
     }
 
     private static boolean isClassOnCertainDay(Element aClass, String classDay) {
