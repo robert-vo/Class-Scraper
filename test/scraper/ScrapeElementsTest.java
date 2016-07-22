@@ -1,25 +1,22 @@
 package scraper;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static resources.DocumentUtility.returnDocumentFromFileName;
 import static scraper.ScrapeElements.*;
 
 public class ScrapeElementsTest {
 
-    ScraperRunner mock = mock(ScraperRunner.class);
+    ClassScraper classScraper = new ClassScraper(Term.FALL_2016);
     Element aClass;
 
     final private String NAME_COURSE_NUMBER     = "COSC 1300 (15240)";
@@ -47,10 +44,10 @@ public class ScrapeElementsTest {
 
     @Before
     public void setUp() throws IOException {
-        when(mock.generateDocumentForTerm(Term.FALL_2016)).thenReturn(returnDocumentFromFileName("coscPageOne"));
-        aClass = mock.generateDocumentForTerm(Term.FALL_2016)
-                     .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
-                     .get(0);
+        classScraper.currentWebSiteDocument = returnDocumentFromFileName("coscPageOne");
+        aClass = classScraper.currentWebSiteDocument
+                             .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
+                             .get(0);
     }
 
     @Test
@@ -218,10 +215,8 @@ public class ScrapeElementsTest {
     }
 
     @Test
-    public void testDocumentHasTenClasses() throws IOException {
-        assertEquals(mock.generateDocumentForTerm(Term.FALL_2016)
-                         .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
-                         .size(), 10);
+    public void testDocumentHas68Classes() throws IOException {
+        assertEquals(classScraper.getNumberOfClasses(), 68);
     }
 
     @Test
@@ -284,19 +279,14 @@ public class ScrapeElementsTest {
             add("Introduction to Programming");
         }};
 
-        Elements allClasses = mock.generateDocumentForTerm(Term.FALL_2016)
-                                  .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
+        Elements allClasses = classScraper.currentWebSiteDocument
+                .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
 
-        ArrayList<String> listOfScrapedNames = allClasses.stream()
-                                                         .map(e -> e.select(HTMLElements.COURSE_TITLE.getHtml()).text())
-                                                         .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> listOfScrapedNames =
+                allClasses.stream()
+                        .map(e -> e.select(HTMLElements.COURSE_TITLE.getHtml()).text())
+                        .collect(Collectors.toCollection(ArrayList::new));
 
         assertEquals(listOfClassNames, listOfScrapedNames);
     }
-
-    private Document returnDocumentFromFileName(String fileName) throws IOException {
-        File page = new File("test/resources/" + fileName + ".html");
-        return Jsoup.parse(page, "UTF-8", "");
-    }
-
 }
