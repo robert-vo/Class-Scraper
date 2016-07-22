@@ -15,11 +15,12 @@ import static java.util.stream.Collectors.toList;
 
 public class ClassScraper implements Scraper {
 
-    Term term;
+    Term                term;
     public String       websiteURL;
     public Document     currentWebSiteDocument;
     List<Class>         allClassesForAGivenDocument;
-    List<Class>         allClasses = new ArrayList<>();
+    List<Class>         allClasses  = new ArrayList<>();
+    int                 pageLimit   = Integer.MAX_VALUE;
 
     public ClassScraper(Term term) {
         this.term = term;
@@ -28,6 +29,12 @@ public class ClassScraper implements Scraper {
     public ClassScraper(int year, String semester) {
         String termValue = semester.toUpperCase() + "_" + year;
         this.term = Term.valueOf(termValue);
+    }
+
+    @Override
+    public void setPageLimit(int pageLimit) {
+        print("The scraper will only run for " + pageLimit + " pages.");
+        this.pageLimit = pageLimit;
     }
 
     @Override
@@ -141,13 +148,14 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void retrieveAllClasses() {
+        int counter = 0;
         do {
             scrapeCurrentPageAndReturnAsListOfClass();
             allClasses.addAll(allClassesForAGivenDocument);
             advanceToNextPage();
             retrieveWebPage();
             print("Retrieved the following website: " + websiteURL);
-        } while (isValidWebSiteWithClasses());
+            counter += 1;
+        } while (isValidWebSiteWithClasses() && counter < pageLimit);
     }
-
 }
