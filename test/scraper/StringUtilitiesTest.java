@@ -1,5 +1,6 @@
 package scraper;
 
+import org.jsoup.select.Elements;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,6 +9,16 @@ import static org.junit.Assert.assertTrue;
 import static scraper.StringUtilities.*;
 
 public class StringUtilitiesTest {
+
+    @Test
+    public void testExtractTextBetweenParenthesesWithNull() {
+        assertEquals(extractTextBetweenParentheses(new Elements(0)), "0");
+    }
+
+    @Test
+    public void testExtractEmailFromHREFTagWithNull() {
+        assertEquals(extractEmailFromHREFTag(new Elements(0)), "Unknown Email");
+    }
 
     @Test
     public void testSplitByHyphenWithNullRequestFirstHalf() {
