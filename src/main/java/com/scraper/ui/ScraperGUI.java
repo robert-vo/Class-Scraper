@@ -9,36 +9,44 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 public class ScraperGUI extends JFrame {
 
-    public  static final int                WIDTH               = 725;
+    public  static final int                WIDTH               = 800;
     public  static final int                HEIGHT              = 700;
     private static       ClassScraper       classScraper;
     private              JScrollPane        loggerScrollPane;
     private static       JTextArea          loggerTextArea;
+    private static       JLabel             pageLimitLabel;
+    private static       JTextField         pageLimitTextField;
     private              JButton            startButton;
-    private              JButton            stopButton;
     private              JButton            closeButton;
     private              JComboBox          termOptions;
     private              long               startTime;
     private              long               endTime;
+    private              int                pageLimit;
     private        final String             TIME_FORMAT         = "HH:MM:SS";
     private        final SimpleDateFormat   simpleDateFormat    = new SimpleDateFormat(TIME_FORMAT);
     private        final Term[]             termDropDownOptions = Term.values();
+    private              Thread             thread;
 
     @Override
     protected void frameInit() {
         super.frameInit();
         setSize(WIDTH, HEIGHT);
-        setTitle("Classbrowser ScraperRunner");
+        setTitle("Class Scraper");
     }
 
     public ScraperGUI() throws IOException {
         JPanel entirePanel = generateButtons();
         termOptions = new JComboBox<>(termDropDownOptions);
+        pageLimitTextField = new JTextField(4);
+        pageLimitTextField.setText("0");
+        pageLimitLabel = new JLabel();
+        pageLimitLabel.setText("Enter a page limit. 0 indicates all pages.");
+        entirePanel.add(pageLimitLabel);
+        entirePanel.add(pageLimitTextField);
         entirePanel.add(termOptions);
         entirePanel.add(new JSeparator());
         loggerScrollPane = createLoggerPanel();
@@ -64,15 +72,12 @@ public class ScraperGUI extends JFrame {
         buttons.setLayout(new FlowLayout());
         createAllButtons();
         buttons.add(startButton);
-        buttons.add(stopButton);
         buttons.add(closeButton);
         return buttons;
     }
 
     private void createAllButtons() throws IOException {
         startButton = new JButton("Start Scraping");
-        stopButton = new JButton("Stop Scraping");
-        stopButton.setEnabled(false);
         closeButton = new JButton("Close Program");
         startButton.addActionListener(e -> {
             try {
@@ -82,38 +87,64 @@ public class ScraperGUI extends JFrame {
                 changeStatusOfButtons(false);
             }
         });
-        stopButton.addActionListener(e -> onStop());
         closeButton.addActionListener(e -> onClose());
     }
 
     private void changeStatusOfButtons(boolean status) {
         startButton.setEnabled(status);
-        stopButton.setEnabled(!status);
-        closeButton.setEnabled(status);
         termOptions.setEnabled(status);
     }
 
+    private boolean validTextPageLimit() {
+        try {
+            pageLimit = Integer.parseInt(pageLimitTextField.getText());
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
     private void onStart() throws IOException {
+        if(validTextPageLimit() && pageLimit > 0) {
+            appendToLoggerTextArea("Scraping " + pageLimit + " pages.");
+            runScraper();
+        }
+        else if(validTextPageLimit() && pageLimit < 0) {
+            appendToLoggerTextArea("Invalid Page Limit. Please re-enter a valid page limit above zero.");
+        }
+        else if(validTextPageLimit() && pageLimit == 0) {
+            appendToLoggerTextArea("Scraping all pages.");
+            runScraper();
+        }
+        else {
+            appendToLoggerTextArea("Invalid Page Limit. Please re-enter a valid page limit, or leave it empty to scrape all pages.");
+        }
+    }
+
+    private void runScraper() {
         changeStatusOfButtons(false);
         classScraper = new ClassScraper((Term) termOptions.getSelectedItem());
+        if(pageLimit != 0) {
+            classScraper.setPageLimit(pageLimit);
+        }
 //        classScraper = new ClassScraper(2016, "Fall");
         appendToLoggerTextArea("Starting the scraper for " + classScraper.getTerm());
 
-        Thread thread = new Thread () {
+        thread = new Thread () {
             @Override public void run () {
                 startAndPrintTimer();
                 classScraper.startScraper();
                 try {
                     appendToLoggerTextArea("The program will now attempt to insert/update the database with the classes.");
                     DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
-                } catch (SQLException | ClassNotFoundException e) {
+                } catch (Exception e) {
                     appendToLoggerTextArea(e.getMessage());
                 }
                 appendToLoggerTextArea("Database updated. Please check the database to see the results of the scraping.");
                 endAndPrintTimer();
             }
         };
-
         thread.start();
     }
 
@@ -128,11 +159,7 @@ public class ScraperGUI extends JFrame {
         String dateText = simpleDateFormat.format(startTime);
         appendToLoggerTextArea("End time is: " + dateText);
         appendToLoggerTextArea("Time taken is " + String.valueOf(endTime - startTime) + "ms.");
-    }
-
-    private void onStop() {
         changeStatusOfButtons(true);
-        appendToLoggerTextArea("Stopping the scraper.");
     }
 
     private void onClose() {
