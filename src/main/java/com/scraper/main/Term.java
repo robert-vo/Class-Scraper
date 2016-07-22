@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 
 /**
  * Term are incremented by 10 from the previous term.

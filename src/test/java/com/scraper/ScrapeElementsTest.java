@@ -1,9 +1,9 @@
-package scraper;
+package com.scraper;
 
-import main.java.scraper.Class;
-import main.java.scraper.ClassScraper;
-import main.java.scraper.HTMLElements;
-import main.java.scraper.Term;
+import com.scraper.main.Class;
+import com.scraper.main.ClassScraper;
+import com.scraper.main.HTMLElements;
+import com.scraper.main.Term;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import static com.scraper.main.ScrapeElements.*;
+import static com.scraper.util.DocumentUtility.returnDocumentFromFileName;
 import static org.junit.Assert.*;
-import static resources.DocumentUtility.returnDocumentFromFileName;
-import static main.java.scraper.ScrapeElements.*;
 
 public class ScrapeElementsTest {
 

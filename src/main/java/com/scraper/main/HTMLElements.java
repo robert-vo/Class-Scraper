@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 
 public enum HTMLElements {
     RETRIEVE_ALL_CLASSES        ("ul[id=accordion] > li"),

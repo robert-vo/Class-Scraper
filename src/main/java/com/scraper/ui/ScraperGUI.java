@@ -1,8 +1,8 @@
-package ui;
+package com.scraper.ui;
 
-import main.java.scraper.ClassScraper;
-import main.java.scraper.DatabaseOperations;
-import main.java.scraper.Term;
+import com.scraper.main.ClassScraper;
+import com.scraper.main.DatabaseOperations;
+import com.scraper.main.Term;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class ScraperGUI extends JFrame {
 
     public  static final int                WIDTH               = 725;
     public  static final int                HEIGHT              = 700;
-    private static       ClassScraper       classScraper;
+    private static       ClassScraper classScraper;
     private              JScrollPane        loggerScrollPane;
     private static       JTextArea          loggerTextArea;
     private              JButton            startButton;

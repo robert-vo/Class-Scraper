@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 
 public enum Subject {
     AAS  ("African American Studies"),

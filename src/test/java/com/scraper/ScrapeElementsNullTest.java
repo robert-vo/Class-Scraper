@@ -1,14 +1,14 @@
-package scraper;
+package com.scraper;
 
 import org.jsoup.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.scraper.main.ScrapeElements.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static main.java.scraper.ScrapeElements.*;
 
 public class ScrapeElementsNullTest {
 

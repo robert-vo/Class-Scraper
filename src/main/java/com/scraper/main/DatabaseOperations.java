@@ -1,7 +1,8 @@
-package main.java.scraper;
+package com.scraper.main;
 
-import ui.ScraperGUI;
+import com.scraper.ui.ScraperGUI;
 
+import java.lang.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

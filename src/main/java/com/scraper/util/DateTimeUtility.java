@@ -1,11 +1,11 @@
-package main.java.scraper;
+package com.scraper.util;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class DateTimeUtilities {
+public class DateTimeUtility {
     static final String MONTH_DAY_YEAR_FORMAT = "MMMM d, yyyy";
     static final String TIME_FORMAT_12_HOUR   = "hh:mm a";
 

@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 
 /**
  * Created by Robert on 7/10/16.

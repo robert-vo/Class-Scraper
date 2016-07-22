@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 
 /*
 For the classbrowser api, there must be a term parameter passed through the URL.

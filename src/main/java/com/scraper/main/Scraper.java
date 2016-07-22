@@ -1,7 +1,8 @@
-package main.java.scraper;
+package com.scraper.main;
 
 import org.jsoup.nodes.Document;
 
+import java.lang.*;
 import java.util.List;
 
 public interface Scraper {

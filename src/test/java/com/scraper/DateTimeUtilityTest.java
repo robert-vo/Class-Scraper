@@ -1,12 +1,13 @@
-package scraper;
+package com.scraper;
 
 import org.junit.Test;
 
+import static com.scraper.util.DateTimeUtility.transformStringDateIntoSQLFormat;
+import static com.scraper.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static main.java.scraper.DateTimeUtilities.*;
 
-public class DateTimeUtilitiesTest {
+public class DateTimeUtilityTest {
 
     @Test
     public void testTransformDateIntoSQLFormatForNullDate() {

@@ -1,14 +1,14 @@
-package scraper;
+package com.scraper;
 
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import static com.scraper.util.StringUtility.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static main.java.scraper.StringUtilities.*;
 
-public class StringUtilitiesTest {
+public class StringUtilityTest {
 
     @Test
     public void testExtractTextBetweenParenthesesWithNull() {

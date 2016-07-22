@@ -1,18 +1,20 @@
-package main.java.scraper;
+package com.scraper.main;
 
+import com.scraper.util.StringUtility;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import java.lang.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static main.java.scraper.DateTimeUtilities.transformStringDateIntoSQLFormat;
-import static main.java.scraper.DateTimeUtilities.transformStringTimeIntoSQLFormat;
-import static main.java.scraper.StringUtilities.*;
+import static com.scraper.util.DateTimeUtility.transformStringDateIntoSQLFormat;
+import static com.scraper.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
+import static com.scraper.util.StringUtility.*;
 
 public class ScrapeElements {
 
@@ -242,11 +244,11 @@ public class ScrapeElements {
     }
 
     public static String getDepartmentCourseNumber(String courseName) {
-        return StringUtilities.splitBySpaceAndExtractHalf(courseName, false);
+        return StringUtility.splitBySpaceAndExtractHalf(courseName, false);
     }
 
     public static String getDepartment(String courseName) {
-        return StringUtilities.splitBySpaceAndExtractHalf(courseName, true);
+        return StringUtility.splitBySpaceAndExtractHalf(courseName, true);
     }
 
     public static int getNumberOfClasses(Document doc) {

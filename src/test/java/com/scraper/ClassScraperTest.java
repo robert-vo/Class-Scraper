@@ -1,14 +1,14 @@
-package scraper;
+package com.scraper;
 
-import main.java.scraper.ClassScraper;
-import main.java.scraper.Term;
+import com.scraper.main.ClassScraper;
+import com.scraper.main.Term;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-import static resources.DocumentUtility.returnDocumentFromFileName;
+import static com.scraper.util.DocumentUtility.returnDocumentFromFileName;
 
 public class ClassScraperTest {
 

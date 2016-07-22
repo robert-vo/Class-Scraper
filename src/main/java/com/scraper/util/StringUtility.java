@@ -1,9 +1,9 @@
-package main.java.scraper;
+package com.scraper.util;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class StringUtilities {
+public class StringUtility {
     static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
     static String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
     static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";
@@ -26,7 +26,7 @@ public class StringUtilities {
                 .orElse("Unknown Email");
     }
 
-    static String extractTextBetweenParentheses(String str) {
+    public static String extractTextBetweenParentheses(String str) {
         try {
             return str.split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES)[1];
         }
@@ -35,7 +35,7 @@ public class StringUtilities {
         }
     }
 
-    static String extractTextBeforeParentheses(String str) {
+    public static String extractTextBeforeParentheses(String str) {
         return str.substring(0, str.indexOf('(') - 1);
     }
 

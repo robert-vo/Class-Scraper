@@ -1,4 +1,4 @@
-package main.java.scraper;
+package com.scraper.main;
 /*
 
 These are the parameters for the class browser.
