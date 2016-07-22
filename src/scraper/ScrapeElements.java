@@ -168,14 +168,8 @@ public class ScrapeElements {
     }
 
     public static String getClassFromElementUsingHTMLElement(Element e, HTMLElements htmlElement) {
-        Optional<Elements> scrapedElement = Optional.ofNullable(e.select(htmlElement.getHtml()));
-
-        if(scrapedElement.isPresent()) {
-            return scrapedElement.get().text();
-        }
-        else {
-            return "";
-        }
+        return Optional.ofNullable(e.select(htmlElement.getHtml()))
+                       .orElse(new Elements(1)).text();
     }
 
     public static String extractSyllabusFromElements(Elements e) {
@@ -183,14 +177,16 @@ public class ScrapeElements {
     }
 
     private static String getClassTime(Optional<String> classTime, boolean isStart) {
-        if(classTime.isPresent() && !classTime.get().equals("") && !classTime.get().equals("--") && !classTime.get().equals("-")) {
-            String bothClassTimes = classTime.get();
-            String wholeString = bothClassTimes.substring(bothClassTimes.indexOf(" "));
-            return splitByHyphenAndExtractHalf(wholeString, isStart);
-        }
-        else {
-            return "";
-        }
+        return classTime
+                .filter(e -> !e.isEmpty())
+                .filter(e -> !e.equals(""))
+                .filter(e -> !e.equals("--"))
+                .filter(e -> !e.equals("-"))
+                .map(e -> {
+                    String wholeString = e.substring(e.indexOf(" "));
+                    return splitByHyphenAndExtractHalf(wholeString, isStart);
+                })
+                .orElse("");
     }
 
     public static String getClassEndTime(Element aClass) {
