@@ -81,6 +81,11 @@ public class ClassScraper implements Scraper {
     }
 
     @Override
+    public void setCurrentWebSiteDocument(Document doc) {
+        this.currentWebSiteDocument = doc;
+    }
+
+    @Override
     public void retrieveWebPage() {
         try {
             Connection.Response response = Jsoup.connect(websiteURL)
@@ -90,7 +95,7 @@ public class ClassScraper implements Scraper {
                 .timeout(12000)
                 .followRedirects(true)
                 .execute();
-            currentWebSiteDocument = response.parse();
+            setCurrentWebSiteDocument(response.parse());
         }
         catch (IOException e) {
             e.printStackTrace();
