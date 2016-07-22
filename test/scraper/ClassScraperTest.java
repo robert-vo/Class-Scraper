@@ -1,21 +1,14 @@
 package scraper;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import static resources.DocumentUtility.returnDocumentFromFileName;
 
 public class ClassScraperTest {
-
-    private Document returnDocumentFromFileName(String fileName) throws IOException {
-        File page = new File("test/resources/" + fileName + ".html");
-        return Jsoup.parse(page, "UTF-8", "");
-    }
 
     ClassScraper classScraper;
 
