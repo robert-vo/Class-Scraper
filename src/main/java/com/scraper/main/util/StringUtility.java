@@ -1,4 +1,4 @@
-package com.scraper.util;
+package com.scraper.main.util;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

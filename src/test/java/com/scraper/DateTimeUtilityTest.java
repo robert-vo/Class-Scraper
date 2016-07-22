@@ -2,8 +2,8 @@ package com.scraper;
 
 import org.junit.Test;
 
-import static com.scraper.util.DateTimeUtility.transformStringDateIntoSQLFormat;
-import static com.scraper.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
+import static com.scraper.main.util.DateTimeUtility.transformStringDateIntoSQLFormat;
+import static com.scraper.main.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

@@ -3,7 +3,7 @@ package com.scraper;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
-import static com.scraper.util.StringUtility.*;
+import static com.scraper.main.util.StringUtility.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
