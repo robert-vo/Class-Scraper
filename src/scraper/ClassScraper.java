@@ -42,9 +42,8 @@ public class ClassScraper implements Scraper {
             if(isValidWebSiteWithClasses()) {
                 print("Starting scraper for " + getNumberOfClasses() + " classes.");
                 retrieveAllClasses();
-                print("Scraping finished. Retrieved " + allClasses.size() + " classes. Updating the database.");
-                DatabaseOperations.performDatabaseActions(allClasses);
-                print("Database updated. Please check the database to see the results of the scraping.");
+                print("Scraping finished. Retrieved " + allClasses.size() + " classes.");
+                print("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
             }
             else {
                 print("Invalid website. Stopping scraper.");
@@ -141,6 +140,10 @@ public class ClassScraper implements Scraper {
             retrieveWebPage();
             print("Retrieved the following website: " + websiteURL);
         } while (isValidWebSiteWithClasses());
+    }
+
+    public List<Class> getAllClasses() {
+        return allClasses;
     }
 
 }
