@@ -18,15 +18,20 @@ import static com.scraper.main.util.StringUtility.*;
 
 public class ScrapeElements {
 
-    final static private String MONDAY_ABBREVIATION    = "Mo";
-    final static private String TUESDAY_ABBREVIATION   = "Tu";
-    final static private String WEDNESDAY_ABBREVIATION = "We";
-    final static private String THURSDAY_ABBREVIATION  = "Th";
-    final static private String FRIDAY_ABBREVIATION    = "Fr";
-    final static private String SATURDAY_ABBREVIATION  = "Sa";
-    final static private String SUNDAY_ABBREVIATION    = "Sun";
-    final static private Predicate<String> isNotEmpty = e -> !e.isEmpty();
-    final static private Predicate<Elements> isNotEmptyElement = e -> !e.isEmpty();
+    final static private String                 MONDAY_ABBREVIATION          = "Mo";
+    final static private String                 TUESDAY_ABBREVIATION         = "Tu";
+    final static private String                 WEDNESDAY_ABBREVIATION       = "We";
+    final static private String                 THURSDAY_ABBREVIATION        = "Th";
+    final static private String                 FRIDAY_ABBREVIATION          = "Fr";
+    final static private String                 SATURDAY_ABBREVIATION        = "Sa";
+    final static private String                 SUNDAY_ABBREVIATION          = "Sun";
+    final static private String                 EMPTY_STRING                 = "";
+    final static private Predicate<Elements>    isNotEmptyElement            = e -> !e.isEmpty();
+    final static private Predicate<Elements>    isElementsSizeNotEqualToZero = e -> e.size() != 0;
+    final static private Predicate<String>      isNotEmpty                   = e -> !e.isEmpty();
+    final static private Predicate<String>      isNotEmptyString             = e -> !e.equals(EMPTY_STRING);
+    final static private Predicate<String>      isNotStringWithTwoHyphens    = e -> !e.equals("--");
+    final static private Predicate<String>      isNotStringWithOneHyphen     = e -> !e.equals("-");
 
     public static String getNameAndCourseNumber(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_NAME_AND_CRN_NUMBER);
@@ -62,9 +67,9 @@ public class ScrapeElements {
     public static String getClassDate(Optional<String> classDate, boolean isStart) {
         return classDate
                     .filter(isNotEmpty)
-                    .filter(e -> !e.equals(""))
+                    .filter(isNotEmptyString)
                     .map(e -> splitByHyphenAndExtractHalf(e, isStart))
-                    .orElse("");
+                    .orElse(EMPTY_STRING);
     }
 
     public static String getClassDaysAndTimes(Element e) {
@@ -94,10 +99,10 @@ public class ScrapeElements {
 
     public static String getDescription(Element e) {
         return Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()))
-                .filter(isNotEmptyElement)
-                .filter(e1 -> e1.size() != 0)
-                .map(ScrapeElements::getFirstChildNodeAndReturnAsString)
-                .orElse("No description available.");
+                    .filter(isNotEmptyElement)
+                    .filter(isElementsSizeNotEqualToZero)
+                    .map(ScrapeElements::getFirstChildNodeAndReturnAsString)
+                    .orElse("No description available.");
     }
 
     public static String getCourseName(Element e) {
@@ -184,14 +189,14 @@ public class ScrapeElements {
     private static String getClassTime(Optional<String> classTime, boolean isStart) {
         return classTime
                 .filter(isNotEmpty)
-                .filter(e -> !e.equals(""))
-                .filter(e -> !e.equals("--"))
-                .filter(e -> !e.equals("-"))
+                .filter(isNotEmptyString)
+                .filter(isNotStringWithTwoHyphens)
+                .filter(isNotStringWithOneHyphen)
                 .map(e -> {
                     String wholeString = e.substring(e.indexOf(" "));
                     return splitByHyphenAndExtractHalf(wholeString, isStart);
                 })
-                .orElse("");
+                .orElse(EMPTY_STRING);
     }
 
     private static String getRequestedClassTime(Element aClass, boolean half) {
@@ -199,7 +204,7 @@ public class ScrapeElements {
         Optional<String> time = Optional.ofNullable(getClassTime(classTimesFromHtml, half));
         return time
                 .filter(isNotEmpty)
-                .orElse("");
+                .orElse(EMPTY_STRING);
     }
 
     public static String getClassEndTime(Element aClass) {
