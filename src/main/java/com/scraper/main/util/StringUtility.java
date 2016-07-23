@@ -14,7 +14,8 @@ public class StringUtility {
                 .findFirst()
                 .map(Element::text)
                 .map(str -> str.split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES))
-                .orElse(new String[]{"0", "0"})[1];
+                .map(str -> str[1])
+                .orElse("0");
     }
 
     public static String extractEmailFromHREFTag(Elements e) {
