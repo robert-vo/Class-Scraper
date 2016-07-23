@@ -46,7 +46,7 @@ public class DatabaseOperations {
     }
 
     public static void performDatabaseActions(List<Class> allClasses) {
-        allClasses.stream().forEach((c) -> {
+        allClasses.parallelStream().forEach((c) -> {
             try {
                 initializeDatabaseActions(c);
             } catch (SQLException | ClassNotFoundException e) {
