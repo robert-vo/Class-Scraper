@@ -32,17 +32,29 @@ public class DatabaseOperations {
         passWord        = properties.getProperty("passWord");
     }
 
-    public static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
-        final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
-                "Title, CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
-                "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, BUILDING_ABBV, " +
-                "BUILDING_ROOM_NUM, FORMAT, DESCRIPTION, DURATION, SESSION, COMPONENT, SYLLABUS, SEATS_TAKEN, " +
-                "SEATS_AVAILABLE, SEATS_TOTAL, MONDAY, TUESDAY, WEDNESDAY, " +
-                "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
-                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        PreparedStatement ps = prepareStatementForFields(c, conn, insertClassIntoDatabase);
-        ps.executeUpdate();
+    private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
+        try {
+            loadPropertiesFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        java.lang.Class.forName(jdbcDriver);
+
+        try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
+            print("Checking if the class, " + c.getClassTitle() + " is already in the database.");
+            if(isClassInDatabase(c, conn)) {
+                print("Class, " + c.getClassTitle() + " exists in database. Updating class.");
+                updateClassInDatabase(c, conn);
+            }
+            else {
+                print("Class, " + c.getClassTitle() + " does not exist in the database. Inserting new row.");
+                insertIntoDatabase(c, conn);
+            }
+        }
+        catch (Exception e1) {
+            print(e1.getMessage());
+        }
     }
 
     public static void performDatabaseActions(List<Class> allClasses) {
@@ -55,24 +67,7 @@ public class DatabaseOperations {
         });
     }
 
-    private static void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
-        final String updateClassInDatabase = "UPDATE CLASS SET " +
-                "Term_ID = ?, Title = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
-                "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
-                "INSTRUCTOR = ?, INSTRUCTOR_EMAIL = ?, LOCATION = ?, BUILDING_ABBV = ?, BUILDING_ROOM_NUM = ?," +
-                "FORMAT = ?, DESCRIPTION = ?, DURATION = ?, SESSION = ?, COMPONENT = ?, SYLLABUS = ?," +
-                "SEATS_TAKEN = ?, SEATS_AVAILABLE = ?, SEATS_TOTAL = ?," +
-                "MONDAY = ?, TUESDAY = ?, WEDNESDAY = ?, THURSDAY = ?, FRIDAY = ?, SATURDAY = ?, SUNDAY = ? " +
-                "WHERE (Term_ID = ? AND CRN = ? AND Department = ?);";
-        PreparedStatement preparedStatement = prepareStatementForFields(c, conn, updateClassInDatabase);
-        preparedStatement.setString (33, c.getTerm().getTermID());
-        preparedStatement.setString (34, c.getCourseNumber());
-        preparedStatement.setString (35, c.getDepartmentAbbreviation());
-        preparedStatement.executeUpdate();
-    }
-
     private static boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
-
         boolean doesClassExist = false;
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
@@ -93,27 +88,33 @@ public class DatabaseOperations {
         return doesClassExist;
     }
 
-    private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
-        try {
-            loadPropertiesFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        java.lang.Class.forName(jdbcDriver);
-        try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
-            print("Checking if the class, " + c.getClassTitle() + " is already in the database.");
-            if(isClassInDatabase(c, conn)) {
-                print("Class, " + c.getClassTitle() + " exists in database. Updating class.");
-                updateClassInDatabase(c, conn);
-            }
-            else {
-                print("Class, " + c.getClassTitle() + " does not exist in the database. Inserting new row.");
-                insertIntoDatabase(c, conn);
-            }
-        }
-        catch (Exception e1) {
-            print(e1.getMessage());
-        }
+    public static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+        final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
+                "Title, CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
+                "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, BUILDING_ABBV, " +
+                "BUILDING_ROOM_NUM, FORMAT, DESCRIPTION, DURATION, SESSION, COMPONENT, SYLLABUS, SEATS_TAKEN, " +
+                "SEATS_AVAILABLE, SEATS_TOTAL, MONDAY, TUESDAY, WEDNESDAY, " +
+                "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement ps = prepareStatementForFields(c, conn, insertClassIntoDatabase);
+        ps.executeUpdate();
+    }
+
+    private static void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+        final String updateClassInDatabase = "UPDATE CLASS SET " +
+                "Term_ID = ?, Title = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
+                "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
+                "INSTRUCTOR = ?, INSTRUCTOR_EMAIL = ?, LOCATION = ?, BUILDING_ABBV = ?, BUILDING_ROOM_NUM = ?," +
+                "FORMAT = ?, DESCRIPTION = ?, DURATION = ?, SESSION = ?, COMPONENT = ?, SYLLABUS = ?," +
+                "SEATS_TAKEN = ?, SEATS_AVAILABLE = ?, SEATS_TOTAL = ?," +
+                "MONDAY = ?, TUESDAY = ?, WEDNESDAY = ?, THURSDAY = ?, FRIDAY = ?, SATURDAY = ?, SUNDAY = ? " +
+                "WHERE (Term_ID = ? AND CRN = ? AND Department = ?);";
+        PreparedStatement preparedStatement = prepareStatementForFields(c, conn, updateClassInDatabase);
+        preparedStatement.setString (33, c.getTerm().getTermID());
+        preparedStatement.setString (34, c.getCourseNumber());
+        preparedStatement.setString (35, c.getDepartmentAbbreviation());
+        preparedStatement.executeUpdate();
     }
 
     private static PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
@@ -161,6 +162,5 @@ public class DatabaseOperations {
         catch (ClassNotFoundException e) {
             System.out.println(message);
         }
-
     }
 }
