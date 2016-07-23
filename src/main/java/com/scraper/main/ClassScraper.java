@@ -64,6 +64,7 @@ public class ClassScraper implements Scraper {
                 retrieveAllClasses();
                 print("Scraping finished. Retrieved " + allClasses.size() + " classes.");
                 print("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
+                print("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
             }
             else {
                 print("Invalid website. Stopping scraper.");
