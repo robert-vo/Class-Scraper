@@ -175,7 +175,9 @@ public class ScraperGUI extends JFrame {
     }
 
     public static void appendToLoggerTextArea(String message) {
-        loggerTextArea.append(message + "\n");
+        if(loggerTextArea != null) {
+            loggerTextArea.append(message + "\n");
+        }
         System.out.println(message);
     }
 
