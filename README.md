@@ -1,6 +1,4 @@
-# Class-Scraper
-
-[![Build Status](https://travis-ci.org/robert-vo/Class-Scraper.svg?branch=master)](https://travis-ci.org/robert-vo/Class-Scraper)
+# Class-Scraper [![Build Status](https://travis-ci.org/robert-vo/Class-Scraper.svg?branch=master)](https://travis-ci.org/robert-vo/Class-Scraper)
 
 ## About
 Class-Scraper is a Java-based API that allows one to extract all of the classes from the **University of Houston** available at [http://classbrowser.uh.edu](http://classbrowser.uh.edu). The data is then readily available for personal use.
