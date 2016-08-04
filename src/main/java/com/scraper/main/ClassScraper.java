@@ -82,7 +82,7 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void startScraperForMultipleTerms() {
-        for (Term t: terms) {
+        for (Term t : terms) {
             term = t;
             startScraper();
         }
