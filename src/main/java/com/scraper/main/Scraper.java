@@ -11,6 +11,7 @@ public interface Scraper {
     String REFERRAL_URL         = "http://www.google.com";
 
     void startScraper();
+    void startScraperForMultipleTerms();
     void setWebSiteFromTerm();
     void retrieveWebPage();
     void scrapeCurrentPageAndReturnAsListOfClass();

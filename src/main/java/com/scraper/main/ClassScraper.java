@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class ClassScraper implements Scraper {
 
     Term                term;
+    List<Term>          terms;
     public String       websiteURL;
     public Document     currentWebSiteDocument;
     List<Class>         allClassesForAGivenDocument;
@@ -29,6 +30,10 @@ public class ClassScraper implements Scraper {
     public ClassScraper(int year, String semester) {
         String termValue = semester.toUpperCase() + "_" + year;
         this.term = Term.valueOf(termValue);
+    }
+
+    public ClassScraper(List<Term> terms) {
+        this.terms = terms;
     }
 
     @Override
@@ -72,6 +77,14 @@ public class ClassScraper implements Scraper {
         }
         catch (Exception e) {
             print(e.getMessage());
+        }
+    }
+
+    @Override
+    public void startScraperForMultipleTerms() {
+        for (Term t: terms) {
+            term = t;
+            startScraper();
         }
     }
 
