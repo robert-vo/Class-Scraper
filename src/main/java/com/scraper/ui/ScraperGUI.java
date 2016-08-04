@@ -128,7 +128,6 @@ public class ScraperGUI extends JFrame {
         if(pageLimit != 0) {
             classScraper.setPageLimit(pageLimit);
         }
-//        classScraper = new ClassScraper(2016, "Fall");
         appendToLoggerTextArea("Starting the scraper for " + classScraper.getTerm());
 
         thread = new Thread () {
@@ -137,6 +136,7 @@ public class ScraperGUI extends JFrame {
                 classScraper.startScraper();
                 try {
                     appendToLoggerTextArea("The program will now attempt to insert/update the database with the classes.");
+                    DatabaseOperations.setPropertiesFileLocation("config/config.properties");
                     DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
                 } catch (Exception e) {
                     appendToLoggerTextArea(e.getMessage());
