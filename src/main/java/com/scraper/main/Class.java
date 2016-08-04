@@ -340,5 +340,43 @@ public class Class {
     public void setSyllabus(String syllabus) {
         this.syllabus = syllabus;
     }
+
+    @Override
+    public String toString() {
+        return "Class{" +
+                "term=" + term +
+                ", classTitle='" + classTitle + '\'' +
+                ", departmentAbbreviation='" + departmentAbbreviation + '\'' +
+                ", departmentCourseNumber='" + departmentCourseNumber + '\'' +
+                ", classStatus=" + classStatus +
+                ", courseNumber='" + courseNumber + '\'' +
+                ", seatsTaken=" + seatsTaken +
+                ", seatsAvailable=" + seatsAvailable +
+                ", seatsTotal=" + seatsTotal +
+                ", classStartDate=" + classStartDate +
+                ", classEndDate=" + classEndDate +
+                ", attributes='" + attributes + '\'' +
+                ", classStartTime=" + classStartTime +
+                ", classEndTime=" + classEndTime +
+                ", isMondayClass=" + isMondayClass +
+                ", isTuesdayClass=" + isTuesdayClass +
+                ", isWednesdayClass=" + isWednesdayClass +
+                ", isThursdayClass=" + isThursdayClass +
+                ", isFridayClass=" + isFridayClass +
+                ", isSaturdayClass=" + isSaturdayClass +
+                ", isSundayClass=" + isSundayClass +
+                ", instructorName='" + instructorName + '\'' +
+                ", instructorEmail='" + instructorEmail + '\'' +
+                ", location='" + location + '\'' +
+                ", buildingAbbreviation='" + buildingAbbreviation + '\'' +
+                ", buildingRoomNumber='" + buildingRoomNumber + '\'' +
+                ", format='" + format + '\'' +
+                ", description='" + description + '\'' +
+                ", duration='" + duration + '\'' +
+                ", session='" + session + '\'' +
+                ", component='" + component + '\'' +
+                ", syllabus='" + syllabus + '\'' +
+                '}';
+    }
 }
 
