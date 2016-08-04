@@ -21,9 +21,14 @@ public class DatabaseOperations {
     static String databaseTable;
     static String userName;
     static String passWord;
+    static String configPropertiesPath;
+
+    public static void setPropertiesFileLocation(String path) {
+        configPropertiesPath = path;
+    }
 
     private static void loadPropertiesFile() throws IOException {
-        InputStream input = new FileInputStream("config.properties");
+        InputStream input = new FileInputStream(configPropertiesPath);
         properties.load(input);
         jdbcDriver      = properties.getProperty("jdbcDriver");
         databaseTable   = properties.getProperty("databaseTable");
