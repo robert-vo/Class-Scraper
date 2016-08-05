@@ -93,7 +93,7 @@ public class DatabaseOperations {
         return doesClassExist;
     }
 
-    public static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
                 "Title, CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
                 "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, BUILDING_ABBV, " +
