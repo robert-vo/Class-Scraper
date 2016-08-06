@@ -1,9 +1,12 @@
 	use class;
 
+DROP TABLE IF EXISTS CORE_CLASS;
 DROP TABLE IF EXISTS CLASS;
 DROP TABLE IF EXISTS TERMS;
 DROP TABLE IF EXISTS DEPARTMENT;
 DROP TABLE IF EXISTS BUILDING;
+DROP TABLE IF EXISTS CLASS_INFORMATION;
+DROP TABLE IF EXISTS CORE;
 
 CREATE TABLE DEPARTMENT (
 	DEPARTMENT_Abbreviation	VARCHAR(5) PRIMARY KEY,
@@ -22,10 +25,35 @@ CREATE TABLE TERMS (
     Semester	ENUM('Fall', 'Summer', 'Spring')
 );
 
+CREATE TABLE CORE(
+	CORE_ID				int primary key,
+    CORE_TITLE			varchar(100),
+    HOURS_REQUIRED		int
+);
+
+CREATE TABLE CORE_CLASS(
+	core_class_id			int primary key auto_increment,
+	DEPARTMENT_Abbreviation varchar(5),
+    department_crn			varchar(5),
+    core_id					int,
+    foreign key(core_id) references core(core_id)
+);
+
+CREATE TABLE CLASS_INFORMATION (
+	DEPARTMENT			VARCHAR(5) NOT NULL,
+    DEPARTMENT_CRN 		VARCHAR(5) NOT NULL,
+    CLASS_DESCRIPTION	VARCHAR(1000),
+	CLASS_TITLE			VARCHAR(100),
+    CREDIT_HOURS		int,
+    CORE				int null,
+    PRIMARY KEY(DEPARTMENT, DEPARTMENT_CRN),
+    foreign key(CORE) REFERENCES CORE(CORE_ID)
+		ON DELETE NO ACTION
+);
+
 CREATE TABLE CLASS (
 	Class_ID            INT     PRIMARY KEY AUTO_INCREMENT,
     Term_ID             INT,
-	Title               VARCHAR(100),
     CRN                 INT     ,
     DEPARTMENT          VARCHAR(5)    NOT NULL,
     DEPARTMENT_CRN      VARCHAR(5)    NOT NULL,
@@ -41,7 +69,6 @@ CREATE TABLE CLASS (
     BUILDING_ABBV       VARCHAR(10),
     BUILDING_ROOM_NUM   VARCHAR(15),
     FORMAT              VARCHAR(100),
-    DESCRIPTION         VARCHAR(1000),
     DURATION            VARCHAR(100),
     SESSION             VARCHAR(100),
     COMPONENT           VARCHAR(100),
@@ -66,7 +93,9 @@ CREATE TABLE CLASS (
         ON DELETE no action,
 	foreign key (BUILDING_Abbv)
 		REFERENCES BUILDING(BUILDING_Abbreviation)
-        ON DELETE no action
+        ON DELETE no action,
+	foreign key (DEPARTMENT, DEPARTMENT_CRN)
+		REFERENCES CLASS_INFORMATION(DEPARTMENT, DEPARTMENT_CRN)
 );
 
 insert into TERMS values(1950, 2015, 'Spring');
@@ -427,3 +456,253 @@ insert into BUILDING values(0824, 'SK42', 'Security Kiosk Lot 42 (ERP)');
 insert into BUILDING values(0482, 'BPF', 'New Basketball Practice Facility');
 insert into BUILDING values(0483, 'HBS2', 'Health and Biomedical Sciences Center 2');
 insert into BUILDING values(0484, 'MREB', 'Multidisciplinary Research and Engineering BUILDING');
+
+
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1303', 1);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1304', 1);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1370', 1);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2361', 1);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1310', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1311', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1312', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1313', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1314', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1330', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1431', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1450', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '2311', 2);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1309', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1310', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1320', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1361', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1362', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1301', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1331', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1332', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1302', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1330', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1340', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1350', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1360', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1376', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('NUTR', '2332', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHAR', '2362', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1301', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1302', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1305', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1306', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1321', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1322', 3);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('AAS', '2320', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('AAS', '2330', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARAB', '3340', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1300', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1380', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHNS', '3352', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHNS', '3360', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3307', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3308', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3366', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3374', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2305', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2306', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2308', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2315', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2316', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2323', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2325', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2340', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3306', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3324', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3325', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3327', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3328', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3350', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3351', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3360', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3318', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3319', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3321', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3322', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3362', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3364', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3350', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3362', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3364', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3369', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2373', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2374', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2375', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2351', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2353', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2361', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2364', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2366', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2367', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2368', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2372', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2373', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3379', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3380', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4330', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HON', '2301', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ILAS', '2350', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ILAS', '2360', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3305', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3306', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3308', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3335', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3336', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('JWST', '2380', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MAS', '3340', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1301', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1305', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3340', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3342', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '1301', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2310', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2311', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2330', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3331', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3373', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3374', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3375', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2351', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2352', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2370', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3351', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3377', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WGSS', '2350', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WGSS', '2360', 4);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '2350', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '2351', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1381', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3345', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3381', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '2307', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '3310', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2307', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2318', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3363', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3381', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3384', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3385', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4371', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('INDS', '2355', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('INDS', '2356', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2302', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2342', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2362', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3300', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3301', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1361', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2346', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3386', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '1331', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '1332', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3366', 5);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1376', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1377', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1378', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1379', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2348', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2341', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2343', 6); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1107', 7); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1336', 7); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1337', 7); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2336', 7); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '1300', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2301', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2302', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2303', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CUST', '2300', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2301', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2304', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2305', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDFS', '2317', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HRMA', '2365', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('KIN', '1304', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3311', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3354', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '1300', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2350', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2351', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '1300', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '1301', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TECH', '1313', 8); 
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('COSC', '1306', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CUIN', '2320', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2370', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ELET', '2300', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1312', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1313', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1314', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1330', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1431', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1432', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1450', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1451', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '2311', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1321', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3312', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3316', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '3301', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TMTH', '3360', 9);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2304', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3348', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3361', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3381', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARAB', '3314', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '1359', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '3312', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BCHS', '4311', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '3311', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '4305', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '4381', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('COMM', '1302', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '2307', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '3310', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '3344', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '3350', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGI', '2304', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2330', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GENB', '4350', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDCS', '1300', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDFS', '1300', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3314', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3333', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3351', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3369', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4339', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HON', '3300', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HRMA', '3358', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('IDNS', '4392', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3307', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3309', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '4308', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('LAST', '3300', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2301', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3303', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1334', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '3313', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2341', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3310', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2344', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '3310', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '4321', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2340', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2350', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2360', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '3370', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '3381', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '3351', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3384', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TELS', '3363', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '2344', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3348', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4351', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4352', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4356', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4365', 10);
+insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4367', 10);
