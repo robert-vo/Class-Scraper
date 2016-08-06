@@ -94,68 +94,76 @@ public class DatabaseOperations {
     }
 
     private static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+        final String insertClassInformationIntoDatabase = "INSERT IGNORE INTO CLASS_INFORMATION(DEPARTMENT, " +
+                "DEPARTMENT_CRN, CLASS_TITLE, CLASS_DESCRIPTION) VALUES(" +
+                "?, ?, ?, ?);";
+        PreparedStatement ps2 = conn.prepareStatement(insertClassInformationIntoDatabase);
+        ps2.setString(1, c.getDepartmentAbbreviation());
+        ps2.setString(2, c.getDepartmentCourseNumber());
+        ps2.setString(3, c.getClassTitle());
+        ps2.setString(4, c.getDescription());
+        ps2.executeUpdate();
+
         final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
-                "Title, CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
+                "CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
                 "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, BUILDING_ABBV, " +
-                "BUILDING_ROOM_NUM, FORMAT, DESCRIPTION, DURATION, SESSION, COMPONENT, SYLLABUS, SEATS_TAKEN, " +
+                "BUILDING_ROOM_NUM, FORMAT, DURATION, SESSION, COMPONENT, SYLLABUS, SEATS_TAKEN, " +
                 "SEATS_AVAILABLE, SEATS_TOTAL, MONDAY, TUESDAY, WEDNESDAY, " +
                 "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
-                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement ps = prepareStatementForFields(c, conn, insertClassIntoDatabase);
         ps.executeUpdate();
     }
 
     private static void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         final String updateClassInDatabase = "UPDATE CLASS SET " +
-                "Term_ID = ?, Title = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
+                "Term_ID = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
                 "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
                 "INSTRUCTOR = ?, INSTRUCTOR_EMAIL = ?, LOCATION = ?, BUILDING_ABBV = ?, BUILDING_ROOM_NUM = ?," +
-                "FORMAT = ?, DESCRIPTION = ?, DURATION = ?, SESSION = ?, COMPONENT = ?, SYLLABUS = ?," +
+                "FORMAT = ?, DURATION = ?, SESSION = ?, COMPONENT = ?, SYLLABUS = ?," +
                 "SEATS_TAKEN = ?, SEATS_AVAILABLE = ?, SEATS_TOTAL = ?," +
                 "MONDAY = ?, TUESDAY = ?, WEDNESDAY = ?, THURSDAY = ?, FRIDAY = ?, SATURDAY = ?, SUNDAY = ? " +
                 "WHERE (Term_ID = ? AND CRN = ? AND Department = ?);";
         PreparedStatement preparedStatement = prepareStatementForFields(c, conn, updateClassInDatabase);
-        preparedStatement.setString (33, c.getTerm().getTermID());
-        preparedStatement.setString (34, c.getCourseNumber());
-        preparedStatement.setString (35, c.getDepartmentAbbreviation());
+        preparedStatement.setString (31, c.getTerm().getTermID());
+        preparedStatement.setString (32, c.getCourseNumber());
+        preparedStatement.setString (33, c.getDepartmentAbbreviation());
         preparedStatement.executeUpdate();
     }
 
     private static PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(sqlQuery);
         ps.setString (1, c.getTerm().getTermID());
-        ps.setString (2, c.getClassTitle());
-        ps.setString (3, c.getCourseNumber());
-        ps.setString (4, c.getDepartmentAbbreviation());
-        ps.setString (5, c.getDepartmentCourseNumber());
-        ps.setString (6, c.getClassStatus().toString());
-        ps.setString (7, c.getAttributes());
-        ps.setDate   (8, c.getClassStartDate());
-        ps.setDate   (9, c.getClassEndDate());
-        ps.setTime   (10, c.getClassStartTime());
-        ps.setTime   (11, c.getClassEndTime());
-        ps.setString (12, c.getInstructorName());
-        ps.setString (13, c.getInstructorEmail());
-        ps.setString (14, c.getLocation());
-        ps.setString (15, c.getBuildingAbbreviation());
-        ps.setString (16, c.getBuildingRoomNumber());
-        ps.setString (17, c.getFormat());
-        ps.setString (18, c.getDescription());
-        ps.setString (19, c.getDuration());
-        ps.setString (20, c.getSession());
-        ps.setString (21, c.getComponent());
-        ps.setString (22, c.getSyllabus());
-        ps.setInt    (23, c.getSeatsTaken());
-        ps.setInt    (24, c.getSeatsAvailable());
-        ps.setInt    (25, c.getSeatsTotal());
-        ps.setBoolean(26, c.isMondayClass());
-        ps.setBoolean(27, c.isTuesdayClass());
-        ps.setBoolean(28, c.isWednesdayClass());
-        ps.setBoolean(29, c.isThursdayClass());
-        ps.setBoolean(30, c.isFridayClass());
-        ps.setBoolean(31, c.isSaturdayClass());
-        ps.setBoolean(32, c.isSundayClass());
+        ps.setString (2, c.getCourseNumber());
+        ps.setString (3, c.getDepartmentAbbreviation());
+        ps.setString (4, c.getDepartmentCourseNumber());
+        ps.setString (5, c.getClassStatus().toString());
+        ps.setString (6, c.getAttributes());
+        ps.setDate   (7, c.getClassStartDate());
+        ps.setDate   (8, c.getClassEndDate());
+        ps.setTime   (9, c.getClassStartTime());
+        ps.setTime   (10, c.getClassEndTime());
+        ps.setString (11, c.getInstructorName());
+        ps.setString (12, c.getInstructorEmail());
+        ps.setString (13, c.getLocation());
+        ps.setString (14, c.getBuildingAbbreviation());
+        ps.setString (15, c.getBuildingRoomNumber());
+        ps.setString (16, c.getFormat());
+        ps.setString (17, c.getDuration());
+        ps.setString (18, c.getSession());
+        ps.setString (19, c.getComponent());
+        ps.setString (20, c.getSyllabus());
+        ps.setInt    (21, c.getSeatsTaken());
+        ps.setInt    (22, c.getSeatsAvailable());
+        ps.setInt    (23, c.getSeatsTotal());
+        ps.setBoolean(24, c.isMondayClass());
+        ps.setBoolean(25, c.isTuesdayClass());
+        ps.setBoolean(26, c.isWednesdayClass());
+        ps.setBoolean(27, c.isThursdayClass());
+        ps.setBoolean(28, c.isFridayClass());
+        ps.setBoolean(29, c.isSaturdayClass());
+        ps.setBoolean(30, c.isSundayClass());
         return ps;
     }
 
