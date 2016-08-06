@@ -1,4 +1,4 @@
-	use class;
+use class;
 
 DROP TABLE IF EXISTS CORE_CLASS;
 DROP TABLE IF EXISTS CLASS;
@@ -9,8 +9,8 @@ DROP TABLE IF EXISTS CLASS_INFORMATION;
 DROP TABLE IF EXISTS CORE;
 
 CREATE TABLE DEPARTMENT (
-	DEPARTMENT_Abbreviation	VARCHAR(5) PRIMARY KEY,
-    DEPARTMENT_Name			varchar(75) NOT NULL
+	DEPARTMENT_ABBREVIATION	VARCHAR(5) PRIMARY KEY,
+    DEPARTMENT_NAME			VARCHAR(75) NOT NULL
 );
 
 CREATE TABLE BUILDING (
@@ -20,23 +20,24 @@ CREATE TABLE BUILDING (
 );
 
 CREATE TABLE TERMS (
-	Term_ID		INT PRIMARY KEY,
-    Year		INT NOT NULL,
-    Semester	ENUM('Fall', 'Summer', 'Spring')
+	TERM_ID		INT PRIMARY KEY,
+    YEAR		INT NOT NULL,
+    SEMESTER	ENUM('Fall', 'Summer', 'Spring')
 );
 
 CREATE TABLE CORE(
-	CORE_ID				int primary key,
-    CORE_TITLE			varchar(100),
-    HOURS_REQUIRED		int
+	CORE_ID				INT primary key,
+    CORE_TITLE			VARCHAR(100),
+    HOURS_REQUIRED		INT
 );
 
 CREATE TABLE CORE_CLASS(
-	core_class_id			int primary key auto_increment,
-	DEPARTMENT_Abbreviation varchar(5),
-    department_crn			varchar(5),
-    core_id					int,
-    foreign key(core_id) references core(core_id)
+	CORE_CLASS_ID			INT primary key auto_increment,
+	DEPARTMENT_ABBREVIATION VARCHAR(5),
+    DEPARTMENT_CRN			VARCHAR(5),
+    CORE_ID					INT,
+    FOREIGN KEY(CORE_ID)    references CORE	(CORE_ID)
+    ON DELETE NO ACTION
 );
 
 CREATE TABLE CLASS_INFORMATION (
@@ -44,21 +45,23 @@ CREATE TABLE CLASS_INFORMATION (
     DEPARTMENT_CRN 		VARCHAR(5) NOT NULL,
     CLASS_DESCRIPTION	VARCHAR(1000),
 	CLASS_TITLE			VARCHAR(100),
-    CREDIT_HOURS		int,
-    CORE				varchar(10) null, -- core references core(core_id).
-    -- since core can take on multiple values (MATH 1312 for example), 
-    -- I opted to leave core as a varchar(10).
-    PRIMARY KEY(DEPARTMENT, DEPARTMENT_CRN) 
+    CREDIT_HOURS		INT,
+    CORE				VARCHAR(10) null,
+    -- CORE references CORE(CORE_ID).
+    -- since CORE can take on multiple VALUES (MATH 1312 for example),
+    -- I opted to leave CORE as a VARCHAR(10).
+    PRIMARY KEY(DEPARTMENT, DEPARTMENT_CRN)
 );
 
 CREATE TABLE CLASS (
-	Class_ID            INT     PRIMARY KEY AUTO_INCREMENT,
-    Term_ID             INT,
+	CLASS_ID            INT     PRIMARY KEY AUTO_INCREMENT,
+    TERM_ID             INT,
     CRN                 INT     ,
     DEPARTMENT          VARCHAR(5)    NOT NULL,
     DEPARTMENT_CRN      VARCHAR(5)    NOT NULL,
-    Status              ENUM('Open', 'Closed') ,
-    ATTRIBUTES          VARCHAR(100), -- possible values include: 'Core', 'Distance Education', 'No class attributes', 'Core Distance Education', 'Core Weekend U', 'Core Distance Education Weekend U', 'Weekend U'
+    STATUS              ENUM('Open', 'Closed') ,
+    ATTRIBUTES          VARCHAR(100),
+    -- possible VALUES include: 'CORE', 'Distance Education', 'No class attributes', 'CORE Distance Education', 'CORE Weekend U', 'CORE Distance Education Weekend U', 'Weekend U'
     START_DATE          DATE,
     END_DATE            DATE,
     START_TIME          TIME,
@@ -68,10 +71,10 @@ CREATE TABLE CLASS (
     LOCATION            VARCHAR(100),
     BUILDING_ABBV       VARCHAR(10),
     BUILDING_ROOM_NUM   VARCHAR(15),
-    FORMAT              VARCHAR(100), -- possible values include: 'Face to Face', 'Hybrid', 'Online', 'Independent Studies', 'Studio', 'Interactive Television', 'Two-way Interactive Video'
+    FORMAT              VARCHAR(100), -- possible VALUES include: 'Face to Face', 'Hybrid', 'Online', 'Independent Studies', 'Studio', 'INTeractive Television', 'Two-way INTeractive Video'
     DURATION            VARCHAR(100),
-    SESSION             VARCHAR(100), -- possible values include: 'Regular Academic Session', '5', 'MIN', '2', '4', '3', '6'
-    COMPONENT           VARCHAR(100), -- possible values include: 'LEC', 'PRA', 'SEM', 'IND', 'LAB', 'PLS', 'PCO', 'THE', 'TUT', 'PRC', 'DST', 'CLN'
+    SESSION             VARCHAR(100), -- possible VALUES include: 'Regular Academic Session', '5', 'MIN', '2', '4', '3', '6'
+    COMPONENT           VARCHAR(100), -- possible VALUES include: 'LEC', 'PRA', 'SEM', 'IND', 'LAB', 'PLS', 'PCO', 'THE', 'TUT', 'PRC', 'DST', 'CLN'
     SYLLABUS            VARCHAR(200),
     SEATS_TAKEN 		INT,
     SEATS_AVAILABLE		INT,
@@ -83,659 +86,659 @@ CREATE TABLE CLASS (
     FRIDAY				BOOLEAN DEFAULT FALSE,
 	SATURDAY			BOOLEAN DEFAULT FALSE,
     SUNDAY				BOOLEAN DEFAULT FALSE,
-    LAST_UPDATED_AT		TIMESTAMP default current_timestamp 
-		on update current_timestamp,
-    foreign key (Term_ID)
+    LAST_UPDATED_AT		TIMESTAMP default current_timestamp
+		ON UPDATE current_timestamp,
+    FOREIGN KEY (Term_ID)
 		REFERENCES TERMS(Term_ID)
         ON DELETE no action,
-    foreign key (DEPARTMENT)
-        REFERENCES DEPARTMENT(DEPARTMENT_Abbreviation)
+    FOREIGN KEY (DEPARTMENT)
+        REFERENCES DEPARTMENT(DEPARTMENT_ABBREVIATION)
         ON DELETE no action,
-	foreign key (BUILDING_Abbv)
+	FOREIGN KEY (BUILDING_Abbv)
 		REFERENCES BUILDING(BUILDING_Abbreviation)
         ON DELETE no action,
-	foreign key (DEPARTMENT, DEPARTMENT_CRN)
+	FOREIGN KEY (DEPARTMENT, DEPARTMENT_CRN)
 		REFERENCES CLASS_INFORMATION(DEPARTMENT, DEPARTMENT_CRN)
 );
 
-insert into TERMS values(1950, 2015, 'Spring');
-insert into TERMS values(1960, 2015, 'Summer');
-insert into TERMS values(1970, 2015, 'Fall');
-insert into TERMS values(1980, 2016, 'Spring');
-insert into TERMS values(1990, 2016, 'Summer');
-insert into TERMS values(2000, 2016, 'Fall');
-insert into TERMS values(2010, 2017, 'Spring');
-insert into TERMS values(2020, 2017, 'Summer');
-insert into TERMS values(2030, 2017, 'Fall');
-insert into TERMS values(2040, 2018, 'Spring');
-insert into TERMS values(2050, 2018, 'Summer');
-insert into TERMS values(2060, 2018, 'Fall');
-insert into TERMS values(2070, 2019, 'Spring');
-insert into TERMS values(2080, 2019, 'Summer');
-insert into TERMS values(2090, 2019, 'Fall');
-insert into TERMS values(2100, 2020, 'Spring');
-insert into TERMS values(2110, 2020, 'Summer');
-insert into TERMS values(2120, 2020, 'Fall');
+INSERT INTO TERMS VALUES(1950, 2015, 'Spring');
+INSERT INTO TERMS VALUES(1960, 2015, 'Summer');
+INSERT INTO TERMS VALUES(1970, 2015, 'Fall');
+INSERT INTO TERMS VALUES(1980, 2016, 'Spring');
+INSERT INTO TERMS VALUES(1990, 2016, 'Summer');
+INSERT INTO TERMS VALUES(2000, 2016, 'Fall');
+INSERT INTO TERMS VALUES(2010, 2017, 'Spring');
+INSERT INTO TERMS VALUES(2020, 2017, 'Summer');
+INSERT INTO TERMS VALUES(2030, 2017, 'Fall');
+INSERT INTO TERMS VALUES(2040, 2018, 'Spring');
+INSERT INTO TERMS VALUES(2050, 2018, 'Summer');
+INSERT INTO TERMS VALUES(2060, 2018, 'Fall');
+INSERT INTO TERMS VALUES(2070, 2019, 'Spring');
+INSERT INTO TERMS VALUES(2080, 2019, 'Summer');
+INSERT INTO TERMS VALUES(2090, 2019, 'Fall');
+INSERT INTO TERMS VALUES(2100, 2020, 'Spring');
+INSERT INTO TERMS VALUES(2110, 2020, 'Summer');
+INSERT INTO TERMS VALUES(2120, 2020, 'Fall');
 
-insert into DEPARTMENT values("AAS","African American Studies");
-insert into DEPARTMENT values("ACCT","Accounting");
-insert into DEPARTMENT values("AFSC","Air Force Science");
-insert into DEPARTMENT values("AMER","American Cultures");
-insert into DEPARTMENT values("ANTH","Anthropology");
-insert into DEPARTMENT values("ARAB","Arabic");
-insert into DEPARTMENT values("ARAF","Architect Affiliated St");
-insert into DEPARTMENT values("ARCH","Architecture");
-insert into DEPARTMENT values("ARED","Art Education");
-insert into DEPARTMENT values("ARLD","Arts Leadership");
-insert into DEPARTMENT values("ARRE","Arch Reciprocal Exch");
-insert into DEPARTMENT values("ART","Art");
-insert into DEPARTMENT values("ARTH","Art History");
-insert into DEPARTMENT values("ASLI","Amer Sign Lang Interpre");
-insert into DEPARTMENT values("ATP","Athletic Training Progr");
-insert into DEPARTMENT values("BCHS","Biochemical & Biophys Sci");
-insert into DEPARTMENT values("BIOE","Biomedical Engineering");
-insert into DEPARTMENT values("BIOL","Biology");
-insert into DEPARTMENT values("BTEC","Biotechnology");
-insert into DEPARTMENT values("BUAF","Business Affiliated St");
-insert into DEPARTMENT values("BURE","Business Reciprocal Exc");
-insert into DEPARTMENT values("BZAN","Business Analytics");
-insert into DEPARTMENT values("CCS","Comparative Cult Studies");
-insert into DEPARTMENT values("CHEE","Chemical Engineering");
-insert into DEPARTMENT values("CHEM","Chemistry");
-insert into DEPARTMENT values("CHNS","Chinese");
-insert into DEPARTMENT values("CIS","Computer Information Sys");
-insert into DEPARTMENT values("CIVE","Civil & Environm Engr");
-insert into DEPARTMENT values("CLAS","Classics");
-insert into DEPARTMENT values("CNST","Construction Technology");
-insert into DEPARTMENT values("COMD","Communication Disorders");
-insert into DEPARTMENT values("COMM","Communication");
-insert into DEPARTMENT values("COOP","Cooperative Engineering");
-insert into DEPARTMENT values("CORE","Core Curriculum");
-insert into DEPARTMENT values("COSC","Computer Science");
-insert into DEPARTMENT values("CUIN","Curriculum & Instruction");
-insert into DEPARTMENT values("CUST","Cultural & Urban Studies");
-insert into DEPARTMENT values("DAN","Dance");
-insert into DEPARTMENT values("DIGM","Digital Media");
-insert into DEPARTMENT values("ECE","Electrical and Comp Engr");
-insert into DEPARTMENT values("ECON","Economics");
-insert into DEPARTMENT values("EDAF","Education Affil Studies");
-insert into DEPARTMENT values("EDRS","Educational Research");
-insert into DEPARTMENT values("EDUC","Education");
-insert into DEPARTMENT values("EGRP","Engineering PROMES");
-insert into DEPARTMENT values("ELCS","Educ Ldrshp & Cultural St");
-insert into DEPARTMENT values("ELED","Elementary Education");
-insert into DEPARTMENT values("ELET","Electrical-Electron Tec");
-insert into DEPARTMENT values("ENGI","Engineering");
-insert into DEPARTMENT values("ENGL","English");
-insert into DEPARTMENT values("ENRE","Engineering Recipr Exc");
-insert into DEPARTMENT values("ENRG","Energy & Sustainability");
-insert into DEPARTMENT values("ENTR","Entrepreneurship");
-insert into DEPARTMENT values("EPSY","Educational Psychology");
-insert into DEPARTMENT values("FINA","Finance");
-insert into DEPARTMENT values("FORE","Foresight");
-insert into DEPARTMENT values("FREN","French");
-insert into DEPARTMENT values("GENB","General Business Admin");
-insert into DEPARTMENT values("GEOL","Geosciences");
-insert into DEPARTMENT values("GERM","German");
-insert into DEPARTMENT values("GIS" ,"Global and International Studies");
-insert into DEPARTMENT values("GREK","Greek");
-insert into DEPARTMENT values("GRET","Global Retailing");
-insert into DEPARTMENT values("HDCS","Hum Develop & Consum Sc");
-insert into DEPARTMENT values("HDFS","Hum Develop & Fam Stds");
-insert into DEPARTMENT values("HIND","Hindi");
-insert into DEPARTMENT values("HIST","History");
-insert into DEPARTMENT values("HLT","Health Education");
-insert into DEPARTMENT values("HON","Honors College");
-insert into DEPARTMENT values("HRAF","HRM Affiliated Studies");
-insert into DEPARTMENT values("HRD","Human Resources Developm");
-insert into DEPARTMENT values("HRMA","Hotel & Restaurant Mgt");
-insert into DEPARTMENT values("HRRE","HRM Reciprocal Exc");
-insert into DEPARTMENT values("IART","Interdisciplinary Art");
-insert into DEPARTMENT values("IDNS","Interdisciplinary-NSM");
-insert into DEPARTMENT values("IGS","International & Global St");
-insert into DEPARTMENT values("ILAS","Interdisciplinary-LASS");
-insert into DEPARTMENT values("INAR","Interior Arch");
-insert into DEPARTMENT values("INDE","Industrial Engineering");
-insert into DEPARTMENT values("INDS","Industrial Design");
-insert into DEPARTMENT values("INTB","International Business");
-insert into DEPARTMENT values("IRW","Integ Reading & Writing");
-insert into DEPARTMENT values("ITAL","Italian");
-insert into DEPARTMENT values("ITEC","Information Syst Tech");
-insert into DEPARTMENT values("JPNS","Japanese");
-insert into DEPARTMENT values("JWST","Jewish Studies");
-insert into DEPARTMENT values("KIN","Kinesiology");
-insert into DEPARTMENT values("LAAF","Law Affiliated Studies");
-insert into DEPARTMENT values("LARE","Law Reciprocal Exchange");
-insert into DEPARTMENT values("LAST","Latin Am Studies");
-insert into DEPARTMENT values("LATN","Latin");
-insert into DEPARTMENT values("LAW","Law");
-insert into DEPARTMENT values("LSAF","LASS Affiliated Studies");
-insert into DEPARTMENT values("LSRE","LASS Reciprocal Exc");
-insert into DEPARTMENT values("MANA","Management");
-insert into DEPARTMENT values("MARK","Marketing and Entrepren");
-insert into DEPARTMENT values("MAS","Mexican Am Studies");
-insert into DEPARTMENT values("MATH","Mathematics");
-insert into DEPARTMENT values("MECE","Mechanical Engineering");
-insert into DEPARTMENT values("MECT","Mechanical Technology");
-insert into DEPARTMENT values("MIS","Management Info. Systems");
-insert into DEPARTMENT values("MSCI","Military Science");
-insert into DEPARTMENT values("MTLS","Materials Engineering");
-insert into DEPARTMENT values("MUED","Music Education");
-insert into DEPARTMENT values("MUSA","Applied Music");
-insert into DEPARTMENT values("MUSI","Music");
-insert into DEPARTMENT values("NAVY","Navy");
-insert into DEPARTMENT values("NSAF","NSM Affiliated Studies");
-insert into DEPARTMENT values("NSRE","NSM Reciprocal Exchange");
-insert into DEPARTMENT values("NURS","Nursing");
-insert into DEPARTMENT values("NUTR","Nutrition");
-insert into DEPARTMENT values("OPTO","Optometry");
-insert into DEPARTMENT values("PCEU","Pharmaceutics");
-insert into DEPARTMENT values("PCOL","Pharmacology");
-insert into DEPARTMENT values("PEB","Physical Edu Basic Instr");
-insert into DEPARTMENT values("PEP","Physical Ed Professional");
-insert into DEPARTMENT values("PETR","Petroleum Engineering");
-insert into DEPARTMENT values("PHAR","Pharmacy");
-insert into DEPARTMENT values("PHCA","Pharmacy Practice");
-insert into DEPARTMENT values("PHIL","Philosophy");
-insert into DEPARTMENT values("PHLA","Pharm Leadership Admin");
-insert into DEPARTMENT values("PHLS","Psych Hlth Learn Sci");
-insert into DEPARTMENT values("PHOP","Physiological Optics");
-insert into DEPARTMENT values("PHYS","Physics");
-insert into DEPARTMENT values("POLC","Policy");
-insert into DEPARTMENT values("POLS","Political Science");
-insert into DEPARTMENT values("PSYC","Psychology");
-insert into DEPARTMENT values("PUBL","Public Administration");
-insert into DEPARTMENT values("QSS","Quantitative Social Sci");
-insert into DEPARTMENT values("RELS","Religious Studies");
-insert into DEPARTMENT values("RUSS","Russian");
-insert into DEPARTMENT values("SAAF","Affiliated Studies Grad");
-insert into DEPARTMENT values("SAER","Systems Anal & Ed Res");
-insert into DEPARTMENT values("SARE","Reciprocal Exchange Grad");
-insert into DEPARTMENT values("SCLT","Supply Chain Logis Tech");
-insert into DEPARTMENT values("SCM","Supply Chain Mgmt");
-insert into DEPARTMENT values("SEDE","Secondary Education");
-insert into DEPARTMENT values("SOC","Sociology");
-insert into DEPARTMENT values("SOCW","Social Work");
-insert into DEPARTMENT values("SPAC","Space Architecture");
-insert into DEPARTMENT values("SPAN","Spanish");
-insert into DEPARTMENT values("STAT","Statistics");
-insert into DEPARTMENT values("SUBS","Subsea Engineering");
-insert into DEPARTMENT values("TEAF","TECH Affiliated Studies");
-insert into DEPARTMENT values("TECH","Technology");
-insert into DEPARTMENT values("TELS","TECH Leadership& Superv");
-insert into DEPARTMENT values("TEPM","Technology Project Mgt");
-insert into DEPARTMENT values("THEA","Theatre");
-insert into DEPARTMENT values("TMTH","Technical Mathematics");
-insert into DEPARTMENT values("UNIV","University Studies");
-insert into DEPARTMENT values("VIET","Vietnamese");
-insert into DEPARTMENT values("WCL","World Cultures & Lit");
-insert into DEPARTMENT values("WGSS","WomenGendSexualitySt");
+INSERT INTO DEPARTMENT VALUES("AAS","African American Studies");
+INSERT INTO DEPARTMENT VALUES("ACCT","Accounting");
+INSERT INTO DEPARTMENT VALUES("AFSC","Air Force Science");
+INSERT INTO DEPARTMENT VALUES("AMER","American Cultures");
+INSERT INTO DEPARTMENT VALUES("ANTH","Anthropology");
+INSERT INTO DEPARTMENT VALUES("ARAB","Arabic");
+INSERT INTO DEPARTMENT VALUES("ARAF","Architect Affiliated St");
+INSERT INTO DEPARTMENT VALUES("ARCH","Architecture");
+INSERT INTO DEPARTMENT VALUES("ARED","Art Education");
+INSERT INTO DEPARTMENT VALUES("ARLD","Arts Leadership");
+INSERT INTO DEPARTMENT VALUES("ARRE","Arch Reciprocal Exch");
+INSERT INTO DEPARTMENT VALUES("ART","Art");
+INSERT INTO DEPARTMENT VALUES("ARTH","Art History");
+INSERT INTO DEPARTMENT VALUES("ASLI","Amer Sign Lang INTerpre");
+INSERT INTO DEPARTMENT VALUES("ATP","Athletic Training Progr");
+INSERT INTO DEPARTMENT VALUES("BCHS","Biochemical & Biophys Sci");
+INSERT INTO DEPARTMENT VALUES("BIOE","Biomedical Engineering");
+INSERT INTO DEPARTMENT VALUES("BIOL","Biology");
+INSERT INTO DEPARTMENT VALUES("BTEC","Biotechnology");
+INSERT INTO DEPARTMENT VALUES("BUAF","Business Affiliated St");
+INSERT INTO DEPARTMENT VALUES("BURE","Business Reciprocal Exc");
+INSERT INTO DEPARTMENT VALUES("BZAN","Business Analytics");
+INSERT INTO DEPARTMENT VALUES("CCS","Comparative Cult Studies");
+INSERT INTO DEPARTMENT VALUES("CHEE","Chemical Engineering");
+INSERT INTO DEPARTMENT VALUES("CHEM","Chemistry");
+INSERT INTO DEPARTMENT VALUES("CHNS","Chinese");
+INSERT INTO DEPARTMENT VALUES("CIS","Computer Information Sys");
+INSERT INTO DEPARTMENT VALUES("CIVE","Civil & Environm Engr");
+INSERT INTO DEPARTMENT VALUES("CLAS","Classics");
+INSERT INTO DEPARTMENT VALUES("CNST","Construction Technology");
+INSERT INTO DEPARTMENT VALUES("COMD","Communication Disorders");
+INSERT INTO DEPARTMENT VALUES("COMM","Communication");
+INSERT INTO DEPARTMENT VALUES("COOP","Cooperative Engineering");
+INSERT INTO DEPARTMENT VALUES("CORE","CORE Curriculum");
+INSERT INTO DEPARTMENT VALUES("COSC","Computer Science");
+INSERT INTO DEPARTMENT VALUES("CUIN","Curriculum & Instruction");
+INSERT INTO DEPARTMENT VALUES("CUST","Cultural & Urban Studies");
+INSERT INTO DEPARTMENT VALUES("DAN","Dance");
+INSERT INTO DEPARTMENT VALUES("DIGM","Digital Media");
+INSERT INTO DEPARTMENT VALUES("ECE","Electrical and Comp Engr");
+INSERT INTO DEPARTMENT VALUES("ECON","Economics");
+INSERT INTO DEPARTMENT VALUES("EDAF","Education Affil Studies");
+INSERT INTO DEPARTMENT VALUES("EDRS","Educational Research");
+INSERT INTO DEPARTMENT VALUES("EDUC","Education");
+INSERT INTO DEPARTMENT VALUES("EGRP","Engineering PROMES");
+INSERT INTO DEPARTMENT VALUES("ELCS","Educ Ldrshp & Cultural St");
+INSERT INTO DEPARTMENT VALUES("ELED","Elementary Education");
+INSERT INTO DEPARTMENT VALUES("ELET","Electrical-Electron Tec");
+INSERT INTO DEPARTMENT VALUES("ENGI","Engineering");
+INSERT INTO DEPARTMENT VALUES("ENGL","English");
+INSERT INTO DEPARTMENT VALUES("ENRE","Engineering Recipr Exc");
+INSERT INTO DEPARTMENT VALUES("ENRG","Energy & Sustainability");
+INSERT INTO DEPARTMENT VALUES("ENTR","Entrepreneurship");
+INSERT INTO DEPARTMENT VALUES("EPSY","Educational Psychology");
+INSERT INTO DEPARTMENT VALUES("FINA","Finance");
+INSERT INTO DEPARTMENT VALUES("FORE","Foresight");
+INSERT INTO DEPARTMENT VALUES("FREN","French");
+INSERT INTO DEPARTMENT VALUES("GENB","General Business Admin");
+INSERT INTO DEPARTMENT VALUES("GEOL","Geosciences");
+INSERT INTO DEPARTMENT VALUES("GERM","German");
+INSERT INTO DEPARTMENT VALUES("GIS" ,"Global and INTernational Studies");
+INSERT INTO DEPARTMENT VALUES("GREK","Greek");
+INSERT INTO DEPARTMENT VALUES("GRET","Global Retailing");
+INSERT INTO DEPARTMENT VALUES("HDCS","Hum Develop & Consum Sc");
+INSERT INTO DEPARTMENT VALUES("HDFS","Hum Develop & Fam Stds");
+INSERT INTO DEPARTMENT VALUES("HIND","Hindi");
+INSERT INTO DEPARTMENT VALUES("HIST","History");
+INSERT INTO DEPARTMENT VALUES("HLT","Health Education");
+INSERT INTO DEPARTMENT VALUES("HON","Honors College");
+INSERT INTO DEPARTMENT VALUES("HRAF","HRM Affiliated Studies");
+INSERT INTO DEPARTMENT VALUES("HRD","Human Resources Developm");
+INSERT INTO DEPARTMENT VALUES("HRMA","Hotel & Restaurant Mgt");
+INSERT INTO DEPARTMENT VALUES("HRRE","HRM Reciprocal Exc");
+INSERT INTO DEPARTMENT VALUES("IART","INTerdisciplinary Art");
+INSERT INTO DEPARTMENT VALUES("IDNS","INTerdisciplinary-NSM");
+INSERT INTO DEPARTMENT VALUES("IGS","INTernational & Global St");
+INSERT INTO DEPARTMENT VALUES("ILAS","INTerdisciplinary-LASS");
+INSERT INTO DEPARTMENT VALUES("INAR","INTerior Arch");
+INSERT INTO DEPARTMENT VALUES("INDE","Industrial Engineering");
+INSERT INTO DEPARTMENT VALUES("INDS","Industrial Design");
+INSERT INTO DEPARTMENT VALUES("INTB","INTernational Business");
+INSERT INTO DEPARTMENT VALUES("IRW","INTeg Reading & Writing");
+INSERT INTO DEPARTMENT VALUES("ITAL","Italian");
+INSERT INTO DEPARTMENT VALUES("ITEC","Information Syst Tech");
+INSERT INTO DEPARTMENT VALUES("JPNS","Japanese");
+INSERT INTO DEPARTMENT VALUES("JWST","Jewish Studies");
+INSERT INTO DEPARTMENT VALUES("KIN","Kinesiology");
+INSERT INTO DEPARTMENT VALUES("LAAF","Law Affiliated Studies");
+INSERT INTO DEPARTMENT VALUES("LARE","Law Reciprocal Exchange");
+INSERT INTO DEPARTMENT VALUES("LAST","Latin Am Studies");
+INSERT INTO DEPARTMENT VALUES("LATN","Latin");
+INSERT INTO DEPARTMENT VALUES("LAW","Law");
+INSERT INTO DEPARTMENT VALUES("LSAF","LASS Affiliated Studies");
+INSERT INTO DEPARTMENT VALUES("LSRE","LASS Reciprocal Exc");
+INSERT INTO DEPARTMENT VALUES("MANA","Management");
+INSERT INTO DEPARTMENT VALUES("MARK","Marketing and Entrepren");
+INSERT INTO DEPARTMENT VALUES("MAS","Mexican Am Studies");
+INSERT INTO DEPARTMENT VALUES("MATH","Mathematics");
+INSERT INTO DEPARTMENT VALUES("MECE","Mechanical Engineering");
+INSERT INTO DEPARTMENT VALUES("MECT","Mechanical Technology");
+INSERT INTO DEPARTMENT VALUES("MIS","Management Info. Systems");
+INSERT INTO DEPARTMENT VALUES("MSCI","Military Science");
+INSERT INTO DEPARTMENT VALUES("MTLS","Materials Engineering");
+INSERT INTO DEPARTMENT VALUES("MUED","Music Education");
+INSERT INTO DEPARTMENT VALUES("MUSA","Applied Music");
+INSERT INTO DEPARTMENT VALUES("MUSI","Music");
+INSERT INTO DEPARTMENT VALUES("NAVY","Navy");
+INSERT INTO DEPARTMENT VALUES("NSAF","NSM Affiliated Studies");
+INSERT INTO DEPARTMENT VALUES("NSRE","NSM Reciprocal Exchange");
+INSERT INTO DEPARTMENT VALUES("NURS","Nursing");
+INSERT INTO DEPARTMENT VALUES("NUTR","Nutrition");
+INSERT INTO DEPARTMENT VALUES("OPTO","Optometry");
+INSERT INTO DEPARTMENT VALUES("PCEU","Pharmaceutics");
+INSERT INTO DEPARTMENT VALUES("PCOL","Pharmacology");
+INSERT INTO DEPARTMENT VALUES("PEB","Physical Edu Basic Instr");
+INSERT INTO DEPARTMENT VALUES("PEP","Physical Ed Professional");
+INSERT INTO DEPARTMENT VALUES("PETR","Petroleum Engineering");
+INSERT INTO DEPARTMENT VALUES("PHAR","Pharmacy");
+INSERT INTO DEPARTMENT VALUES("PHCA","Pharmacy Practice");
+INSERT INTO DEPARTMENT VALUES("PHIL","Philosophy");
+INSERT INTO DEPARTMENT VALUES("PHLA","Pharm Leadership Admin");
+INSERT INTO DEPARTMENT VALUES("PHLS","Psych Hlth Learn Sci");
+INSERT INTO DEPARTMENT VALUES("PHOP","Physiological Optics");
+INSERT INTO DEPARTMENT VALUES("PHYS","Physics");
+INSERT INTO DEPARTMENT VALUES("POLC","Policy");
+INSERT INTO DEPARTMENT VALUES("POLS","Political Science");
+INSERT INTO DEPARTMENT VALUES("PSYC","Psychology");
+INSERT INTO DEPARTMENT VALUES("PUBL","Public Administration");
+INSERT INTO DEPARTMENT VALUES("QSS","Quantitative Social Sci");
+INSERT INTO DEPARTMENT VALUES("RELS","Religious Studies");
+INSERT INTO DEPARTMENT VALUES("RUSS","Russian");
+INSERT INTO DEPARTMENT VALUES("SAAF","Affiliated Studies Grad");
+INSERT INTO DEPARTMENT VALUES("SAER","Systems Anal & Ed Res");
+INSERT INTO DEPARTMENT VALUES("SARE","Reciprocal Exchange Grad");
+INSERT INTO DEPARTMENT VALUES("SCLT","Supply Chain Logis Tech");
+INSERT INTO DEPARTMENT VALUES("SCM","Supply Chain Mgmt");
+INSERT INTO DEPARTMENT VALUES("SEDE","Secondary Education");
+INSERT INTO DEPARTMENT VALUES("SOC","Sociology");
+INSERT INTO DEPARTMENT VALUES("SOCW","Social Work");
+INSERT INTO DEPARTMENT VALUES("SPAC","Space Architecture");
+INSERT INTO DEPARTMENT VALUES("SPAN","Spanish");
+INSERT INTO DEPARTMENT VALUES("STAT","Statistics");
+INSERT INTO DEPARTMENT VALUES("SUBS","Subsea Engineering");
+INSERT INTO DEPARTMENT VALUES("TEAF","TECH Affiliated Studies");
+INSERT INTO DEPARTMENT VALUES("TECH","Technology");
+INSERT INTO DEPARTMENT VALUES("TELS","TECH Leadership& Superv");
+INSERT INTO DEPARTMENT VALUES("TEPM","Technology Project Mgt");
+INSERT INTO DEPARTMENT VALUES("THEA","Theatre");
+INSERT INTO DEPARTMENT VALUES("TMTH","Technical Mathematics");
+INSERT INTO DEPARTMENT VALUES("UNIV","University Studies");
+INSERT INTO DEPARTMENT VALUES("VIET","Vietnamese");
+INSERT INTO DEPARTMENT VALUES("WCL","World Cultures & Lit");
+INSERT INTO DEPARTMENT VALUES("WGSS","WomenGendSexualitySt");
 
-insert into BUILDING values(0000, '', '');
-insert into BUILDING values(0101, 'CRW', 'Chancellor\'s Residence Wortham House');
-insert into BUILDING values(0104, 'P2', 'KUHT Fiber Optics BUILDING');
-insert into BUILDING values(0105, 'TVTE', 'KUHT Telephone Equipment');
-insert into BUILDING values(0106, 'TV', 'Texas Learning & Computational Center Annex');
-insert into BUILDING values(0108, 'P1', 'Cullen Annex Laboratory');
-insert into BUILDING values(0111, 'DYN', 'Dynamometer Test Laboratory');
-insert into BUILDING values(0115, 'OFGR', 'Office of Governmental Relations');
-insert into BUILDING values(0116, 'ACT', 'Safety, Human Factors & Ergonomic Laboratory');
-insert into BUILDING values(0117, 'TVFB', 'KUHT TV at Fort Bend - Tower');
-insert into BUILDING values(0118, 'WRCH', 'Wortham Residence Coach House');
-insert into BUILDING values(0119, 'ACTA', 'Texas Manufacturing Assistance Center');
-insert into BUILDING values(0120, 'UHFB', 'Albert and Mamie George BUILDING');
-insert into BUILDING values(0121, 'FBA2', 'Brazos Hall');
-insert into BUILDING values(0122, 'UBL', 'University Branch Library (UHS-Sugar Land)');
-insert into BUILDING values(0125, 'WHS', 'Wortham House Storage');
-insert into BUILDING values(0126, 'SA1', 'Sugar Land Annex 1');
-insert into BUILDING values(0127, 'SA2', 'Sugar Land Annex 2');
-insert into BUILDING values(0128, 'SA3', 'Sugar Land Annex 3');
-insert into BUILDING values(0199, 'CRSA', 'Clinical Research Services Annex');
-insert into BUILDING values(0400, 'CSS', 'Cougar Sub-Station');
-insert into BUILDING values(0401, 'ERP1', 'Energy Research Park 01');
-insert into BUILDING values(0402, 'ERP2', 'Energy Research Park 02');
-insert into BUILDING values(0403, 'ERP3', 'Energy Research Park 03');
-insert into BUILDING values(0404, 'ERP4', 'Conference & Research BUILDING');
-insert into BUILDING values(0405, 'ERP5', 'Energy Research Park 05');
-insert into BUILDING values(0406, 'ERP6', 'Energy Research Park 06');
-insert into BUILDING values(0407, 'ERP7', 'Energy Research Park 07');
-insert into BUILDING values(0408, 'ERP8', 'Energy Research Park 08');
-insert into BUILDING values(0409, 'ERP9', 'ConocoPhillips Petroleum Engineering BUILDING');
-insert into BUILDING values(0410, 'ERP10', 'Energy Research Park 10');
-insert into BUILDING values(0411, 'ERP11', 'Energy Research Park 11');
-insert into BUILDING values(0413, 'ERP13', 'Energy Research Park 13');
-insert into BUILDING values(0414, 'ERP14', 'Energy Research Park 14');
-insert into BUILDING values(0415, 'ERP15', 'Energy Device Fabrication Laboratory');
-insert into BUILDING values(0419, 'ERPA', 'Energy Research Park Annex');
-insert into BUILDING values(0420, 'ERP20', 'Energy Research Park Storage');
-insert into BUILDING values(0485, 'STAD', 'TDECU Stadium');
-insert into BUILDING values(0486, 'ATL', 'Atmospheric Testing Laboratory');
-insert into BUILDING values(0487, 'UCN', 'Student Center North');
-insert into BUILDING values(0488, 'SCP1', 'Central Plant Satellite');
-insert into BUILDING values(0489, 'KUHA2', 'KUHA - Renters BUILDING');
-insert into BUILDING values(0490, 'WCSG', 'Welcome Center Student Garage');
-insert into BUILDING values(0491, 'KUHA', 'KUHA - Transmitter BUILDING');
-insert into BUILDING values(0492, 'SST', 'Cougar Softball Stadium Ticket Booth');
-insert into BUILDING values(0493, 'SS', 'Cougar Softball Stadium');
-insert into BUILDING values(0494, 'AAA', 'Agnes Arnold Auditorium');
-insert into BUILDING values(0495, 'CPH', 'Cougar Place');
-insert into BUILDING values(0496, 'CV2', 'Cougar Village 2');
-insert into BUILDING values(0498, 'DTF', 'Bulk Fueling Diesel Tank Farm');
-insert into BUILDING values(0499, 'CBB', 'Classroom and Business BUILDING');
-insert into BUILDING values(0500, 'BOA', 'Bayou Oaks Apartments');
-insert into BUILDING values(0501, 'C', 'Roy G. Cullen');
-insert into BUILDING values(0502, 'S', 'Science BUILDING');
-insert into BUILDING values(0503, 'T', 'Technology Annex');
-insert into BUILDING values(0504, 'CCC', 'Child Care Center');
-insert into BUILDING values(0505, 'JDA', 'J. Davis Armistead');
-insert into BUILDING values(0506, 'COM', 'Jack J. Valenti School of Communication');
-insert into BUILDING values(0507, 'WT', 'Cynthia Woods Mitchell Center for the Arts/Wortham Theatre');
-insert into BUILDING values(0508, 'T2', 'College of Technology BUILDING');
-insert into BUILDING values(0509, 'L', 'M. D. Anderson Library');
-insert into BUILDING values(0513, 'INF2', 'Visitor Information Booth 2');
-insert into BUILDING values(0514, 'EPS2', 'Fire & Life Safety - Storage');
-insert into BUILDING values(0515, 'PP', 'Central Power Plant');
-insert into BUILDING values(0516, 'E', 'Ezekiel W. Cullen');
-insert into BUILDING values(0517, 'A', 'Cullen Performance Hall');
-insert into BUILDING values(0518, 'CLA', 'Calhoun Lofts Apartments');
-insert into BUILDING values(0519, 'UHPD', 'DEPARTMENT of Public Safety - UH Police');
-insert into BUILDING values(0520, 'MSM', 'Rebecca & John J. Moores School of Music');
-insert into BUILDING values(0521, 'GS', 'Grounds Storage BUILDING');
-insert into BUILDING values(0522, 'CRWC', 'Campus Recreation & Wellness Center');
-insert into BUILDING values(0523, 'AGL', 'Science & Engineering Annex');
-insert into BUILDING values(0524, 'SSC', 'Student Service Center 1');
-insert into BUILDING values(0525, 'HC', 'Health Center');
-insert into BUILDING values(0526, 'SS2', 'Student Service Center 2');
-insert into BUILDING values(0527, 'EPS3', 'EHRM1');
-insert into BUILDING values(0528, 'MH', 'LeRoy & Lucile Melcher Hall');
-insert into BUILDING values(0529, 'SEC', 'Science & Engineering Classroom BUILDING');
-insert into BUILDING values(0531, 'HP', 'Hofheinz Pavilion');
-insert into BUILDING values(0532, 'GAR', 'Susanna Garrison Gymnasium');
-insert into BUILDING values(0533, 'MEL', 'Melcher Gymnasium/Charter School');
-insert into BUILDING values(0534, 'H', 'Fred J. Heyne');
-insert into BUILDING values(0535, 'EPS1', 'EHRM2');
-insert into BUILDING values(0536, 'CPB', 'LeRoy & Lucile Melcher Center for Public Broadcasting');
-insert into BUILDING values(0537, 'BL', 'Bates Law');
-insert into BUILDING values(0538, 'TU2', 'Teaching Unit 2 BUILDING');
-insert into BUILDING values(0539, 'KH', 'Max Krost Hall');
-insert into BUILDING values(0540, 'LL', 'John M. O\'Quinn Law Library');
-insert into BUILDING values(0541, 'UTS', 'Utility Tunnel System');
-insert into BUILDING values(0542, 'SPA', 'South Park Annex');
-insert into BUILDING values(0543, 'ARC', 'Gerald D. Hines College of Architecture');
-insert into BUILDING values(0544, 'CEMO', 'Michael J. Cemo Hall');
-insert into BUILDING values(0545, 'SERC', 'Science & Engineering Research Center');
-insert into BUILDING values(0546, 'EPG', 'East Parking Garage');
-insert into BUILDING values(0547, 'PGH', 'Philip Guthrie Hoffman Hall');
-insert into BUILDING values(0548, 'AMB', 'Athletics Maintenance BUILDING');
-insert into BUILDING values(0549, 'SW', 'Graduate College of Social Work');
-insert into BUILDING values(0550, 'SR', 'Science and Research 1');
-insert into BUILDING values(0551, 'SR2', 'Science and Research 2');
-insert into BUILDING values(0552, 'BKD', 'Burdette Keeland Jr. Design & Exploration Center');
-insert into BUILDING values(0553, 'WC', 'Welcome Center & Parking Garage');
-insert into BUILDING values(0555, 'LH', 'Law Residence Hall');
-insert into BUILDING values(0556, 'SH', 'Settegast Residence Hall');
-insert into BUILDING values(0557, 'BH', 'Bates Residence Hall');
-insert into BUILDING values(0558, 'TH', 'Taub Residence Hall');
-insert into BUILDING values(0559, 'OB', 'E. E. Oberholtzer Residence Hall');
-insert into BUILDING values(0560, 'UPD', 'UH-DPS Parking Enforcement');
-insert into BUILDING values(0561, 'CRWA', 'CRWC Annex');
-insert into BUILDING values(0562, 'ADB', 'A. D. Bruce Religion Center');
-insert into BUILDING values(0563, 'CV', 'Cougar Village');
-insert into BUILDING values(0564, 'F', 'Lamar Fleming, Jr.');
-insert into BUILDING values(0565, 'UC', 'Student Center South');
-insert into BUILDING values(0567, 'UCS', 'Student Center Satellite');
-insert into BUILDING values(0568, 'CSD', 'Justin Dart Jr. Center for Students with DisABILITIES');
-insert into BUILDING values(0569, 'CULLO', 'Cullen Oaks Apartments');
-insert into BUILDING values(0570, 'BATC', 'Athletics Batting Cage');
-insert into BUILDING values(0572, 'GSS', 'General Services Storage BUILDING');
-insert into BUILDING values(0573, 'ALUM', 'Alumni Center');
-insert into BUILDING values(0574, 'ATH2', 'Athletic Center');
-insert into BUILDING values(0575, 'CO', 'Cambridge Oaks Apartments');
-insert into BUILDING values(0576, 'STL', 'Science Teaching Laboratory BUILDING');
-insert into BUILDING values(0578, 'AH', 'Agnes Arnold Hall');
-insert into BUILDING values(0579, 'D', 'Cullen College of Engineering 1');
-insert into BUILDING values(0580, 'D2', 'Engineering Lecture Hall');
-insert into BUILDING values(0581, 'D3', 'Cullen College of Engineering 2');
-insert into BUILDING values(0582, 'BF', 'Cougar Baseball Field');
-insert into BUILDING values(0583, 'BFT', 'Cougar Baseball Field Ticket Booth');
-insert into BUILDING values(0584, 'MR', 'Moody Towers Residence Halls');
-insert into BUILDING values(0585, 'GEN', 'General Services BUILDING');
-insert into BUILDING values(0586, 'CAM', 'Isabel C. Cameron');
-insert into BUILDING values(0587, 'FH', 'Stephen Power Farish Hall');
-insert into BUILDING values(0588, 'M', 'Charles F. McElhinney Hall');
-insert into BUILDING values(0589, 'FA', 'Fine Arts BUILDING');
-insert into BUILDING values(0590, 'CHC', 'Conrad Hilton College of Hotel & Restaurant Management');
-insert into BUILDING values(0591, 'INF', 'Visitor Information Booth 1');
-insert into BUILDING values(0592, 'HBS', 'Health and Biomedical Sciences Center');
-insert into BUILDING values(0593, 'HSC', 'University of Houston Science Center');
-insert into BUILDING values(0594, 'EERC', 'Engineering Education Resource Center');
-insert into BUILDING values(0595, 'RES', 'Chinese Star Restaurant');
-insert into BUILDING values(0596, 'CC', 'Computing Center');
-insert into BUILDING values(0597, 'SPG', 'Stadium Parking Garage');
-insert into BUILDING values(0598, 'CRS', 'Clinical Research Services Center');
-insert into BUILDING values(0599, 'CLTF', 'Carl Lewis International Track & Field Complex');
-insert into BUILDING values(0701, 'PHA', 'College of Pharmacy Texas Medical Center');
-insert into BUILDING values(0702, 'ABC', 'KUHF Transmitter Tower - ABC');
-insert into BUILDING values(0703, 'KMJQ', 'KMJQ/KUHT Transmitter BUILDING');
-insert into BUILDING values(0704, 'TMC', 'Texas Medical Center - 2151 Holcomb');
-insert into BUILDING values(0705, 'NWC', 'Northwest Campus');
-insert into BUILDING values(0706, 'FB1', 'Small Business Development Center - Rosenberg');
-insert into BUILDING values(0707, 'FB2', 'Small Business Development Center - Missouri City');
-insert into BUILDING values(0708, 'FB3', 'Small Business Development Center - Katy');
-insert into BUILDING values(0709, 'BV', 'Small Business Development Center - Bryan');
-insert into BUILDING values(0710, 'SBD', 'Small Business Development Center');
-insert into BUILDING values(0711, 'ROCK', '4520 Rockwood - University Oak');
-insert into BUILDING values(0713, 'CP1', 'Small Business Development Center - Bay City');
-insert into BUILDING values(0714, 'TMC2', 'Texas Medical Center 2');
-insert into BUILDING values(0715, 'NWC10', 'Northwest Campus 10');
-insert into BUILDING values(0750, 'COCM', 'Coastal Center Caretaker Mobile Home');
-insert into BUILDING values(0751, 'COEL', 'Coastal Center Environmental Laboratory');
-insert into BUILDING values(0752, 'CORL', 'Coastal Center Research Laboratory');
-insert into BUILDING values(0753, 'COES', 'Coastal Center Equipment Storage');
-insert into BUILDING values(0756, 'COIT', 'Coastal Center Residential IT Equipment');
-insert into BUILDING values(0757, 'GEOC', 'Geosciences Coastal Center IT Equipment');
-insert into BUILDING values(0758, 'CROK', 'Coastal Center Rock Saw Facility');
-insert into BUILDING values(0759, 'CRST', 'Coastal Center Rock Storage');
-insert into BUILDING values(0760, 'CGRS', 'Coastal Center Greenhouse Service');
-insert into BUILDING values(0762, 'WHI', 'West Houston Institute (UHS-Cinco Ranch)');
-insert into BUILDING values(0800, 'CW', 'Campus Wide');
-insert into BUILDING values(0801, 'LEP', 'Lynn Eusan Park');
-insert into BUILDING values(0802, 'CFP', 'Cullen Family Plaza');
-insert into BUILDING values(0803, 'BMG', 'Dr. Barnett Memorial Garden');
-insert into BUILDING values(0804, 'CCG', 'The Cougar Community Garden');
-insert into BUILDING values(0805, 'MP', 'Meditation Pond');
-insert into BUILDING values(0806, 'LAG', 'Dena and Guy V. Lewis Azalea Garden');
-insert into BUILDING values(0807, 'SRG', 'Margaret Sharpe Antique Rose Garden');
-insert into BUILDING values(0808, 'TEN', 'Tennis Courts');
-insert into BUILDING values(0809, 'SF', 'Soccer Field');
-insert into BUILDING values(0820, 'SK4A', 'Security Kiosk Lot 4A');
-insert into BUILDING values(0821, 'SK9C', 'Security Kiosk Lot 9C');
-insert into BUILDING values(0822, 'SK12A', 'Security Kiosk Lot 12A');
-insert into BUILDING values(0823, 'SK41', 'Security Kiosk Lot 41 (ERP)');
-insert into BUILDING values(0824, 'SK42', 'Security Kiosk Lot 42 (ERP)');
-insert into BUILDING values(0482, 'BPF', 'New Basketball Practice Facility');
-insert into BUILDING values(0483, 'HBS2', 'Health and Biomedical Sciences Center 2');
-insert into BUILDING values(0484, 'MREB', 'Multidisciplinary Research and Engineering BUILDING');
-
-
-insert into core values(1, 'Communication', 6);
-insert into core values(2, 'Mathematics', 3);
-insert into core values(3, 'Life and Physical Sciences', 6);
-insert into core values(4, 'Language, Philosophy & Culture', 3);
-insert into core values(5, 'Creative Arts', 3);
-insert into core values(6, 'American History', 6);
-insert into core values(7, 'Government/Political Science', 6);
-insert into core values(8, 'Social & Behavioral Sciences', 3);
-insert into core values(9, 'Mathematics/Reasoning', 3);
-insert into core values(10, 'Writing in the Disciplines', 3);
+INSERT INTO BUILDING VALUES(0000, '', '');
+INSERT INTO BUILDING VALUES(0101, 'CRW', 'Chancellor\'s Residence Wortham House');
+INSERT INTO BUILDING VALUES(0104, 'P2', 'KUHT Fiber Optics BUILDING');
+INSERT INTO BUILDING VALUES(0105, 'TVTE', 'KUHT Telephone Equipment');
+INSERT INTO BUILDING VALUES(0106, 'TV', 'Texas Learning & Computational Center Annex');
+INSERT INTO BUILDING VALUES(0108, 'P1', 'Cullen Annex Laboratory');
+INSERT INTO BUILDING VALUES(0111, 'DYN', 'Dynamometer Test Laboratory');
+INSERT INTO BUILDING VALUES(0115, 'OFGR', 'Office of Governmental Relations');
+INSERT INTO BUILDING VALUES(0116, 'ACT', 'Safety, Human Factors & Ergonomic Laboratory');
+INSERT INTO BUILDING VALUES(0117, 'TVFB', 'KUHT TV at Fort Bend - Tower');
+INSERT INTO BUILDING VALUES(0118, 'WRCH', 'Wortham Residence Coach House');
+INSERT INTO BUILDING VALUES(0119, 'ACTA', 'Texas Manufacturing Assistance Center');
+INSERT INTO BUILDING VALUES(0120, 'UHFB', 'Albert and Mamie George BUILDING');
+INSERT INTO BUILDING VALUES(0121, 'FBA2', 'Brazos Hall');
+INSERT INTO BUILDING VALUES(0122, 'UBL', 'University Branch Library (UHS-Sugar Land)');
+INSERT INTO BUILDING VALUES(0125, 'WHS', 'Wortham House Storage');
+INSERT INTO BUILDING VALUES(0126, 'SA1', 'Sugar Land Annex 1');
+INSERT INTO BUILDING VALUES(0127, 'SA2', 'Sugar Land Annex 2');
+INSERT INTO BUILDING VALUES(0128, 'SA3', 'Sugar Land Annex 3');
+INSERT INTO BUILDING VALUES(0199, 'CRSA', 'Clinical Research Services Annex');
+INSERT INTO BUILDING VALUES(0400, 'CSS', 'Cougar Sub-Station');
+INSERT INTO BUILDING VALUES(0401, 'ERP1', 'Energy Research Park 01');
+INSERT INTO BUILDING VALUES(0402, 'ERP2', 'Energy Research Park 02');
+INSERT INTO BUILDING VALUES(0403, 'ERP3', 'Energy Research Park 03');
+INSERT INTO BUILDING VALUES(0404, 'ERP4', 'Conference & Research BUILDING');
+INSERT INTO BUILDING VALUES(0405, 'ERP5', 'Energy Research Park 05');
+INSERT INTO BUILDING VALUES(0406, 'ERP6', 'Energy Research Park 06');
+INSERT INTO BUILDING VALUES(0407, 'ERP7', 'Energy Research Park 07');
+INSERT INTO BUILDING VALUES(0408, 'ERP8', 'Energy Research Park 08');
+INSERT INTO BUILDING VALUES(0409, 'ERP9', 'ConocoPhillips Petroleum Engineering BUILDING');
+INSERT INTO BUILDING VALUES(0410, 'ERP10', 'Energy Research Park 10');
+INSERT INTO BUILDING VALUES(0411, 'ERP11', 'Energy Research Park 11');
+INSERT INTO BUILDING VALUES(0413, 'ERP13', 'Energy Research Park 13');
+INSERT INTO BUILDING VALUES(0414, 'ERP14', 'Energy Research Park 14');
+INSERT INTO BUILDING VALUES(0415, 'ERP15', 'Energy Device Fabrication Laboratory');
+INSERT INTO BUILDING VALUES(0419, 'ERPA', 'Energy Research Park Annex');
+INSERT INTO BUILDING VALUES(0420, 'ERP20', 'Energy Research Park Storage');
+INSERT INTO BUILDING VALUES(0485, 'STAD', 'TDECU Stadium');
+INSERT INTO BUILDING VALUES(0486, 'ATL', 'Atmospheric Testing Laboratory');
+INSERT INTO BUILDING VALUES(0487, 'UCN', 'Student Center North');
+INSERT INTO BUILDING VALUES(0488, 'SCP1', 'Central Plant Satellite');
+INSERT INTO BUILDING VALUES(0489, 'KUHA2', 'KUHA - Renters BUILDING');
+INSERT INTO BUILDING VALUES(0490, 'WCSG', 'Welcome Center Student Garage');
+INSERT INTO BUILDING VALUES(0491, 'KUHA', 'KUHA - Transmitter BUILDING');
+INSERT INTO BUILDING VALUES(0492, 'SST', 'Cougar Softball Stadium Ticket Booth');
+INSERT INTO BUILDING VALUES(0493, 'SS', 'Cougar Softball Stadium');
+INSERT INTO BUILDING VALUES(0494, 'AAA', 'Agnes Arnold Auditorium');
+INSERT INTO BUILDING VALUES(0495, 'CPH', 'Cougar Place');
+INSERT INTO BUILDING VALUES(0496, 'CV2', 'Cougar Village 2');
+INSERT INTO BUILDING VALUES(0498, 'DTF', 'Bulk Fueling Diesel Tank Farm');
+INSERT INTO BUILDING VALUES(0499, 'CBB', 'Classroom and Business BUILDING');
+INSERT INTO BUILDING VALUES(0500, 'BOA', 'Bayou Oaks Apartments');
+INSERT INTO BUILDING VALUES(0501, 'C', 'Roy G. Cullen');
+INSERT INTO BUILDING VALUES(0502, 'S', 'Science BUILDING');
+INSERT INTO BUILDING VALUES(0503, 'T', 'Technology Annex');
+INSERT INTO BUILDING VALUES(0504, 'CCC', 'Child Care Center');
+INSERT INTO BUILDING VALUES(0505, 'JDA', 'J. Davis Armistead');
+INSERT INTO BUILDING VALUES(0506, 'COM', 'Jack J. Valenti School of Communication');
+INSERT INTO BUILDING VALUES(0507, 'WT', 'Cynthia Woods Mitchell Center for the Arts/Wortham Theatre');
+INSERT INTO BUILDING VALUES(0508, 'T2', 'College of Technology BUILDING');
+INSERT INTO BUILDING VALUES(0509, 'L', 'M. D. Anderson Library');
+INSERT INTO BUILDING VALUES(0513, 'INF2', 'Visitor Information Booth 2');
+INSERT INTO BUILDING VALUES(0514, 'EPS2', 'Fire & Life Safety - Storage');
+INSERT INTO BUILDING VALUES(0515, 'PP', 'Central Power Plant');
+INSERT INTO BUILDING VALUES(0516, 'E', 'Ezekiel W. Cullen');
+INSERT INTO BUILDING VALUES(0517, 'A', 'Cullen Performance Hall');
+INSERT INTO BUILDING VALUES(0518, 'CLA', 'Calhoun Lofts Apartments');
+INSERT INTO BUILDING VALUES(0519, 'UHPD', 'DEPARTMENT of Public Safety - UH Police');
+INSERT INTO BUILDING VALUES(0520, 'MSM', 'Rebecca & John J. Moores School of Music');
+INSERT INTO BUILDING VALUES(0521, 'GS', 'Grounds Storage BUILDING');
+INSERT INTO BUILDING VALUES(0522, 'CRWC', 'Campus Recreation & Wellness Center');
+INSERT INTO BUILDING VALUES(0523, 'AGL', 'Science & Engineering Annex');
+INSERT INTO BUILDING VALUES(0524, 'SSC', 'Student Service Center 1');
+INSERT INTO BUILDING VALUES(0525, 'HC', 'Health Center');
+INSERT INTO BUILDING VALUES(0526, 'SS2', 'Student Service Center 2');
+INSERT INTO BUILDING VALUES(0527, 'EPS3', 'EHRM1');
+INSERT INTO BUILDING VALUES(0528, 'MH', 'LeRoy & Lucile Melcher Hall');
+INSERT INTO BUILDING VALUES(0529, 'SEC', 'Science & Engineering Classroom BUILDING');
+INSERT INTO BUILDING VALUES(0531, 'HP', 'Hofheinz Pavilion');
+INSERT INTO BUILDING VALUES(0532, 'GAR', 'Susanna Garrison Gymnasium');
+INSERT INTO BUILDING VALUES(0533, 'MEL', 'Melcher Gymnasium/Charter School');
+INSERT INTO BUILDING VALUES(0534, 'H', 'Fred J. Heyne');
+INSERT INTO BUILDING VALUES(0535, 'EPS1', 'EHRM2');
+INSERT INTO BUILDING VALUES(0536, 'CPB', 'LeRoy & Lucile Melcher Center for Public Broadcasting');
+INSERT INTO BUILDING VALUES(0537, 'BL', 'Bates Law');
+INSERT INTO BUILDING VALUES(0538, 'TU2', 'Teaching Unit 2 BUILDING');
+INSERT INTO BUILDING VALUES(0539, 'KH', 'Max Krost Hall');
+INSERT INTO BUILDING VALUES(0540, 'LL', 'John M. O\'Quinn Law Library');
+INSERT INTO BUILDING VALUES(0541, 'UTS', 'Utility Tunnel System');
+INSERT INTO BUILDING VALUES(0542, 'SPA', 'South Park Annex');
+INSERT INTO BUILDING VALUES(0543, 'ARC', 'Gerald D. Hines College of Architecture');
+INSERT INTO BUILDING VALUES(0544, 'CEMO', 'Michael J. Cemo Hall');
+INSERT INTO BUILDING VALUES(0545, 'SERC', 'Science & Engineering Research Center');
+INSERT INTO BUILDING VALUES(0546, 'EPG', 'East Parking Garage');
+INSERT INTO BUILDING VALUES(0547, 'PGH', 'Philip Guthrie Hoffman Hall');
+INSERT INTO BUILDING VALUES(0548, 'AMB', 'Athletics MaINTenance BUILDING');
+INSERT INTO BUILDING VALUES(0549, 'SW', 'Graduate College of Social Work');
+INSERT INTO BUILDING VALUES(0550, 'SR', 'Science and Research 1');
+INSERT INTO BUILDING VALUES(0551, 'SR2', 'Science and Research 2');
+INSERT INTO BUILDING VALUES(0552, 'BKD', 'Burdette Keeland Jr. Design & Exploration Center');
+INSERT INTO BUILDING VALUES(0553, 'WC', 'Welcome Center & Parking Garage');
+INSERT INTO BUILDING VALUES(0555, 'LH', 'Law Residence Hall');
+INSERT INTO BUILDING VALUES(0556, 'SH', 'Settegast Residence Hall');
+INSERT INTO BUILDING VALUES(0557, 'BH', 'Bates Residence Hall');
+INSERT INTO BUILDING VALUES(0558, 'TH', 'Taub Residence Hall');
+INSERT INTO BUILDING VALUES(0559, 'OB', 'E. E. Oberholtzer Residence Hall');
+INSERT INTO BUILDING VALUES(0560, 'UPD', 'UH-DPS Parking Enforcement');
+INSERT INTO BUILDING VALUES(0561, 'CRWA', 'CRWC Annex');
+INSERT INTO BUILDING VALUES(0562, 'ADB', 'A. D. Bruce Religion Center');
+INSERT INTO BUILDING VALUES(0563, 'CV', 'Cougar Village');
+INSERT INTO BUILDING VALUES(0564, 'F', 'Lamar Fleming, Jr.');
+INSERT INTO BUILDING VALUES(0565, 'UC', 'Student Center South');
+INSERT INTO BUILDING VALUES(0567, 'UCS', 'Student Center Satellite');
+INSERT INTO BUILDING VALUES(0568, 'CSD', 'Justin Dart Jr. Center for Students with DisABILITIES');
+INSERT INTO BUILDING VALUES(0569, 'CULLO', 'Cullen Oaks Apartments');
+INSERT INTO BUILDING VALUES(0570, 'BATC', 'Athletics Batting Cage');
+INSERT INTO BUILDING VALUES(0572, 'GSS', 'General Services Storage BUILDING');
+INSERT INTO BUILDING VALUES(0573, 'ALUM', 'Alumni Center');
+INSERT INTO BUILDING VALUES(0574, 'ATH2', 'Athletic Center');
+INSERT INTO BUILDING VALUES(0575, 'CO', 'Cambridge Oaks Apartments');
+INSERT INTO BUILDING VALUES(0576, 'STL', 'Science Teaching Laboratory BUILDING');
+INSERT INTO BUILDING VALUES(0578, 'AH', 'Agnes Arnold Hall');
+INSERT INTO BUILDING VALUES(0579, 'D', 'Cullen College of Engineering 1');
+INSERT INTO BUILDING VALUES(0580, 'D2', 'Engineering Lecture Hall');
+INSERT INTO BUILDING VALUES(0581, 'D3', 'Cullen College of Engineering 2');
+INSERT INTO BUILDING VALUES(0582, 'BF', 'Cougar Baseball Field');
+INSERT INTO BUILDING VALUES(0583, 'BFT', 'Cougar Baseball Field Ticket Booth');
+INSERT INTO BUILDING VALUES(0584, 'MR', 'Moody Towers Residence Halls');
+INSERT INTO BUILDING VALUES(0585, 'GEN', 'General Services BUILDING');
+INSERT INTO BUILDING VALUES(0586, 'CAM', 'Isabel C. Cameron');
+INSERT INTO BUILDING VALUES(0587, 'FH', 'Stephen Power Farish Hall');
+INSERT INTO BUILDING VALUES(0588, 'M', 'Charles F. McElhinney Hall');
+INSERT INTO BUILDING VALUES(0589, 'FA', 'Fine Arts BUILDING');
+INSERT INTO BUILDING VALUES(0590, 'CHC', 'Conrad Hilton College of Hotel & Restaurant Management');
+INSERT INTO BUILDING VALUES(0591, 'INF', 'Visitor Information Booth 1');
+INSERT INTO BUILDING VALUES(0592, 'HBS', 'Health and Biomedical Sciences Center');
+INSERT INTO BUILDING VALUES(0593, 'HSC', 'University of Houston Science Center');
+INSERT INTO BUILDING VALUES(0594, 'EERC', 'Engineering Education Resource Center');
+INSERT INTO BUILDING VALUES(0595, 'RES', 'Chinese Star Restaurant');
+INSERT INTO BUILDING VALUES(0596, 'CC', 'Computing Center');
+INSERT INTO BUILDING VALUES(0597, 'SPG', 'Stadium Parking Garage');
+INSERT INTO BUILDING VALUES(0598, 'CRS', 'Clinical Research Services Center');
+INSERT INTO BUILDING VALUES(0599, 'CLTF', 'Carl Lewis INTernational Track & Field Complex');
+INSERT INTO BUILDING VALUES(0701, 'PHA', 'College of Pharmacy Texas Medical Center');
+INSERT INTO BUILDING VALUES(0702, 'ABC', 'KUHF Transmitter Tower - ABC');
+INSERT INTO BUILDING VALUES(0703, 'KMJQ', 'KMJQ/KUHT Transmitter BUILDING');
+INSERT INTO BUILDING VALUES(0704, 'TMC', 'Texas Medical Center - 2151 Holcomb');
+INSERT INTO BUILDING VALUES(0705, 'NWC', 'Northwest Campus');
+INSERT INTO BUILDING VALUES(0706, 'FB1', 'Small Business Development Center - Rosenberg');
+INSERT INTO BUILDING VALUES(0707, 'FB2', 'Small Business Development Center - Missouri City');
+INSERT INTO BUILDING VALUES(0708, 'FB3', 'Small Business Development Center - Katy');
+INSERT INTO BUILDING VALUES(0709, 'BV', 'Small Business Development Center - Bryan');
+INSERT INTO BUILDING VALUES(0710, 'SBD', 'Small Business Development Center');
+INSERT INTO BUILDING VALUES(0711, 'ROCK', '4520 Rockwood - University Oak');
+INSERT INTO BUILDING VALUES(0713, 'CP1', 'Small Business Development Center - Bay City');
+INSERT INTO BUILDING VALUES(0714, 'TMC2', 'Texas Medical Center 2');
+INSERT INTO BUILDING VALUES(0715, 'NWC10', 'Northwest Campus 10');
+INSERT INTO BUILDING VALUES(0750, 'COCM', 'Coastal Center Caretaker Mobile Home');
+INSERT INTO BUILDING VALUES(0751, 'COEL', 'Coastal Center Environmental Laboratory');
+INSERT INTO BUILDING VALUES(0752, 'CORL', 'Coastal Center Research Laboratory');
+INSERT INTO BUILDING VALUES(0753, 'COES', 'Coastal Center Equipment Storage');
+INSERT INTO BUILDING VALUES(0756, 'COIT', 'Coastal Center Residential IT Equipment');
+INSERT INTO BUILDING VALUES(0757, 'GEOC', 'Geosciences Coastal Center IT Equipment');
+INSERT INTO BUILDING VALUES(0758, 'CROK', 'Coastal Center Rock Saw Facility');
+INSERT INTO BUILDING VALUES(0759, 'CRST', 'Coastal Center Rock Storage');
+INSERT INTO BUILDING VALUES(0760, 'CGRS', 'Coastal Center Greenhouse Service');
+INSERT INTO BUILDING VALUES(0762, 'WHI', 'West Houston Institute (UHS-Cinco Ranch)');
+INSERT INTO BUILDING VALUES(0800, 'CW', 'Campus Wide');
+INSERT INTO BUILDING VALUES(0801, 'LEP', 'Lynn Eusan Park');
+INSERT INTO BUILDING VALUES(0802, 'CFP', 'Cullen Family Plaza');
+INSERT INTO BUILDING VALUES(0803, 'BMG', 'Dr. Barnett Memorial Garden');
+INSERT INTO BUILDING VALUES(0804, 'CCG', 'The Cougar Community Garden');
+INSERT INTO BUILDING VALUES(0805, 'MP', 'Meditation Pond');
+INSERT INTO BUILDING VALUES(0806, 'LAG', 'Dena and Guy V. Lewis Azalea Garden');
+INSERT INTO BUILDING VALUES(0807, 'SRG', 'Margaret Sharpe Antique Rose Garden');
+INSERT INTO BUILDING VALUES(0808, 'TEN', 'Tennis Courts');
+INSERT INTO BUILDING VALUES(0809, 'SF', 'Soccer Field');
+INSERT INTO BUILDING VALUES(0820, 'SK4A', 'Security Kiosk Lot 4A');
+INSERT INTO BUILDING VALUES(0821, 'SK9C', 'Security Kiosk Lot 9C');
+INSERT INTO BUILDING VALUES(0822, 'SK12A', 'Security Kiosk Lot 12A');
+INSERT INTO BUILDING VALUES(0823, 'SK41', 'Security Kiosk Lot 41 (ERP)');
+INSERT INTO BUILDING VALUES(0824, 'SK42', 'Security Kiosk Lot 42 (ERP)');
+INSERT INTO BUILDING VALUES(0482, 'BPF', 'New Basketball Practice Facility');
+INSERT INTO BUILDING VALUES(0483, 'HBS2', 'Health and Biomedical Sciences Center 2');
+INSERT INTO BUILDING VALUES(0484, 'MREB', 'Multidisciplinary Research and Engineering BUILDING');
 
 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1303', 1);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1304', 1);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1370', 1);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2361', 1);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1310', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1311', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1312', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1313', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1314', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1330', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1431', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1450', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '2311', 2);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1309', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1310', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1320', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1361', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '1362', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1301', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1331', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHEM', '1332', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1302', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1330', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1340', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1350', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1360', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GEOL', '1376', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('NUTR', '2332', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHAR', '2362', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1301', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1302', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1305', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1306', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1321', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '1322', 3);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('AAS', '2320', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('AAS', '2330', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARAB', '3340', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1300', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1380', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHNS', '3352', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CHNS', '3360', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3307', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3308', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3366', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3374', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2305', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2306', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2308', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2315', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2316', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2323', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2325', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2340', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3306', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3324', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3325', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3327', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3328', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3350', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3351', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '3360', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3318', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3319', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3321', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3322', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3362', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('FREN', '3364', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3350', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3362', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3364', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3369', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2373', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2374', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HISP', '2375', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2351', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2353', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2361', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2364', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2366', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2367', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2368', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2372', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2373', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3379', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3380', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4330', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HON', '2301', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ILAS', '2350', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ILAS', '2360', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3305', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3306', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3308', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3335', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3336', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('JWST', '2380', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MAS', '3340', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1301', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1305', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3340', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3342', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '1301', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2310', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2311', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2330', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3331', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3373', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3374', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3375', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2351', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2352', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '2370', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3351', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3377', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WGSS', '2350', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WGSS', '2360', 4);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '2350', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '2351', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '1381', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3345', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '3381', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '2307', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '3310', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2307', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2318', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3363', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3381', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3384', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GERM', '3385', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4371', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('INDS', '2355', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('INDS', '2356', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2302', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2342', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2362', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3300', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3301', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1361', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2346', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3386', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '1331', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '1332', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3366', 5);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1376', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1377', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1378', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '1379', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2348', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2341', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '2343', 6); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1107', 7); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1336', 7); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '1337', 7); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2336', 7); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '1300', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2301', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2302', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2303', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CUST', '2300', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2301', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2304', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2305', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDFS', '2317', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HRMA', '2365', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('KIN', '1304', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3311', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3354', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '1300', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2350', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2351', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '1300', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '1301', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TECH', '1313', 8); 
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('COSC', '1306', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CUIN', '2320', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '2370', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ELET', '2300', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1312', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1313', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1314', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1330', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1431', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1432', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1450', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '1451', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MATH', '2311', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1321', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3312', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3316', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '3301', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TMTH', '3360', 9);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '2304', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3348', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3361', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ANTH', '3381', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARAB', '3314', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARCH', '1359', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ARTH', '3312', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BCHS', '4311', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('BIOL', '3311', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '4305', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('CLAS', '4381', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('COMM', '1302', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '2307', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('DAN', '3310', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '3344', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ECON', '3350', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGI', '2304', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '2330', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('GENB', '4350', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDCS', '1300', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HDFS', '1300', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3314', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3333', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3351', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '3369', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HIST', '4339', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HON', '3300', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('HRMA', '3358', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('IDNS', '4392', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3307', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '3309', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ITAL', '4308', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('LAST', '3300', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '2301', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('MUSI', '3303', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHIL', '1334', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PHYS', '3313', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '2341', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('POLS', '3310', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '2344', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '3310', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('PSYC', '4321', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2340', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2350', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '2360', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '3370', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('RELS', '3381', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SOC', '3351', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('SPAN', '3384', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('TELS', '3363', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('THEA', '2344', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '3348', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4351', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4352', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4356', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4365', 10);
-insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4367', 10);
+INSERT INTO CORE VALUES(1, 'Communication', 6);
+INSERT INTO CORE VALUES(2, 'Mathematics', 3);
+INSERT INTO CORE VALUES(3, 'Life and Physical Sciences', 6);
+INSERT INTO CORE VALUES(4, 'Language, Philosophy & Culture', 3);
+INSERT INTO CORE VALUES(5, 'Creative Arts', 3);
+INSERT INTO CORE VALUES(6, 'American History', 6);
+INSERT INTO CORE VALUES(7, 'Government/Political Science', 6);
+INSERT INTO CORE VALUES(8, 'Social & Behavioral Sciences', 3);
+INSERT INTO CORE VALUES(9, 'Mathematics/Reasoning', 3);
+INSERT INTO CORE VALUES(10, 'Writing in the Disciplines', 3);
 
 
-drop trigger if exists populate_credit_hours;
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '1303', 1);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '1304', 1);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '1370', 1);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2361', 1);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1310', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1311', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1312', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1313', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1314', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1330', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1431', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1450', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '2311', 2);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '1309', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '1310', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '1320', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '1361', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '1362', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CHEM', '1301', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CHEM', '1331', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CHEM', '1332', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1302', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1330', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1340', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1350', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1360', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GEOL', '1376', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('NUTR', '2332', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHAR', '2362', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1301', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1302', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1305', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1306', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1321', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '1322', 3);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('AAS', '2320', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('AAS', '2330', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARAB', '3340', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARTH', '1300', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARTH', '1380', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CHNS', '3352', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CHNS', '3360', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3307', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3308', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3366', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3374', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2305', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2306', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2308', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2315', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2316', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2323', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2325', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2340', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3306', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3324', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3325', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3327', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3328', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3350', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3351', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '3360', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3318', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3319', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3321', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3322', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3362', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('FREN', '3364', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3350', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3362', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3364', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3369', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HISP', '2373', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HISP', '2374', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HISP', '2375', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2351', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2353', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2361', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2364', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2366', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2367', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2368', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2372', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2373', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3379', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3380', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '4330', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HON', '2301', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ILAS', '2350', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ILAS', '2360', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3305', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3306', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3308', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3335', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3336', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('JWST', '2380', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MAS', '3340', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHIL', '1301', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHIL', '1305', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3340', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3342', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '1301', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2310', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2311', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2330', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3331', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3373', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3374', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3375', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '2351', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '2352', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '2370', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '3351', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '3377', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WGSS', '2350', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WGSS', '2360', 4);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARCH', '2350', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARCH', '2351', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARTH', '1381', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3345', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '3381', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('DAN', '2307', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('DAN', '3310', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2307', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2318', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3363', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3381', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3384', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GERM', '3385', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '4371', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('INDS', '2355', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('INDS', '2356', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '2302', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '2342', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '2362', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '3300', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '3301', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHIL', '1361', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '2346', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3386', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('THEA', '1331', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('THEA', '1332', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '3366', 5);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '1376', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '1377', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '1378', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '1379', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2348', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2341', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '2343', 6);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '1107', 7);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '1336', 7);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '1337', 7);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '2336', 7);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '1300', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '2301', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '2302', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '2303', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CUST', '2300', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '2301', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '2304', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '2305', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HDFS', '2317', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HRMA', '2365', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('KIN', '1304', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3311', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3354', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '1300', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '2350', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '2351', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SOC', '1300', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SOC', '1301', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('TECH', '1313', 8);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('COSC', '1306', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CUIN', '2320', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '2370', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ELET', '2300', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1312', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1313', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1314', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1330', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1431', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1432', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1450', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '1451', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MATH', '2311', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHIL', '1321', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3312', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3316', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '3301', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('TMTH', '3360', 9);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '2304', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '3348', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '3361', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ANTH', '3381', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARAB', '3314', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARCH', '1359', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ARTH', '3312', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BCHS', '4311', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('BIOL', '3311', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '4305', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('CLAS', '4381', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('COMM', '1302', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('DAN', '2307', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('DAN', '3310', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '3344', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ECON', '3350', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGI', '2304', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ENGL', '2330', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('GENB', '4350', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HDCS', '1300', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HDFS', '1300', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3314', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3333', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3351', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '3369', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HIST', '4339', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HON', '3300', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('HRMA', '3358', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('IDNS', '4392', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3307', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '3309', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('ITAL', '4308', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('LAST', '3300', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '2301', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('MUSI', '3303', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHIL', '1334', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PHYS', '3313', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '2341', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('POLS', '3310', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '2344', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '3310', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('PSYC', '4321', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2340', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2350', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '2360', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '3370', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('RELS', '3381', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SOC', '3351', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('SPAN', '3384', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('TELS', '3363', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('THEA', '2344', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '3348', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '4351', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '4352', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '4356', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '4365', 10);
+INSERT INTO CORE_CLASS(DEPARTMENT_ABBREVIATION, DEPARTMENT_CRN, CORE_ID) VALUES('WCL', '4367', 10);
+
+
+DROP TRIGGER IF EXISTS POPULATE_CREDIT_HOURS;
 DELIMITER //
-create trigger populate_credit_hours before insert on class_information
-for each row
-	begin
-	set new.CREDIT_HOURS = substring(new.department_crn, 2, 1);
-end//
+CREATE TRIGGER POPULATE_CREDIT_HOURS BEFORE INSERT ON CLASS_INFORMATION
+FOR EACH ROW
+	BEGIN
+	set NEW.CREDIT_HOURS = SUBSTRING(NEW.DEPARTMENT_CRN, 2, 1);
+END//
 DELIMITER ;
 
-drop trigger if exists populate_core;
+DROP TRIGGER IF EXISTS POPULATE_CORE;
 DELIMITER //
-create trigger populate_core before insert on class_information
-for each row
-begin
-	SET NEW.CORE := (SELECT GROUP_CONCAT(core_id SEPARATOR ', ') FROM CORE_CLASS 
-	WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
-	CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
-end//
+CREATE TRIGGER POPULATE_CREDIT_HOURS BEFORE INSERT ON CLASS_INFORMATION
+FOR EACH ROW
+    BEGIN
+	SET NEW.CORE := (SELECT GROUP_CONCAT(CORE_ID SEPARATOR ', ') FROM CORE_CLASS
+	WHERE CORE_CLASS.DEPARTMENT_ABBREVIATION = NEW.DEPARTMENT AND
+	CORE_CLASS.DEPARTMENT_CRN = NEW.DEPARTMENT_CRN);
+END//
 DELIMITER ;
