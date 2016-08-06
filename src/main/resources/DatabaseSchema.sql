@@ -58,7 +58,7 @@ CREATE TABLE CLASS (
     DEPARTMENT          VARCHAR(5)    NOT NULL,
     DEPARTMENT_CRN      VARCHAR(5)    NOT NULL,
     Status              ENUM('Open', 'Closed') ,
-    ATTRIBUTES          VARCHAR(100),
+    ATTRIBUTES          VARCHAR(100), -- possible values include: 'Core', 'Distance Education', 'No class attributes', 'Core Distance Education', 'Core Weekend U', 'Core Distance Education Weekend U', 'Weekend U'
     START_DATE          DATE,
     END_DATE            DATE,
     START_TIME          TIME,
@@ -68,10 +68,10 @@ CREATE TABLE CLASS (
     LOCATION            VARCHAR(100),
     BUILDING_ABBV       VARCHAR(10),
     BUILDING_ROOM_NUM   VARCHAR(15),
-    FORMAT              VARCHAR(100),
+    FORMAT              VARCHAR(100), -- possible values include: 'Face to Face', 'Hybrid', 'Online', 'Independent Studies', 'Studio', 'Interactive Television', 'Two-way Interactive Video'
     DURATION            VARCHAR(100),
-    SESSION             VARCHAR(100),
-    COMPONENT           VARCHAR(100),
+    SESSION             VARCHAR(100), -- possible values include: 'Regular Academic Session', '5', 'MIN', '2', '4', '3', '6'
+    COMPONENT           VARCHAR(100), -- possible values include: 'LEC', 'PRA', 'SEM', 'IND', 'LAB', 'PLS', 'PCO', 'THE', 'TUT', 'PRC', 'DST', 'CLN'
     SYLLABUS            VARCHAR(200),
     SEATS_TAKEN 		INT,
     SEATS_AVAILABLE		INT,
@@ -718,3 +718,43 @@ insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values(
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4356', 10);
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4365', 10);
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('WCL', '4367', 10);
+
+
+drop trigger if exists populate_credit_hours;
+DELIMITER //
+create trigger populate_credit_hours before insert on class_information
+for each row
+	begin
+	set new.CREDIT_HOURS = substring(new.department_crn, 2, 1);
+end//
+DELIMITER ;
+
+drop trigger if exists populate_core;
+DELIMITER //
+create trigger populate_core before insert on class_information
+for each row
+	begin
+	
+    SET @INC = (SELECT count(core_id) 
+    FROM core_class 
+    where core_class.department_abbreviation = new.department AND
+		  core_class.department_crn = new.department_crn);
+          
+	if(@INC = 2) then
+        SET NEW.CORE := (SELECT core_id FROM CORE_CLASS 
+		WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
+		CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
+    else 
+		SET NEW.CORE := (SELECT core_id FROM CORE_CLASS 
+		WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
+		CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
+    end if;
+
+end//
+DELIMITER ;
+
+select * from class_information;
+
+select GROUP_CONCAT(core_id SEPARATOR ', ') from core_class
+where core_class.department_abbreviation = 'MATH' and core_class.department_crn = 1312;
+
