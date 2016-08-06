@@ -458,6 +458,18 @@ insert into BUILDING values(0483, 'HBS2', 'Health and Biomedical Sciences Center
 insert into BUILDING values(0484, 'MREB', 'Multidisciplinary Research and Engineering BUILDING');
 
 
+insert into core values(1, 'Communication', 6);
+insert into core values(2, 'Mathematics', 3);
+insert into core values(3, 'Life and Physical Sciences', 6);
+insert into core values(4, 'Language, Philosophy & Culture', 3);
+insert into core values(5, 'Creative Arts', 3);
+insert into core values(6, 'American History', 6);
+insert into core values(7, 'Government/Political Science', 6);
+insert into core values(8, 'Social & Behavioral Sciences', 3);
+insert into core values(9, 'Mathematics/Reasoning', 3);
+insert into core values(10, 'Writing in the Disciplines', 3);
+
+
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1303', 1);
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1304', 1);
 insert into CORE_CLASS(department_abbreviation, department_crn, core_id) values('ENGL', '1370', 1);
