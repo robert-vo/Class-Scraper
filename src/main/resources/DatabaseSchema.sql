@@ -45,10 +45,10 @@ CREATE TABLE CLASS_INFORMATION (
     CLASS_DESCRIPTION	VARCHAR(1000),
 	CLASS_TITLE			VARCHAR(100),
     CREDIT_HOURS		int,
-    CORE				int null,
-    PRIMARY KEY(DEPARTMENT, DEPARTMENT_CRN),
-    foreign key(CORE) REFERENCES CORE(CORE_ID)
-		ON DELETE NO ACTION
+    CORE				varchar(10) null, -- core references core(core_id).
+    -- since core can take on multiple values (MATH 1312 for example), 
+    -- I opted to leave core as a varchar(10).
+    PRIMARY KEY(DEPARTMENT, DEPARTMENT_CRN) 
 );
 
 CREATE TABLE CLASS (
@@ -733,28 +733,9 @@ drop trigger if exists populate_core;
 DELIMITER //
 create trigger populate_core before insert on class_information
 for each row
-	begin
-	
-    SET @INC = (SELECT count(core_id) 
-    FROM core_class 
-    where core_class.department_abbreviation = new.department AND
-		  core_class.department_crn = new.department_crn);
-          
-	if(@INC = 2) then
-        SET NEW.CORE := (SELECT core_id FROM CORE_CLASS 
-		WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
-		CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
-    else 
-		SET NEW.CORE := (SELECT core_id FROM CORE_CLASS 
-		WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
-		CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
-    end if;
-
+begin
+	SET NEW.CORE := (SELECT GROUP_CONCAT(core_id SEPARATOR ', ') FROM CORE_CLASS 
+	WHERE CORE_CLASS.department_abbreviation = NEW.DEPARTMENT AND
+	CORE_CLASS.department_crn = NEW.DEPARTMENT_CRN);
 end//
 DELIMITER ;
-
-select * from class_information;
-
-select GROUP_CONCAT(core_id SEPARATOR ', ') from core_class
-where core_class.department_abbreviation = 'MATH' and core_class.department_crn = 1312;
-
