@@ -1,6 +1,8 @@
 package com.scraper.main.example;
 
+import com.scraper.main.Class;
 import com.scraper.main.ClassScraper;
+import com.scraper.main.DatabaseOperations;
 import com.scraper.main.Term;
 
 import java.util.Arrays;
@@ -14,8 +16,9 @@ import java.util.List;
 public class ScraperExample {
 
     public static void main(String[] args) {
-        runScraperForFall2016();
-        runScraperForMultipleTerms();
+//        runScraperForFall2016();
+//        runScraperForMultipleTerms();
+        runScraperForMultipleTermsUsingMultipleObjects();
     }
 
     private static void runScraperForFall2016() {
@@ -31,27 +34,31 @@ public class ScraperExample {
          * In this case, "2000" is equal to Term.FALL_2016.
          * "2010" is equal to Term.SPRING_2017, "2020" is equal to Term.SUMMER_2017 and so on.
          */
-        classScraper = new ClassScraper(Term.returnTermFromString("2000"));
+        classScraper = new ClassScraper(Term.returnTermFromString("1980"));
 
         /**
          * Initializing the class scraper using the year (int) and semester (String).
          */
-        classScraper = new ClassScraper(2016, "Fall");
+//        classScraper = new ClassScraper(2016, "Fall");
 
         /**
          * This sets the limit on how many pages are scraped per term.
          */
-        classScraper.setPageLimit(1);
+        classScraper.setPageLimit(2);
 
         /**
          * Starting the scraper.
          */
+
         classScraper.startScraper();
 
         /**
          * Retrieving information from the scraper.
          */
         classScraper.getAllClasses().stream().forEach(System.out::println);
+        DatabaseOperations.setPropertiesFileLocation("config/config.properties");
+        DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
+
     }
 
     private static void runScraperForMultipleTerms() {
@@ -73,7 +80,7 @@ public class ScraperExample {
          * In this case, since there are 4 terms being scraped with a page limit of 1,
          * 4x1 = 4 pages will be scraped.
          */
-        classScraper.setPageLimit(1);
+//        classScraper.setPageLimit(2);
 
         /**
          * Starting the scraper for all terms.
@@ -84,5 +91,30 @@ public class ScraperExample {
          * Retrieving information from the scraper.
          */
         classScraper.getAllClasses().stream().forEach(System.out::println);
+        DatabaseOperations.setPropertiesFileLocation("config/config.properties");
+        DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
+    }
+
+    private static void runScraperForMultipleTermsUsingMultipleObjects() {
+        ClassScraper classScraperFall2015 = new ClassScraper(Term.FALL_2015);
+        ClassScraper classScraperSpring2016 = new ClassScraper(Term.SPRING_2016);
+        ClassScraper classScraperSummer2016 = new ClassScraper(Term.SUMMER_2016);
+        ClassScraper classScraperFall2016 = new ClassScraper(Term.FALL_2016);
+
+//        classScraperFall2015.setPageLimit(1);
+//        classScraperSpring2016.setPageLimit(1);
+//        classScraperSummer2016.setPageLimit(1);
+//        classScraperFall2016.setPageLimit(1);
+
+        List<ClassScraper> allScrapers = new LinkedList<>(Arrays.asList(classScraperFall2015, classScraperSpring2016, classScraperSummer2016, classScraperFall2016));
+        List<List<Class>> allClasses = new LinkedList<>();
+
+        allScrapers.parallelStream().forEach(e -> {
+            e.startScraper();
+            allClasses.add(e.getAllClasses());
+        });
+
+        DatabaseOperations.setPropertiesFileLocation("config/config.properties");
+        allClasses.parallelStream().forEach(DatabaseOperations::performDatabaseActions);
     }
 }
