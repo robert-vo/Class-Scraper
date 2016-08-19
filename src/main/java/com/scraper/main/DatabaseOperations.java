@@ -27,14 +27,34 @@ public class DatabaseOperations {
         configPropertiesPath = path;
     }
 
+    public static void setJdbcDriver(String jdbcDriver) {
+        DatabaseOperations.jdbcDriver = jdbcDriver;
+    }
+
+    public static void setDatabaseURL(String databaseURL) {
+        DatabaseOperations.databaseURL = databaseURL;
+    }
+
+    public static void setDatabaseTable(String databaseTable) {
+        DatabaseOperations.databaseTable = databaseTable;
+    }
+
+    public static void setUserName(String userName) {
+        DatabaseOperations.userName = userName;
+    }
+
+    public static void setPassWord(String passWord) {
+        DatabaseOperations.passWord = passWord;
+    }
+
     private static void loadPropertiesFile() throws IOException {
         InputStream input = new FileInputStream(configPropertiesPath);
         properties.load(input);
-        jdbcDriver      = properties.getProperty("jdbcDriver");
-        databaseTable   = properties.getProperty("databaseTable");
-        databaseURL     = properties.getProperty("databaseURL") +  "/" + databaseTable;
-        userName        = properties.getProperty("userName");
-        passWord        = properties.getProperty("passWord");
+        setJdbcDriver   (properties.getProperty("jdbcDriver"));
+        setDatabaseTable(properties.getProperty("databaseTable"));
+        setDatabaseURL  (properties.getProperty("databaseURL") +  "/" + databaseTable);
+        setUserName     (properties.getProperty("userName"));
+        setPassWord     (properties.getProperty("passWord"));
     }
 
     private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
