@@ -59,7 +59,7 @@ public class DatabaseOperations {
 
     private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
         try {
-            if(jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
+            if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
                 loadPropertiesFile();
             }
         } catch (IOException e) {
