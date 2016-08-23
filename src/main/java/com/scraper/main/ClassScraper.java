@@ -23,7 +23,6 @@ public class ClassScraper implements Scraper {
     List<Class>         allClasses  = new ArrayList<>();
     int                 pageLimit   = Integer.MAX_VALUE;
     private static Logger log = Logger.getLogger(ClassScraper.class);
-
     public ClassScraper(Term term) {
         this.term = term;
         log.info("Initialized ClassScraper with term " + term.toString());
@@ -37,12 +36,12 @@ public class ClassScraper implements Scraper {
 
     public ClassScraper(List<Term> terms) {
         this.terms = terms;
-        log.info("Initialized ClassScraper with term " + terms.toString());
+        log.info("Initialized ClassScraper with terms " + terms.toString());
     }
 
     @Override
     public void setPageLimit(int pageLimit) {
-        print("The scraper will only run for " + pageLimit + " pages.");
+        log.info("The scraper will only run for " + pageLimit + " pages.");
         this.pageLimit = pageLimit;
     }
 
@@ -64,24 +63,24 @@ public class ClassScraper implements Scraper {
     @Override
     public void startScraper() {
 
-        print("Starting Scraper");
+        log.info("Starting Scraper");
         setWebSiteFromTerm();
         retrieveWebPage();
-        print("Retrieved the following website: " + websiteURL);
+        log.info("Retrieved the following website: " + websiteURL);
         try {
             if(isValidWebSiteWithClasses()) {
-                print("Starting scraper for " + getNumberOfClasses() + " classes.");
+                log.info("Starting scraper for " + getNumberOfClasses() + " classes.");
                 retrieveAllClasses();
-                print("Scraping finished. Retrieved " + allClasses.size() + " classes.");
-                print("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
-                print("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
+                log.info("Scraping finished. Retrieved " + allClasses.size() + " classes.");
+                log.info("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
+                log.info("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
             }
             else {
-                print("Invalid website. Stopping scraper.");
+                log.info("Invalid website. Stopping scraper.");
             }
         }
         catch (Exception e) {
-            print(e.getMessage());
+            log.info(e.getMessage());
         }
     }
 
@@ -98,7 +97,7 @@ public class ClassScraper implements Scraper {
         if(term.getTermID().length() > 0)
             websiteURL = URLBuilder.createURLForTermOnly(term);
         else
-            print("Invalid term. Please validate that the term is set.");
+            log.info("Invalid term. Please validate that the term is set.");
     }
 
     @Override
@@ -108,7 +107,7 @@ public class ClassScraper implements Scraper {
             return allClasses.size() != 0;
         }
         catch (NullPointerException e) {
-            print("Invalid website. Please validate that the term is set.");
+            log.info("Invalid website. Please validate that the term is set.");
             return false;
         }
     }
@@ -132,7 +131,7 @@ public class ClassScraper implements Scraper {
             setCurrentWebSiteDocument(response.parse());
         }
         catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -159,7 +158,6 @@ public class ClassScraper implements Scraper {
         }
         catch (ClassNotFoundException e) {
             log.error(e);
-            System.out.println(message);
         }
     }
 
@@ -177,7 +175,7 @@ public class ClassScraper implements Scraper {
             allClasses.addAll(allClassesForAGivenDocument);
             advanceToNextPage();
             retrieveWebPage();
-            print("Retrieved the following website: " + websiteURL);
+            log.info("Retrieved the following website: " + websiteURL);
             counter += 1;
         } while (isValidWebSiteWithClasses() && counter < pageLimit);
     }
