@@ -1,11 +1,11 @@
 package com.scraper.main;
 
 import com.scraper.ui.ScraperGUI;
+import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +22,7 @@ public class DatabaseOperations {
     static String userName;
     static String passWord;
     static String configPropertiesPath;
+    private static Logger log = Logger.getLogger(DatabaseOperations.class);
 
     public static void setPropertiesFileLocation(String path) {
         configPropertiesPath = path;
@@ -55,27 +56,33 @@ public class DatabaseOperations {
         setDatabaseURL  (properties.getProperty("databaseURL") +  "/" + databaseTable);
         setUserName     (properties.getProperty("userName"));
         setPassWord     (properties.getProperty("passWord"));
+        log.info("Set database credentials using the properties file.");
     }
 
     private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
         try {
             if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
+                log.info("Loading database credentials using the properties file.");
                 loadPropertiesFile();
             }
         } catch (IOException e) {
+            log.error(e);
             e.printStackTrace();
         }
 
         java.lang.Class.forName(jdbcDriver);
 
         try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
-            print("Checking if the class, " + c.getClassTitle() + " is already in the database.");
+            log.info("Checking if the class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
+                    " " + c.getDepartmentCourseNumber() + " exists in the database.");
             if(isClassInDatabase(c, conn)) {
-                print("Class, " + c.getClassTitle() + " exists in database. Updating class.");
+                log.info("Class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
+                        " " + c.getDepartmentCourseNumber() + " exists in database. Updating class.");
                 updateClassInDatabase(c, conn);
             }
             else {
-                print("Class, " + c.getClassTitle() + " does not exist in the database. Inserting new row.");
+                log.info("Class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
+                        " " + c.getDepartmentCourseNumber() + " does not exist in the database. Inserting new row.");
                 insertIntoDatabase(c, conn);
             }
         }
@@ -89,6 +96,7 @@ public class DatabaseOperations {
             try {
                 initializeDatabaseActions(c);
             } catch (SQLException | ClassNotFoundException e) {
+                log.error(e);
                 e.printStackTrace();
             }
         });
@@ -191,11 +199,13 @@ public class DatabaseOperations {
 
     private static void print(String message) {
         try {
+            log.info(message);
             java.lang.Class.forName("com.scraper.ui.ScraperGUI");
             ScraperGUI.appendToLoggerTextArea(message);
         }
         catch (ClassNotFoundException e) {
-            System.out.println(message);
+            log.error(message);
+            log.error(e);
         }
     }
 }
