@@ -1,13 +1,13 @@
 package com.scraper.main;
 
 import com.scraper.ui.ScraperGUI;
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,18 +22,22 @@ public class ClassScraper implements Scraper {
     List<Class>         allClassesForAGivenDocument;
     List<Class>         allClasses  = new ArrayList<>();
     int                 pageLimit   = Integer.MAX_VALUE;
+    private static Logger log = Logger.getLogger(ClassScraper.class);
 
     public ClassScraper(Term term) {
         this.term = term;
+        log.info("Initialized ClassScraper with term " + term.toString());
     }
 
     public ClassScraper(int year, String semester) {
         String termValue = semester.toUpperCase() + "_" + year;
         this.term = Term.valueOf(termValue);
+        log.info("Initialized ClassScraper with term " + term.toString());
     }
 
     public ClassScraper(List<Term> terms) {
         this.terms = terms;
+        log.info("Initialized ClassScraper with term " + terms.toString());
     }
 
     @Override
@@ -59,6 +63,7 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void startScraper() {
+
         print("Starting Scraper");
         setWebSiteFromTerm();
         retrieveWebPage();
@@ -116,6 +121,7 @@ public class ClassScraper implements Scraper {
     @Override
     public void retrieveWebPage() {
         try {
+            log.info("Retrieving web page...");
             Connection.Response response = Jsoup.connect(websiteURL)
                 .ignoreContentType(true)
                 .userAgent(USER_AGENT_STRING)
@@ -146,17 +152,20 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void print(String message) {
+        log.info(message);
         try {
             java.lang.Class.forName("com.scraper.ui.ScraperGUI");
             ScraperGUI.appendToLoggerTextArea(message);
         }
         catch (ClassNotFoundException e) {
+            log.error(e);
             System.out.println(message);
         }
     }
 
     @Override
     public int getNumberOfClasses() {
+        log.info("Getting number of classes.");
         return ScrapeElements.getNumberOfClasses(currentWebSiteDocument);
     }
 
