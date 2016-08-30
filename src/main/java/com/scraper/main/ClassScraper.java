@@ -1,6 +1,5 @@
 package com.scraper.main;
 
-import com.scraper.ui.ScraperGUI;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -23,6 +22,7 @@ public class ClassScraper implements Scraper {
     List<Class>         allClasses  = new ArrayList<>();
     int                 pageLimit   = Integer.MAX_VALUE;
     private static Logger log = Logger.getLogger(ClassScraper.class);
+
     public ClassScraper(Term term) {
         this.term = term;
         log.info("Initialized ClassScraper with term " + term.toString());
@@ -140,7 +140,7 @@ public class ClassScraper implements Scraper {
         allClassesForAGivenDocument = currentWebSiteDocument
                 .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                 .stream()
-                .map(ScrapeElements::convertElementToAClass)
+                .map(ScrapeHTMLElements::convertElementToAClass)
                 .collect(toList());
     }
 
@@ -150,21 +150,9 @@ public class ClassScraper implements Scraper {
     }
 
     @Override
-    public void print(String message) {
-        log.info(message);
-        try {
-            java.lang.Class.forName("com.scraper.ui.ScraperGUI");
-            ScraperGUI.appendToLoggerTextArea(message);
-        }
-        catch (ClassNotFoundException e) {
-            log.error(e);
-        }
-    }
-
-    @Override
     public int getNumberOfClasses() {
         log.info("Getting number of classes.");
-        return ScrapeElements.getNumberOfClasses(currentWebSiteDocument);
+        return ScrapeHTMLElements.getNumberOfClasses(currentWebSiteDocument);
     }
 
     @Override
