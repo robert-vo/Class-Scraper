@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import static com.scraper.main.ScrapeElements.*;
+import static com.scraper.main.ScrapeHTMLElements.*;
 import static com.scraper.util.DocumentUtility.returnDocumentFromFileName;
 import static org.junit.Assert.*;
 
-public class ScrapeElementsTest {
+public class ScrapeHTMLElementsTest {
 
     ClassScraper classScraper = new ClassScraper(Term.FALL_2016);
     Element aClass;
@@ -74,12 +74,12 @@ public class ScrapeElementsTest {
 
     @Test
     public void testGetNameAndCourseNumberForCosc1300() {
-        assertEquals(getNameAndCourseNumber(aClass), NAME_COURSE_NUMBER);
+        assertEquals(getNameAndClassNumber(aClass), NAME_COURSE_NUMBER);
     }
 
     @Test
     public void testGetCourseName() {
-        assertEquals(getCourseName(aClass), COURSE_NAME);
+        assertEquals(getClassName(aClass), COURSE_NAME);
     }
 
     @Test
@@ -114,22 +114,22 @@ public class ScrapeElementsTest {
 
     @Test
     public void testGetCourseNumberFromAClass() {
-        assertEquals(getCourseNumber(aClass), COURSE_NUMBER);
+        assertEquals(getClassNumber(aClass), COURSE_NUMBER);
     }
 
     @Test
     public void testGetCourseTitleIntroToComputing() {
-        assertEquals(getCourseTitle(aClass), COURSE_TITLE);
+        assertEquals(getClassTitle(aClass), COURSE_TITLE);
     }
 
     @Test
     public void testGetCourseStatusOpenAndSeats() {
-        assertEquals(getCourseStatusAndSeats(aClass), COURSE_STATUS_SEATS);
+        assertEquals(getClassStatusAndSeats(aClass), COURSE_STATUS_SEATS);
     }
 
     @Test
     public void testGetCourseStatusOpen() {
-        assertEquals(getCourseStatusOpenOrClosed(aClass), Class.Status.Open);
+        assertEquals(getClassStatusOpenOrClosed(aClass), Class.Status.Open);
     }
 
     @Test
@@ -288,7 +288,7 @@ public class ScrapeElementsTest {
 
         ArrayList<String> listOfScrapedNames =
                 allClasses.stream()
-                        .map(e -> e.select(HTMLElements.COURSE_TITLE.getHtml()).text())
+                        .map(e -> e.select(HTMLElements.CLASS_TITLE.getHtml()).text())
                         .collect(Collectors.toCollection(ArrayList::new));
 
         assertEquals(listOfClassNames, listOfScrapedNames);
