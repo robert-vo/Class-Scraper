@@ -1,6 +1,5 @@
 package com.scraper.main;
 
-import com.scraper.ui.ScraperGUI;
 import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
@@ -87,7 +86,7 @@ public class DatabaseOperations {
             }
         }
         catch (Exception e1) {
-            print(e1.getMessage());
+            log.error(e1);
         }
     }
 
@@ -97,7 +96,6 @@ public class DatabaseOperations {
                 initializeDatabaseActions(c);
             } catch (SQLException | ClassNotFoundException e) {
                 log.error(e);
-                e.printStackTrace();
             }
         });
     }
@@ -109,7 +107,7 @@ public class DatabaseOperations {
         PreparedStatement preparedStatement = conn.prepareStatement(getNumberOfOccurrences);
 
         preparedStatement.setString (1, c.getTerm().getTermID());
-        preparedStatement.setString (2, c.getCourseNumber());
+        preparedStatement.setString (2, c.getClassNumber());
         preparedStatement.setString (3, c.getDepartmentAbbreviation());
 
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -157,7 +155,7 @@ public class DatabaseOperations {
                 "WHERE (Term_ID = ? AND CRN = ? AND Department = ?);";
         PreparedStatement preparedStatement = prepareStatementForFields(c, conn, updateClassInDatabase);
         preparedStatement.setString (31, c.getTerm().getTermID());
-        preparedStatement.setString (32, c.getCourseNumber());
+        preparedStatement.setString (32, c.getClassNumber());
         preparedStatement.setString (33, c.getDepartmentAbbreviation());
         preparedStatement.executeUpdate();
     }
@@ -165,7 +163,7 @@ public class DatabaseOperations {
     private static PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(sqlQuery);
         ps.setString (1, c.getTerm().getTermID());
-        ps.setString (2, c.getCourseNumber());
+        ps.setString (2, c.getClassNumber());
         ps.setString (3, c.getDepartmentAbbreviation());
         ps.setString (4, c.getDepartmentCourseNumber());
         ps.setString (5, c.getClassStatus().toString());
@@ -197,15 +195,4 @@ public class DatabaseOperations {
         return ps;
     }
 
-    private static void print(String message) {
-        try {
-            log.info(message);
-            java.lang.Class.forName("com.scraper.ui.ScraperGUI");
-            ScraperGUI.appendToLoggerTextArea(message);
-        }
-        catch (ClassNotFoundException e) {
-            log.error(message);
-            log.error(e);
-        }
-    }
 }
