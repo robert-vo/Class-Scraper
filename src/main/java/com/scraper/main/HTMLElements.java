@@ -1,6 +1,8 @@
 package com.scraper.main;
 
 /**
+ * HTMLElements Enum stores the html tags where a certain attribute lies on the web page.
+ * HTMLElements will be used by JSoup to scrape class information.
  *
  * @author Robert Vo
  */
@@ -8,7 +10,7 @@ public enum HTMLElements {
     RETRIEVE_ALL_CLASSES        ("ul[id=accordion] > li"),
     NUMBER_OF_CLASSES           ("div > section > article > section > h1"),
     CLASS_NAME_AND_CRN_NUMBER   ("h3[class=class-title] > strong"),
-    COURSE_TITLE                ("span[class=class-title--course]"),
+    CLASS_TITLE                 ("span[class=class-title--course]"),
     CLASS_STATUS_AND_SEATS      ("span[class^=class--status]"),
     CLASS_ATTRIBUTES            ("small[class=class--attributesList] > span"),
     CLASS_DATES                 ("li[class=float-list--row] :eq(0) > span[class$=body]:not(:has(a))"),
