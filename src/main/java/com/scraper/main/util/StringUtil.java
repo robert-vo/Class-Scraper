@@ -7,10 +7,10 @@ import org.jsoup.select.Elements;
  *
  */
 public class StringUtil {
-    static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
-    static String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
-    static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";
-    static String REGEX_FOR_SPACES                       = "[ ]";
+    final static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
+    final static String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
+    final static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";
+    final static String REGEX_FOR_SPACES                       = "[ ]";
 
     public static String extractTextBetweenParentheses(Elements e) {
         return e.stream()
