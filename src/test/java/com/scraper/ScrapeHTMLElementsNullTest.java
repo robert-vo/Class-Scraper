@@ -11,6 +11,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests ScrapeHTMLElements for null values.
+ *
+ * @author Robert Vo
+ */
 public class ScrapeHTMLElementsNullTest {
 
     Element mockedNullElement = mock(Element.class);
