@@ -17,7 +17,7 @@ public enum HTMLElements {
     CLASS_DAYS_TIMES            ("li[class=float-list--row] > ul > li:contains(Days) > span[class=class-info--body]"),
     CLASS_INSTRUCTOR            ("li[class=float-list--row] :eq(0) > span[class$=body] > a"),
     CLASS_INSTRUCTOR_EMAIL      ("li[class=float-list--row] :eq(0) > span[class$=body] > a"),
-    CLASS_LOCATION              ("li[class=float-list--row] > ul > li:has(span[class=class-info--label]:contains(Location)) > span[class=class-info-body]"),
+    CLASS_CAMPUS_LOCATION       ("li[class=float-list--row] > ul > li:has(span[class=class-info--label]:contains(Location)) > span[class=class-info-body]"),
     CLASS_ROOM                  ("li[class=float-list--row] > ul > li:has(span[class=class-info--label]:contains(Room)) > span[class=class-info-body]"),
     CLASS_FORMAT                ("li[class=float-list--row] > ul > li:has(span[class=class-info--label]:contains(Format)) > span[class=class-info--body]"),
     CLASS_DESCRIPTION           ("div[class=panel-collapse  collapse  in  class--body] > ul[class=list-unstyled] > li > p:contains(Description)"),
