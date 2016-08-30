@@ -3,7 +3,10 @@ package com.scraper.main.util;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class StringUtility {
+/**
+ *
+ */
+public class StringUtil {
     static String REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES = "[\\(\\)]";
     static String REGEX_TO_GET_EMAIL_FROM_HREF_TAG       = "[\\t\\n\\r]";
     static String REGEX_FOR_BOTH_HYPHENS                 = "[-–]";

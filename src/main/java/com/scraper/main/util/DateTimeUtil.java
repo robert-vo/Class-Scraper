@@ -5,7 +5,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class DateTimeUtility {
+public class DateTimeUtil {
     static final String MONTH_DAY_YEAR_FORMAT = "MMMM d, yyyy";
     static final String TIME_FORMAT_12_HOUR   = "hh:mm a";
 
