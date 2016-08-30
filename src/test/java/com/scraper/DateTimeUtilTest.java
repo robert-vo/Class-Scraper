@@ -2,12 +2,12 @@ package com.scraper;
 
 import org.junit.Test;
 
-import static com.scraper.main.util.DateTimeUtility.transformStringDateIntoSQLFormat;
-import static com.scraper.main.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
+import static com.scraper.main.util.DateTimeUtil.transformStringDateIntoSQLFormat;
+import static com.scraper.main.util.DateTimeUtil.transformStringTimeIntoSQLFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class DateTimeUtilityTest {
+public class DateTimeUtilTest {
 
     @Test
     public void testTransformDateIntoSQLFormatForNullDate() {
