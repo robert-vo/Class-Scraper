@@ -1,9 +1,11 @@
 package com.scraper.main;
-/*
-    These are the parameters for the class browser.
-    The parameters are case-sensitive, that is why they will remain lower-cased.
-*/
 
+/**
+ * URLParameters contains the valid parameters allowed for the class scraping.
+ * The parameters on the UH class browser are case-sensitive.
+ *
+ * @author Robert Vo
+ */
 public enum URLParameters {
     term, subject, location, mode, distance, page
 }

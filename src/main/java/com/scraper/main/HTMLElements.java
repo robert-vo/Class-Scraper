@@ -1,5 +1,9 @@
 package com.scraper.main;
 
+/**
+ *
+ * @author Robert Vo
+ */
 public enum HTMLElements {
     RETRIEVE_ALL_CLASSES        ("ul[id=accordion] > li"),
     NUMBER_OF_CLASSES           ("div > section > article > section > h1"),

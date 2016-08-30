@@ -16,6 +16,11 @@ import static com.scraper.main.util.DateTimeUtility.transformStringDateIntoSQLFo
 import static com.scraper.main.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
 import static com.scraper.main.util.StringUtility.*;
 
+/**
+ *
+ *
+ * @author Robert Vo
+ */
 public class ScrapeElements {
 
     final static private String                 MONDAY_ABBREVIATION          = "Mo";

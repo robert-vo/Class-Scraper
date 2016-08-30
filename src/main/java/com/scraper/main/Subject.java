@@ -1,5 +1,10 @@
 package com.scraper.main;
 
+/**
+ * Subject Enum contains the possible subjects for a given class.
+ *
+ * @author Robert Vo
+ */
 public enum Subject {
     AAS  ("African American Studies"),
     ACCT ("Accounting"),
