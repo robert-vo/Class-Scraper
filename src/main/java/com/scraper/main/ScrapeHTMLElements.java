@@ -17,11 +17,11 @@ import static com.scraper.main.util.DateTimeUtil.transformStringTimeIntoSQLForma
 import static com.scraper.main.util.StringUtil.*;
 
 /**
- *
+ * ScrapeElements
  *
  * @author Robert Vo
  */
-public class ScrapeElements {
+public class ScrapeHTMLElements {
 
     final static private String                 MONDAY_ABBREVIATION                 = "Mo";
     final static private String                 TUESDAY_ABBREVIATION                = "Tu";
@@ -106,7 +106,7 @@ public class ScrapeElements {
         return Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()))
                     .filter(IS_NOT_EMPTY_ELEMENT)
                     .filter(IS_ELEMENTS_SIZE_NOT_EQUAL_TO_ZERO)
-                    .map(ScrapeElements::getFirstChildNodeAndReturnAsString)
+                    .map(ScrapeHTMLElements::getFirstChildNodeAndReturnAsString)
                     .orElse("No description available.");
     }
 
