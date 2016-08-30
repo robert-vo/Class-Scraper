@@ -23,13 +23,13 @@ public class ScrapeHTMLElementsTest {
     ClassScraper classScraper = new ClassScraper(Term.FALL_2016);
     Element aClass;
 
-    final private String NAME_COURSE_NUMBER     = "COSC 1300 (15240)";
-    final private String COURSE_NAME            = "COSC 1300";
+    final private String NAME_CLASS_NUMBER      = "COSC 1300 (15240)";
+    final private String CLASS_NAME             = "COSC 1300";
     final private String DEPARTMENT_NAME        = "COSC";
     final private String DEPARTMENT_COURSE_NUM  = "1300";
-    final private String COURSE_NUMBER          = "15240";
-    final private String COURSE_TITLE           = "Introduction To Computing";
-    final private String COURSE_STATUS_SEATS    = "Open (12/35)";
+    final private String CLASS_NUMBER           = "15240";
+    final private String CLASS_TITLE            = "Introduction To Computing";
+    final private String CLASS_STATUS_SEATS     = "Open (12/35)";
     final private String CLASS_DATES            = "Aug 22, 2016 – Dec 15, 2016";
     final private String CLASS_START_DATE       = "Aug 22, 2016";
     final private String CLASS_END_DATE         = "Dec 15, 2016";
@@ -50,8 +50,8 @@ public class ScrapeHTMLElementsTest {
     public void setUp() throws IOException {
         classScraper.currentWebSiteDocument = returnDocumentFromFileName("coscPageOne");
         aClass = classScraper.currentWebSiteDocument
-                             .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
-                             .get(0);
+                .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
+                .get(0);
     }
 
     @Test
@@ -73,62 +73,62 @@ public class ScrapeHTMLElementsTest {
     }
 
     @Test
-    public void testGetNameAndCourseNumberForCosc1300() {
-        assertEquals(getNameAndClassNumber(aClass), NAME_COURSE_NUMBER);
+    public void testGetNameAndClassNumberForCosc1300() {
+        assertEquals(getNameAndClassNumber(aClass), NAME_CLASS_NUMBER);
     }
 
     @Test
-    public void testGetCourseName() {
-        assertEquals(getClassName(aClass), COURSE_NAME);
+    public void testGetClassName() {
+        assertEquals(getClassName(aClass), CLASS_NAME);
     }
 
     @Test
-    public void testGetDepartmentCoscFromCourseName() {
-        assertEquals(getDepartment(COURSE_NAME), DEPARTMENT_NAME);
+    public void testGetDepartmentCoscFromClassName() {
+        assertEquals(getDepartment(CLASS_NAME), DEPARTMENT_NAME);
     }
 
     @Test
-    public void testGetDepartmentCourseNumber1300FromCourseName() {
-        assertEquals(getDepartmentCourseNumber(COURSE_NAME), DEPARTMENT_COURSE_NUM);
+    public void testGetDepartmentClassNumber1300FromClassName() {
+        assertEquals(getDepartmentCourseNumber(CLASS_NAME), DEPARTMENT_COURSE_NUM);
     }
 
     @Test
-    public void testGetDepartmentABCDFromCourseName() {
+    public void testGetDepartmentABCDFromClassName() {
         assertEquals(getDepartment("ABCD 1234"), "ABCD");
     }
 
     @Test
-    public void testGetDepartmentCourseNumber1234FromCourseName() {
+    public void testGetDepartmentClassNumber1234FromClassName() {
         assertEquals(getDepartmentCourseNumber("ABCD 1234"), "1234");
     }
 
     @Test
-    public void testGetDepartmentXYZFromCourseName() {
+    public void testGetDepartmentXYZFromClassName() {
         assertEquals(getDepartment("XYZ 1234"), "XYZ");
     }
 
     @Test
-    public void testGetDepartmentCourseNumber123FromCourseName() {
+    public void testGetDepartmentClassNumber123FromClassName() {
         assertEquals(getDepartmentCourseNumber("XYZ 123"), "123");
     }
 
     @Test
-    public void testGetCourseNumberFromAClass() {
-        assertEquals(getClassNumber(aClass), COURSE_NUMBER);
+    public void testGetClassNumberFromAClass() {
+        assertEquals(getClassNumber(aClass), CLASS_NUMBER);
     }
 
     @Test
-    public void testGetCourseTitleIntroToComputing() {
-        assertEquals(getClassTitle(aClass), COURSE_TITLE);
+    public void testGetClassTitleIntroToComputing() {
+        assertEquals(getClassTitle(aClass), CLASS_TITLE);
     }
 
     @Test
-    public void testGetCourseStatusOpenAndSeats() {
-        assertEquals(getClassStatusAndSeats(aClass), COURSE_STATUS_SEATS);
+    public void testGetClassStatusOpenAndSeats() {
+        assertEquals(getClassStatusAndSeats(aClass), CLASS_STATUS_SEATS);
     }
 
     @Test
-    public void testGetCourseStatusOpen() {
+    public void testGetClassStatusOpen() {
         assertEquals(getClassStatusOpenOrClosed(aClass), Class.Status.Open);
     }
 
