@@ -5,6 +5,11 @@ import org.jsoup.nodes.Document;
 import java.lang.*;
 import java.util.List;
 
+/**
+ * The Scraper interface defines what methods an inherited class will have to implement.
+ *
+ * @author Robert Vo
+ */
 public interface Scraper {
 
     String USER_AGENT_STRING    = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0";
@@ -17,7 +22,6 @@ public interface Scraper {
     void scrapeCurrentPageAndReturnAsListOfClass();
     void advanceToNextPage();
     void setTerm(Term term);
-    void print(String message);
     void setCurrentWebSiteDocument(Document doc);
     void retrieveAllClasses();
     int getNumberOfClasses();
