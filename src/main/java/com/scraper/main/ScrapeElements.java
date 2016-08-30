@@ -1,6 +1,6 @@
 package com.scraper.main;
 
-import com.scraper.main.util.StringUtility;
+import com.scraper.main.util.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -12,9 +12,9 @@ import java.sql.Time;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.scraper.main.util.DateTimeUtility.transformStringDateIntoSQLFormat;
-import static com.scraper.main.util.DateTimeUtility.transformStringTimeIntoSQLFormat;
-import static com.scraper.main.util.StringUtility.*;
+import static com.scraper.main.util.DateTimeUtil.transformStringDateIntoSQLFormat;
+import static com.scraper.main.util.DateTimeUtil.transformStringTimeIntoSQLFormat;
+import static com.scraper.main.util.StringUtil.*;
 
 /**
  *
@@ -23,30 +23,30 @@ import static com.scraper.main.util.StringUtility.*;
  */
 public class ScrapeElements {
 
-    final static private String                 MONDAY_ABBREVIATION          = "Mo";
-    final static private String                 TUESDAY_ABBREVIATION         = "Tu";
-    final static private String                 WEDNESDAY_ABBREVIATION       = "We";
-    final static private String                 THURSDAY_ABBREVIATION        = "Th";
-    final static private String                 FRIDAY_ABBREVIATION          = "Fr";
-    final static private String                 SATURDAY_ABBREVIATION        = "Sa";
-    final static private String                 SUNDAY_ABBREVIATION          = "Sun";
-    final static private String                 EMPTY_STRING                 = "";
-    final static private Predicate<Elements>    isNotEmptyElement            = e -> !e.isEmpty();
-    final static private Predicate<Elements>    isElementsSizeNotEqualToZero = e -> e.size() != 0;
-    final static private Predicate<String>      isNotEmpty                   = e -> !e.isEmpty();
-    final static private Predicate<String>      isNotEmptyString             = e -> !e.equals(EMPTY_STRING);
-    final static private Predicate<String>      isNotStringWithTwoHyphens    = e -> !e.equals("--");
-    final static private Predicate<String>      isNotStringWithOneHyphen     = e -> !e.equals("-");
+    final static private String                 MONDAY_ABBREVIATION                 = "Mo";
+    final static private String                 TUESDAY_ABBREVIATION                = "Tu";
+    final static private String                 WEDNESDAY_ABBREVIATION              = "We";
+    final static private String                 THURSDAY_ABBREVIATION               = "Th";
+    final static private String                 FRIDAY_ABBREVIATION                 = "Fr";
+    final static private String                 SATURDAY_ABBREVIATION               = "Sa";
+    final static private String                 SUNDAY_ABBREVIATION                 = "Sun";
+    final static private String                 EMPTY_STRING                        = "";
+    final static private Predicate<Elements>    IS_NOT_EMPTY_ELEMENT                = e -> !e.isEmpty();
+    final static private Predicate<Elements>    IS_ELEMENTS_SIZE_NOT_EQUAL_TO_ZERO  = e -> e.size() != 0;
+    final static private Predicate<String>      IS_NOT_EMPTY                        = e -> !e.isEmpty();
+    final static private Predicate<String>      IS_NOT_EMPTY_STRING                 = e -> !e.equals(EMPTY_STRING);
+    final static private Predicate<String>      IS_NOT_STRING_WITH_TWO_HYPHENS      = e -> !e.equals("--");
+    final static private Predicate<String>      IS_NOT_STRING_WITH_ONE_HYPHEN       = e -> !e.equals("-");
 
-    public static String getNameAndCourseNumber(Element e) {
+    public static String getNameAndClassNumber(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_NAME_AND_CRN_NUMBER);
     }
 
-    public static String getCourseTitle(Element e) {
-        return getClassFromElementUsingHTMLElement(e, HTMLElements.COURSE_TITLE);
+    public static String getClassTitle(Element e) {
+        return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_TITLE);
     }
 
-    public static String getCourseStatusAndSeats(Element e) {
+    public static String getClassStatusAndSeats(Element e) {
         return getClassFromElementUsingHTMLElement(e, HTMLElements.CLASS_STATUS_AND_SEATS);
     }
 
@@ -71,8 +71,8 @@ public class ScrapeElements {
 
     public static String getClassDate(Optional<String> classDate, boolean isStart) {
         return classDate
-                    .filter(isNotEmpty)
-                    .filter(isNotEmptyString)
+                    .filter(IS_NOT_EMPTY)
+                    .filter(IS_NOT_EMPTY_STRING)
                     .map(e -> splitByHyphenAndExtractHalf(e, isStart))
                     .orElse(EMPTY_STRING);
     }
@@ -104,19 +104,19 @@ public class ScrapeElements {
 
     public static String getDescription(Element e) {
         return Optional.ofNullable(e.select(HTMLElements.CLASS_DESCRIPTION.getHtml()))
-                    .filter(isNotEmptyElement)
-                    .filter(isElementsSizeNotEqualToZero)
+                    .filter(IS_NOT_EMPTY_ELEMENT)
+                    .filter(IS_ELEMENTS_SIZE_NOT_EQUAL_TO_ZERO)
                     .map(ScrapeElements::getFirstChildNodeAndReturnAsString)
                     .orElse("No description available.");
     }
 
-    public static String getCourseName(Element e) {
-        String classNameAndCrnNumber = getNameAndCourseNumber(e);
+    public static String getClassName(Element e) {
+        String classNameAndCrnNumber = getNameAndClassNumber(e);
         return extractTextBeforeParentheses(classNameAndCrnNumber);
     }
 
-    public static String getCourseNumber(Element e) {
-        String classNameAndCrnNumber = getNameAndCourseNumber(e);
+    public static String getClassNumber(Element e) {
+        String classNameAndCrnNumber = getNameAndClassNumber(e);
         return extractTextBetweenParentheses(classNameAndCrnNumber);
     }
 
@@ -141,7 +141,7 @@ public class ScrapeElements {
     }
 
     public static String getSeatInformationFrom(Element e) {
-        String courseStatus = getCourseStatusAndSeats(e);
+        String courseStatus = getClassStatusAndSeats(e);
         return extractTextBetweenParentheses(courseStatus);
     }
 
@@ -166,8 +166,8 @@ public class ScrapeElements {
         }
     }
 
-    public static Class.Status getCourseStatusOpenOrClosed(Element e) {
-        String seatInformation = getCourseStatusAndSeats(e);
+    public static Class.Status getClassStatusOpenOrClosed(Element e) {
+        String seatInformation = getClassStatusAndSeats(e);
         return Class.Status.valueOf(seatInformation.substring(0, seatInformation.indexOf('(') - 1).trim());
     }
 
@@ -193,10 +193,10 @@ public class ScrapeElements {
 
     private static String getClassTime(Optional<String> classTime, boolean isStart) {
         return classTime
-                .filter(isNotEmpty)
-                .filter(isNotEmptyString)
-                .filter(isNotStringWithTwoHyphens)
-                .filter(isNotStringWithOneHyphen)
+                .filter(IS_NOT_EMPTY)
+                .filter(IS_NOT_EMPTY_STRING)
+                .filter(IS_NOT_STRING_WITH_TWO_HYPHENS)
+                .filter(IS_NOT_STRING_WITH_ONE_HYPHEN)
                 .map(e -> {
                     String wholeString = e.substring(e.indexOf(" "));
                     return splitByHyphenAndExtractHalf(wholeString, isStart);
@@ -208,7 +208,7 @@ public class ScrapeElements {
         Optional<String> classTimesFromHtml = Optional.ofNullable(getClassDaysAndTimes(aClass));
         Optional<String> time = Optional.ofNullable(getClassTime(classTimesFromHtml, half));
         return time
-                .filter(isNotEmpty)
+                .filter(IS_NOT_EMPTY)
                 .orElse(EMPTY_STRING);
     }
 
@@ -254,11 +254,11 @@ public class ScrapeElements {
     }
 
     public static String getDepartmentCourseNumber(String courseName) {
-        return StringUtility.splitBySpaceAndExtractHalf(courseName, false);
+        return StringUtil.splitBySpaceAndExtractHalf(courseName, false);
     }
 
     public static String getDepartment(String courseName) {
-        return StringUtility.splitBySpaceAndExtractHalf(courseName, true);
+        return StringUtil.splitBySpaceAndExtractHalf(courseName, true);
     }
 
     public static int getNumberOfClasses(Document doc) {
@@ -268,12 +268,12 @@ public class ScrapeElements {
 
     public static Class convertElementToAClass(Element aClass) {
         Term            termID                  = Term.returnTermFromString(String.valueOf(URLBuilder.extractTermParameter(aClass.baseUri())));
-        String          classTitle              = getCourseTitle(aClass);
-        String          className               = getCourseName(aClass);
+        String          classTitle              = getClassTitle(aClass);
+        String          className               = getClassName(aClass);
         String          departmentName          = splitBySpaceAndExtractHalf(className, true);
         String          departmentCourseNumber  = splitBySpaceAndExtractHalf(className, false);
-        Class.Status    classStatus             = getCourseStatusOpenOrClosed(aClass);
-        String          courseNumber            = getCourseNumber(aClass);
+        Class.Status    classStatus             = getClassStatusOpenOrClosed(aClass);
+        String          courseNumber            = getClassNumber(aClass);
         int             seatsTaken              = getNumberOfSeatsTaken(aClass);
         int             seatsTotal              = getNumberOfTotalSeats(aClass);
         int             seatsAvailable          = seatsTotal - seatsTaken;
