@@ -74,12 +74,12 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetNameAndClassNumberForCosc1300() {
-        assertEquals(getNameAndClassNumber(aClass), NAME_CLASS_NUMBER);
+        assertEquals(getClassSubjectNumberCRN(aClass), NAME_CLASS_NUMBER);
     }
 
     @Test
     public void testGetClassName() {
-        assertEquals(getClassName(aClass), CLASS_NAME);
+        assertEquals(getClassSubject(aClass), CLASS_NAME);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetClassNumberFromAClass() {
-        assertEquals(getClassNumber(aClass), CLASS_NUMBER);
+        assertEquals(getClassCRN(aClass), CLASS_NUMBER);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetLocationFromAClass() {
-        assertEquals(getLocation(aClass), LOCATION);
+        assertEquals(getCampusLocation(aClass), LOCATION);
     }
 
     @Test
