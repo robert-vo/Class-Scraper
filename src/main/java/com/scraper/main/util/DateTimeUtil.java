@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class DateTimeUtil {
-    final String MONTH_DAY_YEAR_FORMAT = "MMMM d, yyyy";
-    final String TIME_FORMAT_12_HOUR   = "hh:mm a";
+    final static String MONTH_DAY_YEAR_FORMAT = "MMMM d, yyyy";
+    final static String TIME_FORMAT_12_HOUR   = "hh:mm a";
 
     public static Date transformStringDateIntoSQLFormat(String stringDate) {
         SimpleDateFormat format = new SimpleDateFormat(MONTH_DAY_YEAR_FORMAT, Locale.ENGLISH);
