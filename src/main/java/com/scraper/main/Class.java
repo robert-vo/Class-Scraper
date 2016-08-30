@@ -3,6 +3,11 @@ package com.scraper.main;
 import java.sql.Date;
 import java.sql.Time;
 
+/**
+ * Class is a java POJO that represents a class at the University of Houston.
+ *
+ * @author Robert Vo
+ */
 public class Class {
 
     public enum Status {
@@ -14,7 +19,7 @@ public class Class {
     private String          departmentAbbreviation;
     private String          departmentCourseNumber;
     private Class.Status    classStatus;
-    private String          courseNumber;
+    private String          classNumber;
     private int             seatsTaken;
     private int             seatsAvailable;
     private int             seatsTotal;
@@ -43,7 +48,7 @@ public class Class {
     private String          syllabus;
 
     public Class(Term term, String classTitle, String departmentAbbreviation, String departmentCourseNumber,
-                 Status classStatus, String courseNumber, int seatsTaken, int seatsAvailable,
+                 Status classStatus, String classNumber, int seatsTaken, int seatsAvailable,
                  int seatsTotal, Date classStartDate, Date classEndDate, String attributes,
                  Time classStartTime, Time classEndTime, boolean isMondayClass,
                  boolean isTuesdayClass, boolean isWednesdayClass, boolean isThursdayClass,
@@ -56,7 +61,7 @@ public class Class {
         this.departmentAbbreviation = departmentAbbreviation;
         this.departmentCourseNumber = departmentCourseNumber;
         this.classStatus = classStatus;
-        this.courseNumber = courseNumber;
+        this.classNumber = classNumber;
         this.seatsTaken = seatsTaken;
         this.seatsAvailable = seatsAvailable;
         this.seatsTotal = seatsTotal;
@@ -125,12 +130,12 @@ public class Class {
         this.classStatus = classStatus;
     }
 
-    public String getCourseNumber() {
-        return courseNumber;
+    public String getClassNumber() {
+        return classNumber;
     }
 
-    public void setCourseNumber(String courseNumber) {
-        this.courseNumber = courseNumber;
+    public void setClassNumber(String classNumber) {
+        this.classNumber = classNumber;
     }
 
     public int getSeatsTaken() {
@@ -349,7 +354,7 @@ public class Class {
                 ", departmentAbbreviation='" + departmentAbbreviation + '\'' +
                 ", departmentCourseNumber='" + departmentCourseNumber + '\'' +
                 ", classStatus=" + classStatus +
-                ", courseNumber='" + courseNumber + '\'' +
+                ", classNumber='" + classNumber + '\'' +
                 ", seatsTaken=" + seatsTaken +
                 ", seatsAvailable=" + seatsAvailable +
                 ", seatsTotal=" + seatsTotal +
