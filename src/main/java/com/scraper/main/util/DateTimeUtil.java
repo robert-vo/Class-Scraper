@@ -10,9 +10,9 @@ public class DateTimeUtil {
     final static String TIME_FORMAT_12_HOUR   = "hh:mm a";
 
     public static Date transformStringDateIntoSQLFormat(String stringDate) {
-        SimpleDateFormat format = new SimpleDateFormat(MONTH_DAY_YEAR_FORMAT, Locale.ENGLISH);
+        final SimpleDateFormat format = new SimpleDateFormat(MONTH_DAY_YEAR_FORMAT, Locale.ENGLISH);
         try {
-            java.util.Date date = format.parse(stringDate);
+            final java.util.Date date = format.parse(stringDate);
             return new java.sql.Date(date.getTime());
         }
         catch (Exception e) {
@@ -21,9 +21,9 @@ public class DateTimeUtil {
     }
 
     public static Time transformStringTimeIntoSQLFormat(String stringTime) {
-        SimpleDateFormat date12Format = new SimpleDateFormat(TIME_FORMAT_12_HOUR, Locale.ENGLISH);
+        final SimpleDateFormat date12Format = new SimpleDateFormat(TIME_FORMAT_12_HOUR, Locale.ENGLISH);
         try {
-            String stringTimeToConvert = stringTime.replace(".", "");
+            final String stringTimeToConvert = stringTime.replace(".", "");
             java.util.Date time = date12Format.parse(stringTimeToConvert);
             return new java.sql.Time(time.getTime());
         }
