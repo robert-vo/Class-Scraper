@@ -12,56 +12,58 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * DatabaseOperations contains methods that sets the credentials needed for a database connection and
+ * performs database a variety (select, update, insert) of SQL queries on a given database connection.
+ *
+ * @author Robert Vo
+ */
 public class DatabaseOperations {
 
-    static Properties properties = new Properties();
-    static String jdbcDriver;
-    static String databaseURL;
-    static String databaseTable;
-    static String userName;
-    static String passWord;
-    static String configPropertiesPath;
+    Properties properties = new Properties();
+    String jdbcDriver;
+    String databaseURL;
+    String databaseTable;
+    String userName;
+    String passWord;
+    String configPropertiesPath;
     private static Logger log = Logger.getLogger(DatabaseOperations.class);
 
-    public static void setPropertiesFileLocation(String path) {
-        configPropertiesPath = path;
+    public DatabaseOperations(String configPropertiesPath) throws IOException {
+        this.configPropertiesPath = configPropertiesPath;
+        loadPropertiesFile();
     }
 
-    public static void setJdbcDriver(String jdbcDriver) {
-        DatabaseOperations.jdbcDriver = jdbcDriver;
+    public DatabaseOperations(String jdbcDriver, String databaseTable, String databaseURL,
+                              String userName, String passWord) throws IOException {
+        this.jdbcDriver = jdbcDriver;
+        this.databaseTable = databaseTable;
+        this.databaseURL = databaseURL + "/" + databaseTable;
+        this.userName = userName;
+        this.passWord = passWord;
     }
 
-    public static void setDatabaseURL(String databaseURL) {
-        DatabaseOperations.databaseURL = databaseURL;
-    }
-
-    public static void setDatabaseTable(String databaseTable) {
-        DatabaseOperations.databaseTable = databaseTable;
-    }
-
-    public static void setUserName(String userName) {
-        DatabaseOperations.userName = userName;
-    }
-
-    public static void setPassWord(String passWord) {
-        DatabaseOperations.passWord = passWord;
-    }
-
-    private static void loadPropertiesFile() throws IOException {
-        InputStream input = new FileInputStream(configPropertiesPath);
-        properties.load(input);
-        setJdbcDriver   (properties.getProperty("jdbcDriver"));
-        setDatabaseTable(properties.getProperty("databaseTable"));
-        setDatabaseURL  (properties.getProperty("databaseURL") +  "/" + databaseTable);
-        setUserName     (properties.getProperty("userName"));
-        setPassWord     (properties.getProperty("passWord"));
+    private void loadPropertiesFile() throws IOException {
+        log.info("Loading database credentials using the properties file.");
+        try(InputStream input = new FileInputStream(configPropertiesPath)) {
+            properties.load(input);
+            this.jdbcDriver     = properties.getProperty("jdbcDriver");
+            this.databaseTable  = properties.getProperty("databaseTable");
+            this.databaseURL    = properties.getProperty("databaseURL") +  "/" + databaseTable;
+            this.userName       = properties.getProperty("userName");
+            this.passWord       = properties.getProperty("passWord");
+        }
+        catch (IOException e) {
+            log.error("Unable to load properties file at: " + configPropertiesPath + ". " +
+                    "Please verify that the properties file is in the right location, " +
+                    "or set the database credentials using a different method.");
+        }
         log.info("Set database credentials using the properties file.");
     }
 
-    private static void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
+    private void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
         try {
             if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
-                log.info("Loading database credentials using the properties file.");
                 loadPropertiesFile();
             }
         } catch (IOException e) {
@@ -69,38 +71,45 @@ public class DatabaseOperations {
             e.printStackTrace();
         }
 
-        java.lang.Class.forName(jdbcDriver);
+        try {
+            java.lang.Class.forName(jdbcDriver);
+        }
+        catch (ClassNotFoundException e) {
+            log.error("Invalid jdbcDriver for: " + jdbcDriver);
+        }
 
         try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
-            log.info("Checking if the class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
-                    " " + c.getDepartmentCourseNumber() + " exists in the database.");
+
+            String currentClass = c.getClassTitle() + ", " +
+                    c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber();
+
+            log.info("Checking if the class, " + currentClass + " exists in the database.");
+
             if(isClassInDatabase(c, conn)) {
-                log.info("Class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
-                        " " + c.getDepartmentCourseNumber() + " exists in database. Updating class.");
+                log.info("The class, " + currentClass + " exists in database. Updating class.");
                 updateClassInDatabase(c, conn);
             }
             else {
-                log.info("Class, " + c.getClassTitle() + ", " + c.getDepartmentAbbreviation() +
-                        " " + c.getDepartmentCourseNumber() + " does not exist in the database. Inserting new row.");
+                log.info("The class, " + currentClass + " does not exist in the database. Inserting new row.");
                 insertIntoDatabase(c, conn);
             }
         }
         catch (Exception e1) {
-            log.error(e1);
+            log.error("Something has gone wrong during the SQL data manipulation queries. The error is: " + e1);
         }
     }
 
-    public static void performDatabaseActions(List<Class> allClasses) {
+    public void performDatabaseActions(List<Class> allClasses) {
         allClasses.parallelStream().forEach((c) -> {
             try {
                 initializeDatabaseActions(c);
             } catch (SQLException | ClassNotFoundException e) {
-                log.error(e);
+                log.error("An error has occurred while performing the database actions. The error is: " + e);
             }
         });
     }
 
-    private static boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         boolean doesClassExist = false;
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
@@ -121,7 +130,7 @@ public class DatabaseOperations {
         return doesClassExist;
     }
 
-    private static void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         final String insertClassInformationIntoDatabase = "INSERT IGNORE INTO CLASS_INFORMATION(DEPARTMENT, " +
                 "DEPARTMENT_CRN, CLASS_TITLE, CLASS_DESCRIPTION) VALUES(" +
                 "?, ?, ?, ?);";
@@ -144,7 +153,7 @@ public class DatabaseOperations {
         ps.executeUpdate();
     }
 
-    private static void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
         final String updateClassInDatabase = "UPDATE CLASS SET " +
                 "Term_ID = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
                 "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
@@ -160,7 +169,7 @@ public class DatabaseOperations {
         preparedStatement.executeUpdate();
     }
 
-    private static PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
+    private PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(sqlQuery);
         ps.setString (1, c.getTerm().getTermID());
         ps.setString (2, c.getClassNumber());
