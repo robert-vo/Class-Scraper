@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -30,9 +31,8 @@ public class DateTimeUtil {
             final java.util.Date date = format.parse(stringDate);
             return new java.sql.Date(date.getTime());
         }
-        catch (Exception e) {
-            log.warn("Unable to convert date: " + stringDate);
-            log.warn("Given an error of: " + e);
+        catch (ParseException e) {
+            log.warn("Unable to convert date. Given an error of: " + e);
             return null;
         }
     }
@@ -50,9 +50,8 @@ public class DateTimeUtil {
             java.util.Date time = date12Format.parse(stringTimeToConvert);
             return new java.sql.Time(time.getTime());
         }
-        catch (Exception e) {
-            log.warn("Unable to convert date: " + stringTime);
-            log.warn("Given an error of: " + e);
+        catch (ParseException e) {
+            log.warn("Unable to convert time. Given an error of: " + e);
             return null;
         }
     }
