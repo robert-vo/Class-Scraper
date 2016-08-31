@@ -84,7 +84,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetDepartmentCoscFromClassName() {
-        assertEquals(getDepartment(CLASS_NAME), DEPARTMENT_NAME);
+        assertEquals(getDepartmentAbbreviation(CLASS_NAME), DEPARTMENT_NAME);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetDepartmentABCDFromClassName() {
-        assertEquals(getDepartment("ABCD 1234"), "ABCD");
+        assertEquals(getDepartmentAbbreviation("ABCD 1234"), "ABCD");
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetDepartmentXYZFromClassName() {
-        assertEquals(getDepartment("XYZ 1234"), "XYZ");
+        assertEquals(getDepartmentAbbreviation("XYZ 1234"), "XYZ");
     }
 
     @Test
