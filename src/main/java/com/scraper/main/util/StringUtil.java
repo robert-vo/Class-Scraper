@@ -29,7 +29,7 @@ public class StringUtil {
                 .map(Element::text)
                 .map(str -> str.split(REGEX_TO_GET_CHARS_BETWEEN_PARENTHESES))
                 .map(str -> str[1])
-                .orElse(logAndReturnString("0"));
+                .orElse("0");
     }
 
     /**
@@ -46,7 +46,7 @@ public class StringUtil {
                 .map(e1 -> e1.replaceAll(REGEX_TO_GET_EMAIL_FROM_HREF_TAG, ""))
                 .map(e1 -> e1.substring(7))
                 .findFirst()
-                .orElse(logAndReturnString("Unknown Email"));
+                .orElse("Unknown Email");
     }
 
     /**
@@ -132,14 +132,4 @@ public class StringUtil {
         return str == null || str.equals("");
     }
 
-    /**
-     * Logs the String to the console and returns the String.
-     *
-     * @param str The String to be logged to the console.
-     * @return The original String, str.
-     */
-    private static String logAndReturnString(String str) {
-        log.info(str + " has been returned by orElse condition in stream.");
-        return str;
-    }
 }
