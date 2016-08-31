@@ -18,12 +18,12 @@ import java.util.List;
  */
 public class ScraperExample {
 
-    final static String JDBC_DRIVER     = "com.mysql.jdbc.Driver";
-    final static String DATABASE_TABLE  = "class";
-    final static String DATABASE_URL    = "jdbc:mysql://localhost";
-    final static String USER_NAME       = "root";
-    final static String PASS_WORD       = "password";
-    final static int    PAGE_LIMIT      = 2;
+    private final static String JDBC_DRIVER     = "com.mysql.jdbc.Driver";
+    private final static String DATABASE_TABLE  = "class";
+    private final static String DATABASE_URL    = "jdbc:mysql://localhost";
+    private final static String USER_NAME       = "root";
+    private final static String PASS_WORD       = "password";
+    private final static int    PAGE_LIMIT      = 2;
     private static Logger log = Logger.getLogger(ScraperExample.class);
 
     public static void main(String[] args) {
@@ -136,6 +136,11 @@ public class ScraperExample {
         performDatabaseOperationsWithScrapedClasses(classScraper);
     }
 
+    /**
+     * Performs the database operations (update, insert) with the scraped classes.
+     *
+     * @param classScraper The completed ClassScraper that holds a List of Class.
+     */
     private static void performDatabaseOperationsWithScrapedClasses(ClassScraper classScraper) {
         try {
             DatabaseOperations databaseOperations = new DatabaseOperations(JDBC_DRIVER, DATABASE_TABLE,
