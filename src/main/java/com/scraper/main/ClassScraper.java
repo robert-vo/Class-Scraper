@@ -171,13 +171,11 @@ public class ClassScraper implements Scraper {
 
     @Override
     public void scrapeAndRetrieveAllClasses() {
-        int counter = 0;
         do {
             scrapeCurrentPageAndReturnAsListOfClass();
             allClasses.addAll(allClassesForAGivenDocument);
             advanceToNextPage();
             retrieveWebPage();
-            counter += 1;
-        } while (isValidWebSiteWithClasses() && counter < pageLimit);
+        } while (isValidWebSiteWithClasses() && pageLimit-- > 0);
     }
 }
