@@ -100,6 +100,9 @@ public class DatabaseOperations {
     }
 
     public void performDatabaseActions(List<Class> allClasses) {
+        long startTime = System.currentTimeMillis();
+        long endTime;
+
         allClasses.parallelStream().forEach((c) -> {
             try {
                 initializeDatabaseActions(c);
@@ -107,6 +110,12 @@ public class DatabaseOperations {
                 log.error("An error has occurred while performing the database actions. The error is: " + e);
             }
         });
+
+        endTime = System.currentTimeMillis();
+
+        log.info("Time taken to perform database operations for " + allClasses.size() +
+                 " is " + String.valueOf(endTime - startTime) + " milliseconds.");
+        log.info("Database operations complete!");
     }
 
     private boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
