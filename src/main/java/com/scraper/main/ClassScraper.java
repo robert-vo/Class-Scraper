@@ -12,15 +12,21 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * ClassScraper contains methods that will scrape classes on the
+ * University of Houston's class browser and stores the classes in memory.
+ *
+ * @author Robert Vo
+ */
 public class ClassScraper implements Scraper {
 
-    Term                term;
-    List<Term>          terms;
-    public String       websiteURL;
-    public Document     currentWebSiteDocument;
-    List<Class>         allClassesForAGivenDocument;
-    List<Class>         allClasses  = new ArrayList<>();
-    int                 pageLimit   = Integer.MAX_VALUE;
+    private Term                term;
+    private List<Term>          terms;
+    private String              websiteURL;
+    private Document            currentWebSiteDocument;
+    private List<Class>         allClassesForAGivenDocument;
+    private List<Class>         allClasses  = new ArrayList<>();
+    private int                 pageLimit   = Integer.MAX_VALUE;
     private static Logger log = Logger.getLogger(ClassScraper.class);
 
     public ClassScraper(Term term) {
@@ -60,17 +66,28 @@ public class ClassScraper implements Scraper {
         return allClasses;
     }
 
+    public Document getCurrentWebSiteDocument() {
+        return currentWebSiteDocument;
+    }
+
+    @Override
+    public void setCurrentWebSiteDocument(Document currentWebSiteDocument) {
+        this.currentWebSiteDocument = currentWebSiteDocument;
+    }
+
+    public String getWebsiteURL() {
+        return websiteURL;
+    }
+
     @Override
     public void startScraper() {
-
-        log.info("Starting Scraper");
         setWebSiteFromTerm();
         retrieveWebPage();
         log.info("Retrieved the following website: " + websiteURL);
         try {
             if(isValidWebSiteWithClasses()) {
                 log.info("Starting scraper for " + getNumberOfClasses() + " classes.");
-                retrieveAllClasses();
+                scrapeAndRetrieveAllClasses();
                 log.info("Scraping finished. Retrieved " + allClasses.size() + " classes.");
                 log.info("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
                 log.info("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
@@ -113,11 +130,6 @@ public class ClassScraper implements Scraper {
     }
 
     @Override
-    public void setCurrentWebSiteDocument(Document doc) {
-        this.currentWebSiteDocument = doc;
-    }
-
-    @Override
     public void retrieveWebPage() {
         try {
             log.info("Retrieving web page...");
@@ -129,14 +141,16 @@ public class ClassScraper implements Scraper {
                 .followRedirects(true)
                 .execute();
             setCurrentWebSiteDocument(response.parse());
+            log.info("Retrieved web page! URL is: " + getWebsiteURL());
         }
         catch (IOException e) {
-            log.error(e);
+            log.error("Unable to retrieve web page with error: " + e);
         }
     }
 
     @Override
     public void scrapeCurrentPageAndReturnAsListOfClass() {
+        log.info("Scraping current page.");
         allClassesForAGivenDocument = currentWebSiteDocument
                 .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                 .stream()
@@ -156,14 +170,13 @@ public class ClassScraper implements Scraper {
     }
 
     @Override
-    public void retrieveAllClasses() {
+    public void scrapeAndRetrieveAllClasses() {
         int counter = 0;
         do {
             scrapeCurrentPageAndReturnAsListOfClass();
             allClasses.addAll(allClassesForAGivenDocument);
             advanceToNextPage();
             retrieveWebPage();
-            log.info("Retrieved the following website: " + websiteURL);
             counter += 1;
         } while (isValidWebSiteWithClasses() && counter < pageLimit);
     }
