@@ -48,8 +48,8 @@ public class ScrapeHTMLElementsTest {
 
     @Before
     public void setUp() throws IOException {
-        classScraper.currentWebSiteDocument = returnDocumentFromFileName("coscPageOne");
-        aClass = classScraper.currentWebSiteDocument
+        classScraper.setCurrentWebSiteDocument(returnDocumentFromFileName("coscPageOne"));
+        aClass = classScraper.getCurrentWebSiteDocument()
                 .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                 .get(0);
     }
@@ -283,7 +283,7 @@ public class ScrapeHTMLElementsTest {
             add("Introduction to Programming");
         }};
 
-        Elements allClasses = classScraper.currentWebSiteDocument
+        Elements allClasses = classScraper.getCurrentWebSiteDocument()
                 .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml());
 
         ArrayList<String> listOfScrapedNames =

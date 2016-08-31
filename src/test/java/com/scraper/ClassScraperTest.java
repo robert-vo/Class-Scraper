@@ -26,19 +26,19 @@ public class ClassScraperTest {
 
     @Test
     public void testValidDocumentReturnsFalseForEmptyPage() throws IOException {
-        classScraper.currentWebSiteDocument = returnDocumentFromFileName("empty");
+        classScraper.setCurrentWebSiteDocument(returnDocumentFromFileName("empty"));
         assertFalse(classScraper.isValidWebSiteWithClasses());
     }
 
     @Test
     public void testValidDocumentReturnsTrueForValidPage() throws IOException {
-        classScraper.currentWebSiteDocument = returnDocumentFromFileName("coscPageOne");
+        classScraper.setCurrentWebSiteDocument(returnDocumentFromFileName("coscPageOne"));
         assertTrue(classScraper.isValidWebSiteWithClasses());
     }
 
     @Test
     public void testValidDocumentReturnsFalseForInvalidPage() throws IOException {
-        classScraper.currentWebSiteDocument = returnDocumentFromFileName("validPageWithNoClasses");
+        classScraper.setCurrentWebSiteDocument(returnDocumentFromFileName("validPageWithNoClasses"));
         assertFalse(classScraper.isValidWebSiteWithClasses());
     }
 
@@ -46,7 +46,7 @@ public class ClassScraperTest {
     public void testSetWebSiteFromTermWorks() {
         classScraper.setWebSiteFromTerm();
         classScraper.advanceToNextPage();
-        assertEquals(classScraper.websiteURL, "http://classbrowser.uh.edu/classes?term=2000&page=2");
+        assertEquals(classScraper.getWebsiteURL(), "http://classbrowser.uh.edu/classes?term=2000&page=2");
     }
 
     @Test(expected = NullPointerException.class)
