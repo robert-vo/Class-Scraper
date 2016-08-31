@@ -24,12 +24,21 @@ public class ScraperExample {
     private final static String USER_NAME       = "root";
     private final static String PASS_WORD       = "password";
     private final static int    PAGE_LIMIT      = 2;
+    private       static long   startTime;
     private static Logger log = Logger.getLogger(ScraperExample.class);
 
     public static void main(String[] args) {
+        startTime = System.currentTimeMillis();
         runScraperForFall2016();
+        log.info(retrieveTimeTakenFromStart(startTime));
+
+        startTime = System.currentTimeMillis();
         runScraperForSpring2017();
+        log.info(retrieveTimeTakenFromStart(startTime));
+
+        startTime = System.currentTimeMillis();
         runScraperForMultipleTerms();
+        log.info(retrieveTimeTakenFromStart(startTime));
     }
 
     /**
@@ -150,5 +159,10 @@ public class ScraperExample {
         catch (IOException e) {
             log.error("Error occurred during database operations.");
         }
+    }
+
+    private static String retrieveTimeTakenFromStart(long startTime) {
+        return "The time taken to perform the scraping and database operations was: "
+                + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.";
     }
 }
