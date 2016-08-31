@@ -31,7 +31,7 @@ public class DateTimeUtil {
             final java.util.Date date = format.parse(stringDate);
             return new java.sql.Date(date.getTime());
         }
-        catch (ParseException e) {
+        catch (ParseException | NullPointerException e) {
             log.warn("Unable to convert date. Given an error of: " + e);
             return null;
         }
@@ -50,7 +50,7 @@ public class DateTimeUtil {
             java.util.Date time = date12Format.parse(stringTimeToConvert);
             return new java.sql.Time(time.getTime());
         }
-        catch (ParseException e) {
+        catch (ParseException | NullPointerException e) {
             log.warn("Unable to convert time. Given an error of: " + e);
             return null;
         }
