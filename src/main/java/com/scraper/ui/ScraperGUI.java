@@ -136,8 +136,9 @@ public class ScraperGUI extends JFrame {
                 classScraper.startScraper();
                 try {
                     appendToLoggerTextArea("The program will now attempt to insert/update the database with the classes.");
-                    DatabaseOperations.setPropertiesFileLocation("config/config.properties");
-                    DatabaseOperations.performDatabaseActions(classScraper.getAllClasses());
+
+                    DatabaseOperations databaseOperations = new DatabaseOperations("config/config.properties");
+                    databaseOperations.performDatabaseActions(classScraper.getAllClasses());
                 } catch (Exception e) {
                     appendToLoggerTextArea(e.getMessage());
                 }
