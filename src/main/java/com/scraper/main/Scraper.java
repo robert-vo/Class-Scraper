@@ -23,7 +23,7 @@ public interface Scraper {
     void advanceToNextPage();
     void setTerm(Term term);
     void setCurrentWebSiteDocument(Document doc);
-    void retrieveAllClasses();
+    void scrapeAndRetrieveAllClasses();
     int getNumberOfClasses();
     boolean isValidWebSiteWithClasses();
     List<Class> getAllClasses();
