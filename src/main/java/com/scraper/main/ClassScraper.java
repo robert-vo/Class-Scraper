@@ -140,7 +140,7 @@ public class ClassScraper implements Scraper {
         allClassesForAGivenDocument = currentWebSiteDocument
                 .select(HTMLElements.RETRIEVE_ALL_CLASSES.getHtml())
                 .stream()
-                .map(ScrapeHTMLElements::convertElementToAClass)
+                .map(ScrapeHTMLElements::getClassFromAClassElement)
                 .collect(toList());
     }
 
