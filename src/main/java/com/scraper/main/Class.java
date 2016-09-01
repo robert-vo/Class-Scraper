@@ -10,15 +10,11 @@ import java.sql.Time;
  */
 public class Class {
 
-    public enum Status {
-        Open, Closed
-    }
-
-    private Term term;
+    private Term            term;
     private String          classTitle;
     private String          departmentAbbreviation;
     private String          departmentCourseNumber;
-    private Class.Status    classStatus;
+    private Status          classStatus;
     private String          classNumber;
     private int             seatsTaken;
     private int             seatsAvailable;
