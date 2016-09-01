@@ -1,10 +1,5 @@
 package com.scraper.main;
 
-import org.jsoup.nodes.Document;
-
-import java.lang.*;
-import java.util.List;
-
 /**
  * The Scraper interface defines what methods an inherited class will have to implement.
  *
@@ -17,16 +12,13 @@ public interface Scraper {
 
     void startScraper();
     void startScraperForMultipleTerms();
-    void setWebSiteFromTerm();
-    void retrieveWebPage();
-    void scrapeCurrentPageAndReturnAsListOfClass();
+    void setWebSiteURLFromTerm();
+    void retrieveAndSetWebPage();
+    void scrapeCurrentPageAndAddToListOfClass();
     void advanceToNextPage();
-    void setTerm(Term term);
-    void setCurrentWebSiteDocument(Document doc);
-    void scrapeAndRetrieveAllClasses();
+    void scrapeEachWebPageAndAddToListOfClass();
     int getNumberOfClasses();
     boolean isValidWebSiteWithClasses();
-    List<Class> getAllClasses();
-    Term getTerm();
     void setPageLimit(int pageLimit);
+
 }
