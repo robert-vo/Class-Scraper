@@ -1,8 +1,8 @@
 package com.scraper;
 
-import com.scraper.main.Class;
 import com.scraper.main.ClassScraper;
 import com.scraper.main.HTMLElements;
+import com.scraper.main.Status;
 import com.scraper.main.Term;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -129,7 +129,7 @@ public class ScrapeHTMLElementsTest {
 
     @Test
     public void testGetClassStatusOpen() {
-        assertEquals(getClassStatusOpenOrClosed(aClass), Class.Status.Open);
+        assertEquals(getClassStatusOpenOrClosed(aClass), Status.Open);
     }
 
     @Test

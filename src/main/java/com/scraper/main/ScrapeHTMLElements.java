@@ -339,9 +339,9 @@ public class ScrapeHTMLElements {
      * @param aClass The DOM element that contains information about an entire class.
      * @return The status of a class.
      */
-    public static Class.Status getClassStatusOpenOrClosed(Element aClass) {
+    public static Status getClassStatusOpenOrClosed(Element aClass) {
         String seatInformation = getClassStatusAndSeats(aClass);
-        return Class.Status.valueOf(seatInformation.substring(0, seatInformation.indexOf('(') - 1).trim());
+        return Status.valueOf(seatInformation.substring(0, seatInformation.indexOf('(') - 1).trim());
     }
 
     /**
@@ -560,7 +560,7 @@ public class ScrapeHTMLElements {
         String          className               = getClassSubject(aClass);
         String          departmentName          = splitBySpaceAndExtractHalf(className, true);
         String          departmentCourseNumber  = splitBySpaceAndExtractHalf(className, false);
-        Class.Status    classStatus             = getClassStatusOpenOrClosed(aClass);
+        Status          classStatus             = getClassStatusOpenOrClosed(aClass);
         String          courseNumber            = getClassCRN(aClass);
         int             seatsTaken              = getNumberOfSeatsTaken(aClass);
         int             seatsTotal              = getNumberOfTotalSeats(aClass);
