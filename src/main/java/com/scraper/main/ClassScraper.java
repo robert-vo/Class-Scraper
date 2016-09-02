@@ -138,23 +138,26 @@ public class ClassScraper implements Scraper {
      */
     @Override
     public void startScraper() {
-        setWebSiteURLFromTerm();
-        retrieveAndSetWebPage();
-        log.info("Retrieved the following website: " + websiteURL);
-        try {
-            if(isValidWebSiteWithClasses()) {
-                log.info("Starting scraper for " + getNumberOfClasses() + " classes.");
-                scrapeEachWebPageAndAddToListOfClass();
-                log.info("Scraping finished. Retrieved " + allClasses.size() + " classes.");
-                log.info("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
-                log.info("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
-            }
-            else {
-                log.info("Invalid website. Stopping scraper.");
-            }
+        if(term == null && terms == null) {
+            log.error("The term to be scraped has not been set. Aborting scraper.");
         }
-        catch (Exception e) {
-            log.info(e.getMessage());
+        else {
+            setWebSiteURLFromTerm();
+            retrieveAndSetWebPage();
+            log.info("Retrieved the following website: " + websiteURL);
+            try {
+                if (isValidWebSiteWithClasses()) {
+                    log.info("Starting scraper for " + getNumberOfClasses() + " classes.");
+                    scrapeEachWebPageAndAddToListOfClass();
+                    log.info("Scraping finished. Retrieved " + allClasses.size() + " classes.");
+                    log.info("All classes are now the ClassScraper object. The variable, allClasses, holds all of the classes.");
+                    log.info("Access to the variable, allClasses, can be done by invoking getAllClasses() on the ClassScraper object.");
+                } else {
+                    log.info("Invalid website. Stopping scraper.");
+                }
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
         }
     }
 
