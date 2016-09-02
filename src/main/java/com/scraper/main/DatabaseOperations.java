@@ -218,6 +218,6 @@ public class DatabaseOperations implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        System.out.println("Closing...");
+        log.debug("Closing database operations resource.");
     }
 }
