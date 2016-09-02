@@ -44,7 +44,7 @@ public class ClassScraperTest {
 
     @Test
     public void testSetWebSiteFromTermWorks() {
-        classScraper.setWebSiteFromTerm();
+        classScraper.setWebSiteURLFromTerm();
         classScraper.advanceToNextPage();
         assertEquals(classScraper.getWebsiteURL(), "http://classbrowser.uh.edu/classes?term=2000&page=2");
     }
@@ -58,7 +58,7 @@ public class ClassScraperTest {
     @Test(expected = NullPointerException.class)
     public void testSetWebSiteForInvalidTerm() {
         classScraper.setTerm(null);
-        classScraper.setWebSiteFromTerm();
+        classScraper.setWebSiteURLFromTerm();
     }
 
 }
