@@ -102,9 +102,8 @@ public class DatabaseOperations implements AutoCloseable {
      * @param aClass
      * @throws SQLException
      * @throws ClassNotFoundException
-     * @throws IOException
      */
-    private void performUpdateOrInsertForClass(Class aClass) throws SQLException, ClassNotFoundException, IOException {
+    private void performUpdateOrInsertForClass(Class aClass) throws SQLException, ClassNotFoundException {
         final String currentClass = aClass.getClassTitle() + ", " +
                 aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
                 "(" + aClass.getClassNumber() + ")";
@@ -142,14 +141,14 @@ public class DatabaseOperations implements AutoCloseable {
             allClasses.parallelStream().forEach((aClass) -> {
                 try {
                     performUpdateOrInsertForClass(aClass);
-                } catch (SQLException | ClassNotFoundException | IOException e) {
+                } catch (SQLException | ClassNotFoundException e) {
                     log.error("An error has occurred while performing the database actions. The error is: " + e);
                 }
             });
 
             endTime = System.currentTimeMillis();
 
-            log.info("Time taken to perform database operations for " + allClasses.size() +
+            log.debug("Time taken to perform database operations for " + allClasses.size() +
                     " is " + String.valueOf(endTime - startTime) + " milliseconds.");
             log.info("Database operations complete!");
         }
