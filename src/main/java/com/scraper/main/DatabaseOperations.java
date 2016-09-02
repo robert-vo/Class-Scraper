@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.MissingFormatArgumentException;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
@@ -43,8 +44,18 @@ public class DatabaseOperations implements AutoCloseable {
         loadPropertiesFile();
     }
 
+    /**
+     * Constructor to initialize the database credentials through the method arguments.
+     *
+     * @param jdbcDriver The database driver that allows Java to communicate with a database.
+     *                   MySQL example: com.mysql.jdbc.Driver
+     * @param databaseURL The URL, local or remote, where the database is located at.
+     *                    Please include the database table name, e.g. jdbc:mysql://localhost/class
+     * @param userName The username used to access the database.
+     * @param passWord The password that supplements the username for access to the database.
+     */
     public DatabaseOperations(String jdbcDriver, String databaseURL,
-                              String userName, String passWord) throws IOException {
+                              String userName, String passWord) {
         this.jdbcDriver = jdbcDriver;
         this.databaseURL = databaseURL;
         this.userName = userName;
@@ -61,7 +72,7 @@ public class DatabaseOperations implements AutoCloseable {
             this.userName       = properties.getProperty("userName");
             this.passWord       = properties.getProperty("passWord");
 
-            if(databaseCredentialsNotEmptyOrNull()) {
+            if(databaseCredentialsEmptyOrNull()) {
                 throw new MissingResourceException("One of the database credentials has not been set using the properties file. " +
                         "Please double check the properties file to see if the credentials are valid.",
                         "DatabaseOperations", "");
@@ -81,11 +92,9 @@ public class DatabaseOperations implements AutoCloseable {
     }
 
     private void performUpdateOrInsertForClass(Class c) throws SQLException, ClassNotFoundException, IOException {
-        loadPropertiesFileIfCredentialsNotSet();
-        initializeJdbcDriver();
-
         final String currentClass = c.getClassTitle() + ", " +
-                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber() + c.getClassNumber();
+                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber() +
+                "(" + c.getClassNumber() + ")";
 
         try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
@@ -108,19 +117,34 @@ public class DatabaseOperations implements AutoCloseable {
         long startTime = System.currentTimeMillis();
         long endTime;
 
-        allClasses.parallelStream().forEach((c) -> {
-            try {
-                performUpdateOrInsertForClass(c);
-            } catch (SQLException | ClassNotFoundException | IOException e) {
-                log.error("An error has occurred while performing the database actions. The error is: " + e);
+        try {
+            if (databaseCredentialsEmptyOrNull()) {
+                throw new MissingFormatArgumentException("Database credentials are empty or null. Aborting database operations.");
             }
-        });
 
-        endTime = System.currentTimeMillis();
+            initializeJdbcDriver();
 
-        log.info("Time taken to perform database operations for " + allClasses.size() +
-                 " is " + String.valueOf(endTime - startTime) + " milliseconds.");
-        log.info("Database operations complete!");
+            allClasses.parallelStream().forEach((aClass) -> {
+                try {
+                    performUpdateOrInsertForClass(aClass);
+                } catch (SQLException | ClassNotFoundException | IOException e) {
+                    log.error("An error has occurred while performing the database actions. The error is: " + e);
+                }
+            });
+
+            endTime = System.currentTimeMillis();
+
+            log.info("Time taken to perform database operations for " + allClasses.size() +
+                    " is " + String.valueOf(endTime - startTime) + " milliseconds.");
+            log.info("Database operations complete!");
+        }
+        catch (ClassNotFoundException cnfe) {
+            log.error("The jdbc driver is not valid. Error message is: " + cnfe);
+        }
+        catch (MissingFormatArgumentException e) {
+            log.error("The database credentials have not been set with error: " + e);
+        }
+
     }
 
     private boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
@@ -217,38 +241,22 @@ public class DatabaseOperations implements AutoCloseable {
         return ps;
     }
 
-    private boolean databaseCredentialsNotEmptyOrNull() {
-        if(this.jdbcDriver == null || this.jdbcDriver.isEmpty() || this.jdbcDriver.equals("")) {
-            return false;
-        }
-        else if(this.databaseURL == null || this.databaseURL.isEmpty() || this.databaseURL.equals("")) {
-            return false;
-        }
-        else if(this.userName == null || this.userName.isEmpty() || this.userName.equals("")) {
-            return false;
-        }
-        else if(this.passWord == null || this.passWord.isEmpty() || this.passWord.equals("")) {
-            return false;
-        }
-        else {
+    private boolean databaseCredentialsEmptyOrNull() {
+        if(jdbcDriver == null || databaseURL == null || userName == null || passWord == null) {
+            log.info("Database credentials are currently null. Setting credentials using properties file.");
             return true;
         }
-    }
-
-    private void loadPropertiesFileIfCredentialsNotSet() throws IOException {
-        try {
-            if(databaseCredentialsNotEmptyOrNull()) {
-                loadPropertiesFile();
-            }
-        } catch (IOException e) {
-            log.error(e);
-            e.printStackTrace();
+        else {
+            log.info("Database credentials are not null. Proceeding with database operations.");
+            return false;
         }
     }
 
     private void initializeJdbcDriver() throws ClassNotFoundException {
         try {
+            log.info("Attempting to set jdbc driver...");
             java.lang.Class.forName(jdbcDriver);
+            log.info("Jdbc driver set!");
         }
         catch (ClassNotFoundException e) {
             log.error("Invalid jdbcDriver for given driver: " + jdbcDriver);
