@@ -67,7 +67,6 @@ public class ClassScraper implements Scraper {
      *
      * @param pageLimit The number of pages to be scraped.
      */
-    @Override
     public void setPageLimit(int pageLimit) {
         if(pageLimit > 0) {
             log.info("The scraper will only run for " + pageLimit + " pages.");
