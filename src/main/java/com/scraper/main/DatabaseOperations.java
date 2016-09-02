@@ -18,12 +18,11 @@ import java.util.Properties;
  *
  * @author Robert Vo
  */
-public class DatabaseOperations {
+public class DatabaseOperations implements AutoCloseable {
 
     Properties properties = new Properties();
     String jdbcDriver;
     String databaseURL;
-    String databaseTable;
     String userName;
     String passWord;
     String configPropertiesPath;
@@ -34,11 +33,10 @@ public class DatabaseOperations {
         loadPropertiesFile();
     }
 
-    public DatabaseOperations(String jdbcDriver, String databaseTable, String databaseURL,
+    public DatabaseOperations(String jdbcDriver, String databaseURL,
                               String userName, String passWord) throws IOException {
         this.jdbcDriver = jdbcDriver;
-        this.databaseTable = databaseTable;
-        this.databaseURL = databaseURL + "/" + databaseTable;
+        this.databaseURL = databaseURL;
         this.userName = userName;
         this.passWord = passWord;
     }
@@ -48,8 +46,7 @@ public class DatabaseOperations {
         try(InputStream input = new FileInputStream(configPropertiesPath)) {
             properties.load(input);
             this.jdbcDriver     = properties.getProperty("jdbcDriver");
-            this.databaseTable  = properties.getProperty("databaseTable");
-            this.databaseURL    = properties.getProperty("databaseURL") +  "/" + databaseTable;
+            this.databaseURL    = properties.getProperty("databaseURL");
             this.userName       = properties.getProperty("userName");
             this.passWord       = properties.getProperty("passWord");
         }
@@ -61,7 +58,7 @@ public class DatabaseOperations {
         log.info("Set database credentials using the properties file.");
     }
 
-    private void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException, IOException {
+    private void performUpdateOrInsertForClass(Class c) throws SQLException, ClassNotFoundException, IOException {
         loadPropertiesFileIfCredentialsNotSet();
         initializeJdbcDriver();
 
@@ -85,13 +82,13 @@ public class DatabaseOperations {
         }
     }
 
-    public void performDatabaseActions(List<Class> allClasses) {
+    public void performUpdateOrInsertForAllClass(List<Class> allClasses) {
         long startTime = System.currentTimeMillis();
         long endTime;
 
         allClasses.parallelStream().forEach((c) -> {
             try {
-                initializeDatabaseActions(c);
+                performUpdateOrInsertForClass(c);
             } catch (SQLException | ClassNotFoundException | IOException e) {
                 log.error("An error has occurred while performing the database actions. The error is: " + e);
             }
@@ -219,4 +216,8 @@ public class DatabaseOperations {
         }
     }
 
+    @Override
+    public void close() throws Exception {
+        System.out.println("Closing...");
+    }
 }

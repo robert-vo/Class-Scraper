@@ -5,7 +5,6 @@ import com.scraper.main.DatabaseOperations;
 import com.scraper.main.Term;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,16 +18,14 @@ import java.util.List;
 public class ScraperExample {
 
     private final static String JDBC_DRIVER     = "com.mysql.jdbc.Driver";
-    private final static String DATABASE_TABLE  = "class";
-    private final static String DATABASE_URL    = "jdbc:mysql://localhost";
+    private final static String DATABASE_URL    = "jdbc:mysql://localhost/class";
     private final static String USER_NAME       = "root";
     private final static String PASS_WORD       = "password";
-    private final static int    PAGE_LIMIT      = 2;
-    private       static long   startTime;
+    private final static int    PAGE_LIMIT      = 1;
     private static Logger log = Logger.getLogger(ScraperExample.class);
 
     public static void main(String[] args) {
-        startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         runScraperForFall2016();
         log.info(retrieveTimeTakenFromStart(startTime));
 
@@ -151,12 +148,11 @@ public class ScraperExample {
      * @param classScraper The completed ClassScraper that holds a List of Class.
      */
     private static void performDatabaseOperationsWithScrapedClasses(ClassScraper classScraper) {
-        try {
-            DatabaseOperations databaseOperations = new DatabaseOperations(JDBC_DRIVER, DATABASE_TABLE,
-                    DATABASE_URL, USER_NAME, PASS_WORD);
-            databaseOperations.performDatabaseActions(classScraper.getAllClasses());
+        try (DatabaseOperations databaseOperations = new DatabaseOperations(JDBC_DRIVER,
+                DATABASE_URL, USER_NAME, PASS_WORD)){
+            databaseOperations.performUpdateOrInsertForAllClass(classScraper.getAllClasses());
         }
-        catch (IOException e) {
+        catch (Exception e) {
             log.error("Error occurred during database operations.");
         }
     }
