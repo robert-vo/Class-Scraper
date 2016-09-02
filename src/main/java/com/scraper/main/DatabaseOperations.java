@@ -61,29 +61,14 @@ public class DatabaseOperations {
         log.info("Set database credentials using the properties file.");
     }
 
-    private void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException {
-        try {
-            if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
-                loadPropertiesFile();
-            }
-        } catch (IOException e) {
-            log.error(e);
-            e.printStackTrace();
-        }
+    private void initializeDatabaseActions(Class c) throws SQLException, ClassNotFoundException, IOException {
+        loadPropertiesFileIfCredentialsNotSet();
+        initializeJdbcDriver();
 
-        try {
-            java.lang.Class.forName(jdbcDriver);
-        }
-        catch (ClassNotFoundException e) {
-            log.error("Invalid jdbcDriver for: " + jdbcDriver);
-        }
+        final String currentClass = c.getClassTitle() + ", " +
+                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber();
 
         try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
-
-            String currentClass = c.getClassTitle() + ", " +
-                    c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber();
-
-            log.info("Checking if the class, " + currentClass + " exists in the database.");
 
             if(isClassInDatabase(c, conn)) {
                 log.info("The class, " + currentClass + " exists in database. Updating class.");
@@ -95,7 +80,8 @@ public class DatabaseOperations {
             }
         }
         catch (Exception e1) {
-            log.error("Something has gone wrong during the SQL data manipulation queries. The error is: " + e1);
+            log.error("Something has gone wrong during the SQL data manipulation queries. " +
+                    "The class in that caused the exception is: " + currentClass + ". The error is: " + e1);
         }
     }
 
@@ -106,7 +92,7 @@ public class DatabaseOperations {
         allClasses.parallelStream().forEach((c) -> {
             try {
                 initializeDatabaseActions(c);
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException | ClassNotFoundException | IOException e) {
                 log.error("An error has occurred while performing the database actions. The error is: " + e);
             }
         });
@@ -119,7 +105,6 @@ public class DatabaseOperations {
     }
 
     private boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
-        boolean doesClassExist = false;
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
         PreparedStatement preparedStatement = conn.prepareStatement(getNumberOfOccurrences);
@@ -132,11 +117,11 @@ public class DatabaseOperations {
 
         while (resultSet.next()) {
             if(resultSet.getInt(1) > 0) {
-                doesClassExist = true;
+                return true;
             }
         }
 
-        return doesClassExist;
+        return false;
     }
 
     private void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
@@ -211,6 +196,27 @@ public class DatabaseOperations {
         ps.setBoolean(29, c.isSaturdayClass());
         ps.setBoolean(30, c.isSundayClass());
         return ps;
+    }
+
+
+    private void loadPropertiesFileIfCredentialsNotSet() throws IOException {
+        try {
+            if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
+                loadPropertiesFile();
+            }
+        } catch (IOException e) {
+            log.error(e);
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeJdbcDriver() throws ClassNotFoundException {
+        try {
+            java.lang.Class.forName(jdbcDriver);
+        }
+        catch (ClassNotFoundException e) {
+            log.error("Invalid jdbcDriver for: " + jdbcDriver);
+        }
     }
 
 }
