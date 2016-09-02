@@ -62,6 +62,12 @@ public class DatabaseOperations implements AutoCloseable {
         this.passWord = passWord;
     }
 
+    /**
+     * Loads and sets the database credentials using the properties file.
+     *
+     * @throws IOException if the properties file does not exist, or could not be found.
+     * @throws MissingResourceException if one of the properties is missing.
+     */
     private void loadPropertiesFile() throws IOException, MissingResourceException {
         log.info("Loading database credentials using the properties file.");
 
@@ -91,25 +97,34 @@ public class DatabaseOperations implements AutoCloseable {
         log.info("Set database credentials using the properties file.");
     }
 
-    private void performUpdateOrInsertForClass(Class c) throws SQLException, ClassNotFoundException, IOException {
-        final String currentClass = c.getClassTitle() + ", " +
-                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber() +
-                "(" + c.getClassNumber() + ")";
+    /**
+     *
+     * @param aClass
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+    private void performUpdateOrInsertForClass(Class aClass) throws SQLException, ClassNotFoundException, IOException {
+        final String currentClass = aClass.getClassTitle() + ", " +
+                aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
+                "(" + aClass.getClassNumber() + ")";
 
-        try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
+        try (java.sql.Connection connection = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
-            if(isClassInDatabase(c, conn)) {
-                log.info("The class, " + currentClass + " exists in database. Updating class.");
-                updateClassInDatabase(c, conn);
+            if(isClassInDatabase(aClass, connection)) {
+                log.info("The class, " + currentClass + " exists in database. " +
+                        "Updating class entry if any changes have been made.");
+                updateClassInDatabase(aClass, connection);
             }
             else {
-                log.info("The class, " + currentClass + " does not exist in the database. Inserting new row.");
-                insertIntoDatabase(c, conn);
+                log.info("The class, " + currentClass + " does not exist in the database. " +
+                        "Inserting new entry in the database.");
+                insertClassIntoDatabase(aClass, connection);
             }
         }
-        catch (Exception e1) {
+        catch (Exception e) {
             log.error("Something has gone wrong during the SQL data manipulation queries. " +
-                    "The class in that caused the exception is: " + currentClass + ". The error is: " + e1);
+                    "The class in that caused the exception is: " + currentClass + ". The error is: " + e);
         }
     }
 
@@ -147,14 +162,14 @@ public class DatabaseOperations implements AutoCloseable {
 
     }
 
-    private boolean isClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private boolean isClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
-        PreparedStatement preparedStatement = conn.prepareStatement(getNumberOfOccurrences);
+        PreparedStatement preparedStatement = connection.prepareStatement(getNumberOfOccurrences);
 
-        preparedStatement.setString (1, c.getTerm().getTermID());
-        preparedStatement.setString (2, c.getClassNumber());
-        preparedStatement.setString (3, c.getDepartmentAbbreviation());
+        preparedStatement.setString (1, aClass.getTerm().getTermID());
+        preparedStatement.setString (2, aClass.getClassNumber());
+        preparedStatement.setString (3, aClass.getDepartmentAbbreviation());
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -167,16 +182,16 @@ public class DatabaseOperations implements AutoCloseable {
         return false;
     }
 
-    private void insertIntoDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private void insertClassIntoDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
         final String insertClassInformationIntoDatabase = "INSERT IGNORE INTO CLASS_INFORMATION(DEPARTMENT, " +
                 "DEPARTMENT_CRN, CLASS_TITLE, CLASS_DESCRIPTION) VALUES(" +
                 "?, ?, ?, ?);";
-        PreparedStatement ps2 = conn.prepareStatement(insertClassInformationIntoDatabase);
-        ps2.setString(1, c.getDepartmentAbbreviation());
-        ps2.setString(2, c.getDepartmentCourseNumber());
-        ps2.setString(3, c.getClassTitle());
-        ps2.setString(4, c.getDescription());
-        ps2.executeUpdate();
+        PreparedStatement preparedStatement = connection.prepareStatement(insertClassInformationIntoDatabase);
+        preparedStatement.setString(1, aClass.getDepartmentAbbreviation());
+        preparedStatement.setString(2, aClass.getDepartmentCourseNumber());
+        preparedStatement.setString(3, aClass.getClassTitle());
+        preparedStatement.setString(4, aClass.getDescription());
+        preparedStatement.executeUpdate();
 
         final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
                 "CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
@@ -186,11 +201,11 @@ public class DatabaseOperations implements AutoCloseable {
                 "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
                 ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        PreparedStatement ps = prepareStatementForFields(c, conn, insertClassIntoDatabase);
+        PreparedStatement ps = prepareStatementForCommonFields(aClass, connection, insertClassIntoDatabase);
         ps.executeUpdate();
     }
 
-    private void updateClassInDatabase(Class c, java.sql.Connection conn) throws SQLException, ClassNotFoundException {
+    private void updateClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
         final String updateClassInDatabase = "UPDATE CLASS SET " +
                 "Term_ID = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
                 "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
@@ -199,46 +214,46 @@ public class DatabaseOperations implements AutoCloseable {
                 "SEATS_TAKEN = ?, SEATS_AVAILABLE = ?, SEATS_TOTAL = ?," +
                 "MONDAY = ?, TUESDAY = ?, WEDNESDAY = ?, THURSDAY = ?, FRIDAY = ?, SATURDAY = ?, SUNDAY = ? " +
                 "WHERE (Term_ID = ? AND CRN = ? AND Department = ?);";
-        PreparedStatement preparedStatement = prepareStatementForFields(c, conn, updateClassInDatabase);
-        preparedStatement.setString (31, c.getTerm().getTermID());
-        preparedStatement.setString (32, c.getClassNumber());
-        preparedStatement.setString (33, c.getDepartmentAbbreviation());
+        PreparedStatement preparedStatement = prepareStatementForCommonFields(aClass, connection, updateClassInDatabase);
+        preparedStatement.setString (31, aClass.getTerm().getTermID());
+        preparedStatement.setString (32, aClass.getClassNumber());
+        preparedStatement.setString (33, aClass.getDepartmentAbbreviation());
         preparedStatement.executeUpdate();
     }
 
-    private PreparedStatement prepareStatementForFields(Class c, java.sql.Connection conn, String sqlQuery) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement(sqlQuery);
-        ps.setString (1, c.getTerm().getTermID());
-        ps.setString (2, c.getClassNumber());
-        ps.setString (3, c.getDepartmentAbbreviation());
-        ps.setString (4, c.getDepartmentCourseNumber());
-        ps.setString (5, c.getClassStatus().toString());
-        ps.setString (6, c.getAttributes());
-        ps.setDate   (7, c.getClassStartDate());
-        ps.setDate   (8, c.getClassEndDate());
-        ps.setTime   (9, c.getClassStartTime());
-        ps.setTime   (10, c.getClassEndTime());
-        ps.setString (11, c.getInstructorName());
-        ps.setString (12, c.getInstructorEmail());
-        ps.setString (13, c.getLocation());
-        ps.setString (14, c.getBuildingAbbreviation());
-        ps.setString (15, c.getBuildingRoomNumber());
-        ps.setString (16, c.getFormat());
-        ps.setString (17, c.getDuration());
-        ps.setString (18, c.getSession());
-        ps.setString (19, c.getComponent());
-        ps.setString (20, c.getSyllabus());
-        ps.setInt    (21, c.getSeatsTaken());
-        ps.setInt    (22, c.getSeatsAvailable());
-        ps.setInt    (23, c.getSeatsTotal());
-        ps.setBoolean(24, c.isMondayClass());
-        ps.setBoolean(25, c.isTuesdayClass());
-        ps.setBoolean(26, c.isWednesdayClass());
-        ps.setBoolean(27, c.isThursdayClass());
-        ps.setBoolean(28, c.isFridayClass());
-        ps.setBoolean(29, c.isSaturdayClass());
-        ps.setBoolean(30, c.isSundayClass());
-        return ps;
+    private PreparedStatement prepareStatementForCommonFields(Class aClass, java.sql.Connection connection, String sqlQuery) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+        preparedStatement.setString (1, aClass.getTerm().getTermID());
+        preparedStatement.setString (2, aClass.getClassNumber());
+        preparedStatement.setString (3, aClass.getDepartmentAbbreviation());
+        preparedStatement.setString (4, aClass.getDepartmentCourseNumber());
+        preparedStatement.setString (5, aClass.getClassStatus().toString());
+        preparedStatement.setString (6, aClass.getAttributes());
+        preparedStatement.setDate   (7, aClass.getClassStartDate());
+        preparedStatement.setDate   (8, aClass.getClassEndDate());
+        preparedStatement.setTime   (9, aClass.getClassStartTime());
+        preparedStatement.setTime   (10, aClass.getClassEndTime());
+        preparedStatement.setString (11, aClass.getInstructorName());
+        preparedStatement.setString (12, aClass.getInstructorEmail());
+        preparedStatement.setString (13, aClass.getLocation());
+        preparedStatement.setString (14, aClass.getBuildingAbbreviation());
+        preparedStatement.setString (15, aClass.getBuildingRoomNumber());
+        preparedStatement.setString (16, aClass.getFormat());
+        preparedStatement.setString (17, aClass.getDuration());
+        preparedStatement.setString (18, aClass.getSession());
+        preparedStatement.setString (19, aClass.getComponent());
+        preparedStatement.setString (20, aClass.getSyllabus());
+        preparedStatement.setInt    (21, aClass.getSeatsTaken());
+        preparedStatement.setInt    (22, aClass.getSeatsAvailable());
+        preparedStatement.setInt    (23, aClass.getSeatsTotal());
+        preparedStatement.setBoolean(24, aClass.isMondayClass());
+        preparedStatement.setBoolean(25, aClass.isTuesdayClass());
+        preparedStatement.setBoolean(26, aClass.isWednesdayClass());
+        preparedStatement.setBoolean(27, aClass.isThursdayClass());
+        preparedStatement.setBoolean(28, aClass.isFridayClass());
+        preparedStatement.setBoolean(29, aClass.isSaturdayClass());
+        preparedStatement.setBoolean(30, aClass.isSundayClass());
+        return preparedStatement;
     }
 
     private boolean databaseCredentialsEmptyOrNull() {
