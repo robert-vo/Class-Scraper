@@ -61,22 +61,10 @@ public class DatabaseOperations implements AutoCloseable {
             this.userName       = properties.getProperty("userName");
             this.passWord       = properties.getProperty("passWord");
 
-            if (this.jdbcDriver.isEmpty()) {
-                throw new MissingResourceException("The JDBC driver has not been set.",
-                        "DatabaseOperations", "jdbcDriver");
-            }
-
-            if (this.databaseURL.isEmpty()) {
-                throw new MissingResourceException("The database URL has not been set.",
-                        "DatabaseOperations", "databaseURL");
-            }
-            if (this.userName.isEmpty()) {
-                throw new MissingResourceException("The database userName has not been set.",
-                        "DatabaseOperations", "userName");
-            }
-            if (this.passWord.isEmpty()) {
-                throw new MissingResourceException("The database passWord has not been set.",
-                        "DatabaseOperations", "passWord");
+            if(databaseCredentialsNotEmptyOrNull()) {
+                throw new MissingResourceException("One of the database credentials has not been set using the properties file. " +
+                        "Please double check the properties file to see if the credentials are valid.",
+                        "DatabaseOperations", "");
             }
 
         }
@@ -97,7 +85,7 @@ public class DatabaseOperations implements AutoCloseable {
         initializeJdbcDriver();
 
         final String currentClass = c.getClassTitle() + ", " +
-                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber();
+                c.getDepartmentAbbreviation() + " " + c.getDepartmentCourseNumber() + c.getClassNumber();
 
         try (java.sql.Connection conn = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
@@ -229,10 +217,27 @@ public class DatabaseOperations implements AutoCloseable {
         return ps;
     }
 
+    private boolean databaseCredentialsNotEmptyOrNull() {
+        if(this.jdbcDriver == null || this.jdbcDriver.isEmpty() || this.jdbcDriver.equals("")) {
+            return false;
+        }
+        else if(this.databaseURL == null || this.databaseURL.isEmpty() || this.databaseURL.equals("")) {
+            return false;
+        }
+        else if(this.userName == null || this.userName.isEmpty() || this.userName.equals("")) {
+            return false;
+        }
+        else if(this.passWord == null || this.passWord.isEmpty() || this.passWord.equals("")) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
     private void loadPropertiesFileIfCredentialsNotSet() throws IOException {
         try {
-            if(jdbcDriver == null || jdbcDriver.isEmpty() || jdbcDriver.equals("")) {
+            if(databaseCredentialsNotEmptyOrNull()) {
                 loadPropertiesFile();
             }
         } catch (IOException e) {
@@ -246,7 +251,7 @@ public class DatabaseOperations implements AutoCloseable {
             java.lang.Class.forName(jdbcDriver);
         }
         catch (ClassNotFoundException e) {
-            log.error("Invalid jdbcDriver for: " + jdbcDriver);
+            log.error("Invalid jdbcDriver for given driver: " + jdbcDriver);
         }
     }
 
