@@ -19,6 +19,5 @@ public interface Scraper {
     void scrapeEachWebPageAndAddToListOfClass();
     int getNumberOfClasses();
     boolean isValidWebSiteWithClasses();
-    void setPageLimit(int pageLimit);
 
 }
