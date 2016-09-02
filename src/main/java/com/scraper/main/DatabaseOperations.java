@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Properties;
 
 /**
@@ -28,7 +29,16 @@ public class DatabaseOperations implements AutoCloseable {
     String configPropertiesPath;
     private static Logger log = Logger.getLogger(DatabaseOperations.class);
 
-    public DatabaseOperations(String configPropertiesPath) throws IOException {
+    /**
+     * Constructor to initialize the database credentials using the path of the configuration properties file.
+     *
+     * @param configPropertiesPath The path of the configuration properties file.
+     * @throws IOException if the file does not exist, or can not be read due to it not being a being a folder.
+     * @throws MissingResourceException if the file does not contain or is missing the necessary properties.
+     *                                  The mandatory properties required are:
+     *                                  jdbcDriver, databaseURL, userName, passWord.
+     */
+    public DatabaseOperations(String configPropertiesPath) throws IOException, MissingResourceException {
         this.configPropertiesPath = configPropertiesPath;
         loadPropertiesFile();
     }
@@ -41,19 +51,43 @@ public class DatabaseOperations implements AutoCloseable {
         this.passWord = passWord;
     }
 
-    private void loadPropertiesFile() throws IOException {
+    private void loadPropertiesFile() throws IOException, MissingResourceException {
         log.info("Loading database credentials using the properties file.");
-        try(InputStream input = new FileInputStream(configPropertiesPath)) {
+
+        try (InputStream input = new FileInputStream(configPropertiesPath)) {
             properties.load(input);
             this.jdbcDriver     = properties.getProperty("jdbcDriver");
             this.databaseURL    = properties.getProperty("databaseURL");
             this.userName       = properties.getProperty("userName");
             this.passWord       = properties.getProperty("passWord");
+
+            if (this.jdbcDriver.isEmpty()) {
+                throw new MissingResourceException("The JDBC driver has not been set.",
+                        "DatabaseOperations", "jdbcDriver");
+            }
+
+            if (this.databaseURL.isEmpty()) {
+                throw new MissingResourceException("The database URL has not been set.",
+                        "DatabaseOperations", "databaseURL");
+            }
+            if (this.userName.isEmpty()) {
+                throw new MissingResourceException("The database userName has not been set.",
+                        "DatabaseOperations", "userName");
+            }
+            if (this.passWord.isEmpty()) {
+                throw new MissingResourceException("The database passWord has not been set.",
+                        "DatabaseOperations", "passWord");
+            }
+
         }
-        catch (IOException e) {
+        catch (IOException ioe) {
             log.error("Unable to load properties file at: " + configPropertiesPath + ". " +
                     "Please verify that the properties file is in the right location, " +
                     "or set the database credentials using a different method.");
+        }
+        catch (MissingResourceException mre) {
+            log.error("One of the database credentials has not been set using the properties file. " +
+                    "Please see the error: " + mre);
         }
         log.info("Set database credentials using the properties file.");
     }
