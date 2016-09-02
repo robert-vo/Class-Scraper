@@ -561,7 +561,7 @@ public class ScrapeHTMLElements {
         String          departmentName          = splitBySpaceAndExtractHalf(className, true);
         String          departmentCourseNumber  = splitBySpaceAndExtractHalf(className, false);
         Status          classStatus             = getClassStatusOpenOrClosed(aClass);
-        String          courseNumber            = getClassCRN(aClass);
+        String          classNumber             = getClassCRN(aClass);
         int             seatsTaken              = getNumberOfSeatsTaken(aClass);
         int             seatsTotal              = getNumberOfTotalSeats(aClass);
         int             seatsAvailable          = seatsTotal - seatsTaken;
@@ -589,7 +589,7 @@ public class ScrapeHTMLElements {
         String          session                 = getSession(aClass);
         String          component               = getClassComponent(aClass);
         String          syllabus                = getSyllabus(aClass);
-        return new Class(termID, classTitle, departmentName, departmentCourseNumber, classStatus, courseNumber, seatsTaken, seatsAvailable,
+        return new Class(termID, classTitle, departmentName, departmentCourseNumber, classStatus, classNumber, seatsTaken, seatsAvailable,
                 seatsTotal, classStartDate, classEndDate, attributes, classStartTime, classEndTime,
                 isMondayClass, isTuesdayClass, isWednesdayClass, isThursdayClass, isFridayClass, isSaturdayClass,
                 isSundayClass, instructorName, instructorEmail, location, buildingAbbreviation, buildingRoomNumber, format,
