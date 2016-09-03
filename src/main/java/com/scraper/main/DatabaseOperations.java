@@ -78,7 +78,7 @@ public class DatabaseOperations implements AutoCloseable {
             this.userName       = properties.getProperty("userName");
             this.passWord       = properties.getProperty("passWord");
 
-            if(databaseCredentialsEmptyOrNull()) {
+            if(areDatabaseCredentialsNull()) {
                 throw new MissingResourceException("One of the database credentials has not been set using the properties file. " +
                         "Please double check the properties file to see if the credentials are valid.",
                         "DatabaseOperations", "");
@@ -98,12 +98,12 @@ public class DatabaseOperations implements AutoCloseable {
     }
 
     /**
+     * Performs an update or insert data manipulation language query with a given class.
      *
-     * @param aClass
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * @param aClass A class that will be updated or inserted into the database.
+     * @throws SQLException If an error occurs with the java.sql.Connection.
      */
-    private void performUpdateOrInsertForClass(Class aClass) throws SQLException, ClassNotFoundException {
+    private void performUpdateOrInsertForClass(Class aClass) throws SQLException {
         final String currentClass = aClass.getClassTitle() + ", " +
                 aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
                 "(" + aClass.getClassNumber() + ")";
@@ -121,18 +121,26 @@ public class DatabaseOperations implements AutoCloseable {
                 insertClassIntoDatabase(aClass, connection);
             }
         }
-        catch (Exception e) {
+        catch (SQLException e) {
             log.error("Something has gone wrong during the SQL data manipulation queries. " +
                     "The class in that caused the exception is: " + currentClass + ". The error is: " + e);
         }
     }
 
-    public void performUpdateOrInsertForAllClass(List<Class> allClasses) {
+    /**
+     * Performs an update or insert data manipulation language query with all classes.
+     *
+     * @param allClasses All classes that will be updated or inserted into the database.
+     * @throws SQLException If an error occurs with the java.sql.Connection.
+     * @throws ClassNotFoundException If the JDBC driver fails to be set.
+     * @throws MissingFormatArgumentException If the database credentials are not set or are empty.
+     */
+    public void performUpdateOrInsertForAllClass(List<Class> allClasses) throws SQLException, ClassNotFoundException, MissingFormatArgumentException {
         long startTime = System.currentTimeMillis();
         long endTime;
 
         try {
-            if (databaseCredentialsEmptyOrNull()) {
+            if (areDatabaseCredentialsNull()) {
                 throw new MissingFormatArgumentException("Database credentials are empty or null. Aborting database operations.");
             }
 
@@ -141,7 +149,7 @@ public class DatabaseOperations implements AutoCloseable {
             allClasses.parallelStream().forEach((aClass) -> {
                 try {
                     performUpdateOrInsertForClass(aClass);
-                } catch (SQLException | ClassNotFoundException e) {
+                } catch (SQLException e) {
                     log.error("An error has occurred while performing the database actions. The error is: " + e);
                 }
             });
@@ -161,7 +169,17 @@ public class DatabaseOperations implements AutoCloseable {
 
     }
 
-    private boolean isClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
+    /**
+     * Determines whether a class exists in the database, or not.
+     * A class is in the database when the Term_ID, CRN, and Department equals to {@code aClass}.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @return Whether the class exists in the database or not.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
+    private boolean isClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException {
         final String getNumberOfOccurrences = "SELECT COUNT(*) FROM CLASS " +
                 "WHERE (TERM_ID = ? AND CRN = ? AND DEPARTMENT = ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(getNumberOfOccurrences);
@@ -181,7 +199,29 @@ public class DatabaseOperations implements AutoCloseable {
         return false;
     }
 
-    private void insertClassIntoDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
+    /**
+     * Inserts the class into the class_information database table, if {@code aClass} does not exist in the database,
+     * and also inserts the class into the class database table.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
+    private void insertClassIntoDatabase(Class aClass, java.sql.Connection connection) throws SQLException {
+        insertClassIntoClassInformationTable(aClass, connection);
+        insertClassIntoClassTable(aClass, connection);
+    }
+
+    /**
+     * Helper method for insertClassIntoDatabase that inserts the class into the class_information database table.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
+    private void insertClassIntoClassInformationTable(Class aClass, java.sql.Connection connection) throws SQLException {
         final String insertClassInformationIntoDatabase = "INSERT IGNORE INTO CLASS_INFORMATION(DEPARTMENT, " +
                 "DEPARTMENT_CRN, CLASS_TITLE, CLASS_DESCRIPTION) VALUES(" +
                 "?, ?, ?, ?);";
@@ -191,7 +231,17 @@ public class DatabaseOperations implements AutoCloseable {
         preparedStatement.setString(3, aClass.getClassTitle());
         preparedStatement.setString(4, aClass.getDescription());
         preparedStatement.executeUpdate();
+    }
 
+    /**
+     * Helper method for insertClassIntoDatabase that inserts the class into the class database table.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
+    private void insertClassIntoClassTable(Class aClass, java.sql.Connection connection) throws SQLException {
         final String insertClassIntoDatabase = "INSERT INTO CLASS(Term_ID, " +
                 "CRN, Department, Department_CRN, Status, ATTRIBUTES, START_DATE, END_DATE, " +
                 "START_TIME, END_TIME, INSTRUCTOR, INSTRUCTOR_EMAIL, LOCATION, BUILDING_ABBV, " +
@@ -204,7 +254,16 @@ public class DatabaseOperations implements AutoCloseable {
         ps.executeUpdate();
     }
 
-    private void updateClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException, ClassNotFoundException {
+    /**
+     * Updates the class in the database.
+     * MySQL will update the class entry in the database if any of the values change.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
+    private void updateClassInDatabase(Class aClass, java.sql.Connection connection) throws SQLException {
         final String updateClassInDatabase = "UPDATE CLASS SET " +
                 "Term_ID = ?, CRN = ?, Department = ?, Department_CRN = ?, Status = ?, " +
                 "ATTRIBUTES = ?, START_DATE = ?, END_DATE = ?, START_TIME = ?, END_TIME = ?," +
@@ -220,6 +279,18 @@ public class DatabaseOperations implements AutoCloseable {
         preparedStatement.executeUpdate();
     }
 
+    /**
+     * This helper method prepares a {@code PreparedStatement} for the insert and update
+     * data manipulation language queries. This is used because both insert and update queries have
+     * a lot in common. As a result, there will be less duplication of code.
+     *
+     * @param aClass A class scraped from the web scraper.
+     * @param connection An established connection with the database.
+     * @param sqlQuery A SQL query that has parameters needed to be set.
+     * @return A {@code PreparedStatement} that is ready to be either executed or modified some more.
+     * @exception SQLException if a database access error occurs
+     * or this method is called on a closed connection.
+     */
     private PreparedStatement prepareStatementForCommonFields(Class aClass, java.sql.Connection connection, String sqlQuery) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
         preparedStatement.setString (1, aClass.getTerm().getTermID());
@@ -255,7 +326,12 @@ public class DatabaseOperations implements AutoCloseable {
         return preparedStatement;
     }
 
-    private boolean databaseCredentialsEmptyOrNull() {
+    /**
+     * Determines whether the database credentials are null, or not.
+     *
+     * @return Whether the database credentials are null, or not.
+     */
+    private boolean areDatabaseCredentialsNull() {
         if(jdbcDriver == null || databaseURL == null || userName == null || passWord == null) {
             log.info("Database credentials are currently null. Setting credentials using properties file.");
             return true;
@@ -266,6 +342,12 @@ public class DatabaseOperations implements AutoCloseable {
         }
     }
 
+    /**
+     * Helper method that initializes the JDBC Driver that allows Java
+     * to establish a connection with a database.
+     *
+     * @throws ClassNotFoundException If the class could not be located.
+     */
     private void initializeJdbcDriver() throws ClassNotFoundException {
         try {
             log.info("Attempting to set jdbc driver...");
@@ -277,8 +359,11 @@ public class DatabaseOperations implements AutoCloseable {
         }
     }
 
+    /**
+     * Closes out the {@code DatabaseOperations} resource used in the try-with-resource block.
+     */
     @Override
-    public void close() throws Exception {
+    public void close() {
         log.debug("Closing database operations resource.");
     }
 }
