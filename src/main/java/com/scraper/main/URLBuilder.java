@@ -47,11 +47,9 @@ public class URLBuilder {
      * @param subject The subject where all of the classes to be scraped are in.
      * @return A String representing the URL to be used for the scraper.
      */
-    public static String createURLForTermAndSubject(Term term, String subject) {
-        final String generatedURL = createURLForTermOnly(term) + generateParameter(URLParameters.subject, subject);
-
+    public static String createURLForTermAndSubject(Term term, Subject subject) {
+        final String generatedURL = createURLForTermOnly(term) + generateParameter(URLParameters.subject, subject.name());
         log.info("The generated URL for term and subject: " + generatedURL);
-
         return generatedURL;
     }
 
@@ -114,12 +112,17 @@ public class URLBuilder {
     public static String changePageNumber(String url, int requestPageNumber) {
         log.info("Changing page number to " + requestPageNumber + ".");
 
+        String newURL;
+
         if(!url.contains("page")) {
-            return url + generateParameter(URLParameters.page, String.valueOf(requestPageNumber));
+            newURL = url + generateParameter(URLParameters.page, String.valueOf(requestPageNumber));
         }
         else {
-            return url.substring(0, url.indexOf("page"))  + "page=" + requestPageNumber;
+            newURL =  url.substring(0, url.indexOf("page"))  + "page=" + requestPageNumber;
         }
+
+        log.info("The URL after the changing of page number is: " + newURL);
+        return newURL;
     }
 
     /**
@@ -130,11 +133,39 @@ public class URLBuilder {
      */
     public static int extractTermParameter(String url) {
         try {
-            return Integer.parseInt(url.split("\\?")[1].split("&")[0].split("=")[1]);
+            return Integer.parseInt(extractStringTermParameter(url));
         }
         catch (Exception e) {
             log.error("Unable to extract term parameter from " + url + " with error " + e + ".");
             return 0;
         }
+    }
+
+    public static String extractStringTermParameter(String url) {
+        return url.split("\\?")[1].split("&")[0].split("=")[1];
+    }
+
+    public static String modifyTermParameterValueForSession(String URL, Session session) {
+        if(URL.contains("term")) {
+            String newTerm = extractStringTermParameter(URL) + "-" + session.sessionName;
+
+            log.info("Modifying the URL: " + URL + " to include session: " + session.sessionName);
+
+            String newURL = URL.replaceAll("term=[^&]+","term=" + newTerm);
+
+            log.info("The new URL is: " + newURL);
+            return newURL;
+        }
+        else {
+            log.error("The URL does not have a term parameter.");
+            return "";
+        }
+    }
+
+    public static String addSubjectParameterToURL(String URL, Subject subject) {
+        log.info("Adding subject, " + subject + ", to URL: " + URL);
+        final String newURL = URL + generateParameter(URLParameters.subject, subject.name());
+        log.info("The URL after the subject addition is: " + newURL);
+        return newURL;
     }
 }
