@@ -62,6 +62,21 @@ public class ClassScraper implements Scraper {
         log.info("Initialized ClassScraper with terms " + terms.toString());
     }
 
+    public void setSessionOnScraper(Session session) {
+        log.info("Replacing current term to include session: " + session);
+        websiteURL = URLBuilder.modifyTermParameterValueForSession(websiteURL, session);
+    }
+
+    public void setSubjectOnScraper(Subject subject) {
+        log.info("Applying subject parameter with value, " + subject.fullSubjectName + " to website URL.");
+        websiteURL = URLBuilder.addSubjectParameterToURL(websiteURL, subject);
+    }
+
+    public void setInitialPageNumberOnScraper(int pageNumber) {
+        log.info("The scraper will now start on page " + pageNumber + ".");
+        websiteURL = URLBuilder.changePageNumber(websiteURL, pageNumber);
+    }
+
     /**
      * Sets a limit on how many pages the ClassScraper can crawl through.
      *
