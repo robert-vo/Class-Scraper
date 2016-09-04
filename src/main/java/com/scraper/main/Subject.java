@@ -159,7 +159,7 @@ public enum Subject {
     WCL  ("World Cultures & Lit"),
     WGSS ("WomenGendSexualitySt");
 
-    private final String fullSubjectName;
+    protected final String fullSubjectName;
 
     Subject(String name) {
         fullSubjectName = name;
