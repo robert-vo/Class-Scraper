@@ -26,7 +26,7 @@ public class ClassScraper implements Scraper {
     private Document            currentWebSiteDocument;
     private List<Class>         allClassesForAGivenDocument;
     private List<Class>         allClasses  = new ArrayList<>();
-    private int                 pageLimit   = Integer.MAX_VALUE;
+    private ScraperConstraints  scraperConstraints = new ScraperConstraints();
     private static Logger       log = Logger.getLogger(ClassScraper.class);
 
     /**
@@ -63,18 +63,37 @@ public class ClassScraper implements Scraper {
     }
 
     public void setSessionOnScraper(Session session) {
-        log.info("Replacing current term to include session: " + session);
-        websiteURL = URLBuilder.modifyTermParameterValueForSession(websiteURL, session);
+        log.info("Setting session constraint, " + session + " on the scraper.");
+        scraperConstraints.sessionConstraint = session;
+
+    }
+
+    private void applySessionConstraintOnWebsiteURL() {
+        log.info("Replacing current term to include session: " +
+                scraperConstraints.sessionConstraint);
+        websiteURL = URLBuilder.modifyTermParameterValueForSession(websiteURL, scraperConstraints.sessionConstraint);
     }
 
     public void setSubjectOnScraper(Subject subject) {
-        log.info("Applying subject parameter with value, " + subject.fullSubjectName + " to website URL.");
-        websiteURL = URLBuilder.addSubjectParameterToURL(websiteURL, subject);
+        log.info("Setting subject constraint, " + subject + " on the scraper.");
+        scraperConstraints.subjectConstraint = subject;
+
     }
 
-    public void setInitialPageNumberOnScraper(int pageNumber) {
-        log.info("The scraper will now start on page " + pageNumber + ".");
-        websiteURL = URLBuilder.changePageNumber(websiteURL, pageNumber);
+    private void applySubjectConstraintOnWebsiteURL() {
+        log.info("Applying subject parameter with value, " +
+                scraperConstraints.subjectConstraint.fullSubjectName + " to website URL.");
+        websiteURL = URLBuilder.addSubjectParameterToURL(websiteURL, scraperConstraints.subjectConstraint);
+    }
+
+    public void setInitialPageNumberOnScraper(int initialPageNumber) {
+        log.info("Setting initial page number constraint, " + initialPageNumber + " on the scraper.");
+        scraperConstraints.initialPageNumberConstraint = initialPageNumber;
+    }
+
+    private void applyInitialPageNumberConstraintOnWebsiteURL() {
+        log.info("The scraper will now start on page " + scraperConstraints.initialPageNumberConstraint + ".");
+        websiteURL = URLBuilder.changePageNumber(websiteURL, scraperConstraints.initialPageNumberConstraint);
     }
 
     /**
@@ -85,7 +104,7 @@ public class ClassScraper implements Scraper {
     public void setPageLimit(int pageLimit) {
         if(pageLimit > 0) {
             log.info("The scraper will only run for " + pageLimit + " pages.");
-            this.pageLimit = pageLimit;
+            scraperConstraints.pageLimitConstraint = pageLimit;
         }
         else {
             log.warn("Attempted to set a page limit, " + pageLimit + " that is not positive. " +
@@ -157,7 +176,7 @@ public class ClassScraper implements Scraper {
             log.error("The term to be scraped has not been set. Aborting scraper.");
         }
         else {
-            setWebSiteURLFromTerm();
+            setWebSiteURLWithConstraints();
             retrieveAndSetWebPage();
             log.info("Retrieved the following website: " + websiteURL);
             try {
@@ -174,6 +193,27 @@ public class ClassScraper implements Scraper {
                 log.info(e.getMessage());
             }
         }
+    }
+
+    private void setWebSiteURLWithConstraints() {
+        setWebSiteURLFromTerm();
+
+        if(scraperConstraints.sessionConstraint != null) {
+            applySessionConstraintOnWebsiteURL();
+        }
+
+        if(scraperConstraints.subjectConstraint != null) {
+            applySubjectConstraintOnWebsiteURL();
+        }
+
+        if(scraperConstraints.initialPageNumberConstraint > 0) {
+            applyInitialPageNumberConstraintOnWebsiteURL();
+        }
+
+        if(scraperConstraints.pageLimitConstraint > 0) {
+            setPageLimit(scraperConstraints.pageLimitConstraint);
+        }
+
     }
 
     /**
@@ -278,12 +318,12 @@ public class ClassScraper implements Scraper {
      */
     @Override
     public void scrapeEachWebPageAndAddToListOfClass() {
-        do {
+        while(canContinueWithNextPage()) {
             scrapeCurrentPageAndAddToListOfClass();
             allClasses.addAll(allClassesForAGivenDocument);
             advanceToNextPage();
             retrieveAndSetWebPage();
-        } while (canContinueWithNextPage());
+        }
     }
 
     /**
@@ -292,6 +332,6 @@ public class ClassScraper implements Scraper {
      * @return Whether the scraper can continue on, or not.
      */
     private boolean canContinueWithNextPage() {
-        return isValidWebSiteWithClasses() && pageLimit-- > 0;
+        return isValidWebSiteWithClasses() && scraperConstraints.pageLimitConstraint-- > 0;
     }
 }
