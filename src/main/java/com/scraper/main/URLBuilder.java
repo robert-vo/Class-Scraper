@@ -142,7 +142,7 @@ public class URLBuilder {
     }
 
     public static String extractStringTermParameter(String url) {
-        return url.split("\\?")[1].split("&")[0].split("=")[1];
+        return url.split("\\?")[1].split("&")[0].split("=")[1].split("-")[0];
     }
 
     public static String modifyTermParameterValueForSession(String URL, Session session) {
