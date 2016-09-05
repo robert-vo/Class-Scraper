@@ -3,15 +3,17 @@ package com.scraper.main;
 public class ScraperConstraints {
     protected Session sessionConstraint;
     protected Subject subjectConstraint;
-    protected int     pageConstraint = Integer.MAX_VALUE;
+    protected int pageLimitConstraint = Integer.MAX_VALUE;
+    protected int initialPageNumberConstraint = 0;
 
     public ScraperConstraints() {
     }
 
-    public ScraperConstraints(Session sessionConstraint, Subject subjectConstraint, int pageConstraint) {
+    public ScraperConstraints(Session sessionConstraint, Subject subjectConstraint, int pageLimitConstraint, int initialPageNumberConstraint) {
         this.sessionConstraint = sessionConstraint;
         this.subjectConstraint = subjectConstraint;
-        this.pageConstraint = pageConstraint;
+        this.pageLimitConstraint = pageLimitConstraint;
+        this.initialPageNumberConstraint = initialPageNumberConstraint;
     }
 
     public Session getSessionConstraint() {
@@ -30,11 +32,19 @@ public class ScraperConstraints {
         this.subjectConstraint = subjectConstraint;
     }
 
-    public int getPageConstraint() {
-        return pageConstraint;
+    public int getPageLimitConstraint() {
+        return pageLimitConstraint;
     }
 
-    public void setPageConstraint(int pageConstraint) {
-        this.pageConstraint = pageConstraint;
+    public void setPageLimitConstraint(int pageLimitConstraint) {
+        this.pageLimitConstraint = pageLimitConstraint;
+    }
+
+    public int getInitialPageNumberConstraint() {
+        return initialPageNumberConstraint;
+    }
+
+    public void setInitialPageNumberConstraint(int initialPageNumberConstraint) {
+        this.initialPageNumberConstraint = initialPageNumberConstraint;
     }
 }
