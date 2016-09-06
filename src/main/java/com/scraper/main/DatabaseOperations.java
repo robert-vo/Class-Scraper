@@ -106,7 +106,8 @@ public class DatabaseOperations implements AutoCloseable {
     private void performUpdateOrInsertForClass(Class aClass) throws SQLException {
         final String currentClass = aClass.getClassTitle() + ", " +
                 aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
-                "(" + aClass.getClassNumber() + ")";
+                "(" + aClass.getClassNumber() + ") for term " +
+                aClass.getTerm() + " and session " + aClass.getSession();
 
         try (java.sql.Connection connection = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
