@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.MissingFormatArgumentException;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * DatabaseOperations contains methods that sets the credentials needed for a database connection and
@@ -107,8 +108,8 @@ public class DatabaseOperations implements AutoCloseable {
     private void performUpdateOrInsertForClass(Class aClass) throws SQLException {
         final String currentClass = aClass.getClassTitle() + ", " +
                 aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
-                "(" + aClass.getClassNumber() + ") for Term: " +
-                aClass.getTerm() + " and Session: " + aClass.getSession();
+                "(" + aClass.getClassNumber() + ") for Term, " +
+                aClass.getTerm() + ", and Session, " + aClass.getSession();
 
         try (java.sql.Connection connection = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
@@ -139,7 +140,6 @@ public class DatabaseOperations implements AutoCloseable {
      */
     public void performUpdateOrInsertForAllClass(List<Class> allClasses) throws SQLException, ClassNotFoundException, MissingFormatArgumentException {
         long startTime = System.currentTimeMillis();
-        long endTime;
 
         try {
             if (areDatabaseCredentialsNull()) {
@@ -156,10 +156,8 @@ public class DatabaseOperations implements AutoCloseable {
                 }
             });
 
-            endTime = System.currentTimeMillis();
-
             log.debug("Time taken to perform database operations for " + allClasses.size() +
-                    " is " + String.valueOf(endTime - startTime) + " milliseconds.");
+                    " classes is " + retrieveTimeTakenFromStart(startTime));
             log.info("Database operations complete!");
         }
         catch (ClassNotFoundException cnfe) {
@@ -367,5 +365,20 @@ public class DatabaseOperations implements AutoCloseable {
     @Override
     public void close() {
         log.debug("Closing database operations resource.");
+    }
+
+    /**
+     * Returns a String that displays how many milliseconds it took to complete the database operations.
+     *
+     * @param startTime The time the database operations started on.
+     * @return A message that displays in the console about the length of the database operations.
+     */
+    private static String retrieveTimeTakenFromStart(long startTime) {
+        long endTime = System.currentTimeMillis() - startTime;
+        long hours = TimeUnit.HOURS.convert(endTime, TimeUnit.MILLISECONDS);
+        long minutes = TimeUnit.MINUTES.convert(endTime, TimeUnit.MILLISECONDS);
+        long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS);
+
+        return hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
     }
 }
