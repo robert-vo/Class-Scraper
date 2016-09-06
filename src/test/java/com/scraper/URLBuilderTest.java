@@ -146,4 +146,10 @@ public class URLBuilderTest {
         assertEquals(URL_WITH_TERM_2010_SUBJECT_COSC_PAGE_2, URL);
     }
 
+    @Test
+    public void testExtractTermParameterWithTermParameterLast() {
+        String URL = "http://classbrowser.uh.edu/classes?subject=COSC&term=1990";
+
+        assertEquals(URLBuilder.extractStringTermParameter(URL), "1990");
+    }
 }
