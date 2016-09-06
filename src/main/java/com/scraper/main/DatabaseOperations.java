@@ -1,5 +1,6 @@
 package com.scraper.main;
 
+import com.scraper.main.pojo.Class;
 import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
@@ -106,7 +107,7 @@ public class DatabaseOperations implements AutoCloseable {
     private void performUpdateOrInsertForClass(Class aClass) throws SQLException {
         final String currentClass = aClass.getClassTitle() + ", " +
                 aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
-                "(" + aClass.getClassNumber() + ") for term " +
+                "(" + aClass.getClassNumber() + ") for Term: " +
                 aClass.getTerm() + " and Session: " + aClass.getSession();
 
         try (java.sql.Connection connection = DriverManager.getConnection(databaseURL, userName, passWord)) {
