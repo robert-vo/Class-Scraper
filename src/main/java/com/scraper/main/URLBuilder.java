@@ -1,5 +1,9 @@
 package com.scraper.main;
 
+import com.scraper.main.pojo.Session;
+import com.scraper.main.pojo.Subject;
+import com.scraper.main.pojo.Term;
+import com.scraper.main.pojo.URLParameters;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -161,7 +165,8 @@ public class URLBuilder {
             parameterValueMap.put(key, value);
         }
 
-        return parameterValueMap.get("term");
+        String termValue = parameterValueMap.get("term");
+        return !termValue.contains("-") ? termValue : termValue.substring(0, termValue.indexOf("-"));
     }
 
     /**
@@ -175,9 +180,9 @@ public class URLBuilder {
      */
     public static String modifyTermParameterValueForSession(String URL, Session session) {
         if(URL.contains("term")) {
-            String newTerm = extractStringTermParameter(URL) + "-" + session.sessionName;
+            String newTerm = extractStringTermParameter(URL) + "-" + session.getSessionName();
 
-            log.info("Modifying the URL: " + URL + " to include session: " + session.sessionName);
+            log.info("Modifying the URL: " + URL + " to include session: " + session.getSessionName());
 
             String newURL = URL.replaceAll("term=[^&]+","term=" + newTerm);
 
