@@ -1,6 +1,10 @@
 package com.scraper;
 
 import com.scraper.main.*;
+import com.scraper.main.pojo.Session;
+import com.scraper.main.pojo.Subject;
+import com.scraper.main.pojo.Term;
+import com.scraper.main.pojo.URLParameters;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -151,5 +155,10 @@ public class URLBuilderTest {
         String URL = "http://classbrowser.uh.edu/classes?subject=COSC&term=1990";
 
         assertEquals(URLBuilder.extractStringTermParameter(URL), "1990");
+    }
+
+    @Test
+    public void testExtractTermParameterWithSessionMIN() {
+        assertEquals(URLBuilder.extractTermParameter(URL_WITH_TERM_2010_SUBJECT_COSC_MIN_SESSION), 2010);
     }
 }
