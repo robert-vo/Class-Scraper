@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 /**
  * Semester Enum lists the three semesters a class can be offered under.

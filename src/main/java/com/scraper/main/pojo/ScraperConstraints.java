@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 public class ScraperConstraints {
     protected Session sessionConstraint;

@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 /**
  * Session details which part of the semester a class falls under.
@@ -15,7 +15,7 @@ public enum Session {
     SESSION_6("6"),
     MINI_SESSION("MIN");
 
-    protected final String sessionName;
+    private final String sessionName;
 
     Session(String sessionName) {
         this.sessionName = sessionName;

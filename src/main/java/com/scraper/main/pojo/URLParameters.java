@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 /**
  * URLParameters contains the valid parameters allowed for the class scraping.

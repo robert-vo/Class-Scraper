@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 /**
  * HTMLElements Enum stores the html tags where a certain attribute lies on the web page.

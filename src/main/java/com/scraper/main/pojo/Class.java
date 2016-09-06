@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 import java.sql.Date;
 import java.sql.Time;

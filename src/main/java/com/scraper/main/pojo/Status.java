@@ -1,4 +1,4 @@
-package com.scraper.main;
+package com.scraper.main.pojo;
 
 /**
  * Status describes whether a class has available seats, or not.
