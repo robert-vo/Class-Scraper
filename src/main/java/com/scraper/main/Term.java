@@ -60,13 +60,33 @@ public enum Term {
      * @return A Term Enum that corresponds to the String representation parameter.
      */
     public static Term returnTermFromString(String text) {
-        if (text != null) {
-            for (Term t : Term.values()) {
-                if (text.equalsIgnoreCase(t.termID)) {
-                    return t;
-                }
-            }
+        return returnTermFromBinarySearch(Term.values(), text, 0, Term.values().length);
+    }
+
+    /**
+     * Performs a binary search on the {@code Term.values()} to find a particular enum from a string.
+     *
+     * @param allTerms All of the term values available.
+     * @param termToFind The term to be found.
+     * @param low The lower bound of the array to be searched through.
+     * @param high The higher bound of the array to be searched through.
+     * @return The corresponding Term, if found, or null, if not found.
+     */
+    private static Term returnTermFromBinarySearch(Term[] allTerms, String termToFind, int low, int high) {
+        if(high < low) {
+            return null;
         }
-        return null;
+
+        int mid = low + ((high - low) / 2);
+
+        if(allTerms[mid].getTermID().compareTo(termToFind) > 0) {
+            return returnTermFromBinarySearch(allTerms, termToFind, low, mid - 1);
+        }
+        else if (allTerms[mid].getTermID().compareTo(termToFind) < 0) {
+            return returnTermFromBinarySearch(allTerms, termToFind, mid + 1, high);
+        }
+        else {
+            return allTerms[mid];
+        }
     }
 }
