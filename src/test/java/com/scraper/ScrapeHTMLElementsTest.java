@@ -1,9 +1,9 @@
 package com.scraper;
 
 import com.scraper.main.ClassScraper;
-import com.scraper.main.HTMLElements;
-import com.scraper.main.Status;
-import com.scraper.main.Term;
+import com.scraper.main.pojo.HTMLElements;
+import com.scraper.main.pojo.Status;
+import com.scraper.main.pojo.Term;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
