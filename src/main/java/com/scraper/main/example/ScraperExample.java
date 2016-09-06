@@ -1,13 +1,12 @@
 package com.scraper.main.example;
 
-import com.scraper.main.ClassScraper;
-import com.scraper.main.DatabaseOperations;
-import com.scraper.main.Term;
+import com.scraper.main.*;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class, ScraperExample, showcases how to use the scraper for a term or multiple terms.
@@ -17,16 +16,17 @@ import java.util.List;
  */
 public class ScraperExample {
 
-    private final static String JDBC_DRIVER     = "com.mysql.jdbc.Driver";
-    private final static String DATABASE_URL    = "jdbc:mysql://localhost/class";
-    private final static String USER_NAME       = "root";
-    private final static String PASS_WORD       = "password";
-    private final static int    PAGE_LIMIT      = 1;
-    private static Logger log = Logger.getLogger(ScraperExample.class);
+    private final static String JDBC_DRIVER         = "com.mysql.jdbc.Driver";
+    private final static String DATABASE_URL        = "jdbc:mysql://localhost/class";
+    private final static String USER_NAME           = "root";
+    private final static String PASS_WORD           = "password";
+    private final static int    PAGE_LIMIT          = 1;
+    private final static int    INITIAL_PAGE_LIMIT  = 5;
+    private static       Logger log                 = Logger.getLogger(ScraperExample.class);
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        runScraperForFall2016();
+        runScraperForFall2016Session1MathClasses();
         log.info(retrieveTimeTakenFromStart(startTime));
 
         startTime = System.currentTimeMillis();
@@ -39,15 +39,30 @@ public class ScraperExample {
     }
 
     /**
-     * Runs the scraper for Fall 2016.
+     * Runs the scraper for Fall 2016, Session 1, Math classes, starting on page 5 and ending on page 7.
      */
-    private static void runScraperForFall2016() {
+    private static void runScraperForFall2016Session1MathClasses() {
         ClassScraper classScraper;
 
         /**
          * Initializing the class scraper using the year (int) and semester (String).
          */
         classScraper = new ClassScraper(2016, "Fall");
+
+        /**
+         * Restricts the scraper to only regular academic session classes.
+         */
+        classScraper.setSessionOnScraper(Session.REGULAR_ACADEMIC_SESSION);
+
+        /**
+         * Restricts the scraper to only Math classes.
+         */
+        classScraper.setSubjectOnScraper(Subject.MATH);
+
+        /**
+         * Sets the initial page that the scraper will start on.
+         */
+        classScraper.setInitialPageNumber(INITIAL_PAGE_LIMIT);
 
         /**
          * This sets the limit on how many pages are scraped per term.
@@ -103,7 +118,7 @@ public class ScraperExample {
     }
 
     /**
-     * Runs the scraper for Fall 2015, Spring 2016, Summer 2016, Fall 2016.
+     * Runs the scraper for Summer 2016, Fall 2016 and Spring 2017.
      */
     private static void runScraperForMultipleTerms() {
         ClassScraper classScraper;
@@ -112,7 +127,7 @@ public class ScraperExample {
          * List of terms that the scraper will be crawling through.
          */
         List<Term> terms = new LinkedList<>(
-                Arrays.asList(Term.FALL_2015, Term.SPRING_2016, Term.SUMMER_2016, Term.FALL_2016));
+                Arrays.asList(Term.SUMMER_2016, Term.FALL_2016, Term.SPRING_2017));
 
         /**
          * Initializing the scraper with the list of terms.
@@ -121,8 +136,8 @@ public class ScraperExample {
 
         /**
          * This sets the limit on how many pages are scraped per term.
-         * In this case, since there are 4 terms being scraped with a page limit of 1,
-         * 4x1 = 4 pages will be scraped.
+         * In this case, since there are 3 terms being scraped with a page limit of 2,
+         * 3x2 = 6 pages will be scraped.
          */
         classScraper.setPageLimit(PAGE_LIMIT);
 
@@ -149,16 +164,27 @@ public class ScraperExample {
      */
     private static void performDatabaseOperationsWithScrapedClasses(ClassScraper classScraper) {
         try (DatabaseOperations databaseOperations = new DatabaseOperations(JDBC_DRIVER,
-                DATABASE_URL, USER_NAME, PASS_WORD)){
+                DATABASE_URL, USER_NAME, PASS_WORD)) {
             databaseOperations.performUpdateOrInsertForAllClass(classScraper.getAllClasses());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error occurred during database operations.");
         }
     }
 
+    /**
+     * Returns a String that displays how many milliseconds it took to complete the scraper.
+     *
+     * @param startTime The time the scraper started on.
+     * @return A message that displays in the console about the length of the scraper.
+     */
     private static String retrieveTimeTakenFromStart(long startTime) {
-        return "The time taken to perform the scraping and database operations was: "
-                + String.valueOf(System.currentTimeMillis() - startTime) + " milliseconds.";
+        long endTime = System.currentTimeMillis() - startTime;
+        long hours = TimeUnit.HOURS.convert(endTime, TimeUnit.MILLISECONDS);
+        long minutes = TimeUnit.MINUTES.convert(endTime, TimeUnit.MILLISECONDS);
+        long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS);
+
+        return "The time taken to perform the scraping and database operations was: " +
+                hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
     }
+
 }
