@@ -2,6 +2,9 @@ package com.scraper.main;
 
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * URLBuilder constructs and modifies a given URL that will be used for the scraping.
  *
@@ -126,7 +129,7 @@ public class URLBuilder {
     }
 
     /**
-     * Extracts the term parameter value from a given URL.
+     * Extracts the term parameter value from a given URL and returns the result as an integer.
      *
      * @param url The URL that contains a term parameter.
      * @return The value of the term parameter.
@@ -141,10 +144,35 @@ public class URLBuilder {
         }
     }
 
+    /**
+     * Extracts the term parameter value from a given URL.
+     *
+     * @param url The URL that contains a term parameter.
+     * @return The value of the term parameter.
+     */
     public static String extractStringTermParameter(String url) {
-        return url.split("\\?")[1].split("&")[0].split("=")[1].split("-")[0];
+        String[] parameterValuePairs = url.split("\\?")[1].split("&");
+        Map<String, String> parameterValueMap = new HashMap<>();
+
+        for (String parameterValuePair : parameterValuePairs) {
+            String key = parameterValuePair.split("=")[0];
+            String value = parameterValuePair.split("=")[1];
+
+            parameterValueMap.put(key, value);
+        }
+
+        return parameterValueMap.get("term");
     }
 
+    /**
+     * Modifies the term parameter to include the session value.
+     * This is done by appending a hyphen and a value corresponding the session, such as,
+     * 1990-2, for the Term 1990 and Session 2 and also, 2000-MIN, for the Term 2000 and Session MIN.
+     *
+     * @param URL The URL that contains a term parameter to be modified.
+     * @param session The session to be appended to the term parameter value.
+     * @return The URL with the term modified to include the session value.
+     */
     public static String modifyTermParameterValueForSession(String URL, Session session) {
         if(URL.contains("term")) {
             String newTerm = extractStringTermParameter(URL) + "-" + session.sessionName;
@@ -162,6 +190,13 @@ public class URLBuilder {
         }
     }
 
+    /**
+     * Adds a subject parameter and value to the URL.
+     *
+     * @param URL The URL that will have the subject parameter appended to it.
+     * @param subject The subject to be appended to the URL.
+     * @return The URL with a subject parameter and value appended to it.
+     */
     public static String addSubjectParameterToURL(String URL, Subject subject) {
         log.info("Adding subject, " + subject + ", to URL: " + URL);
         final String newURL = URL + generateParameter(URLParameters.subject, subject.name());
