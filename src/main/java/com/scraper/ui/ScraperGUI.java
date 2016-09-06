@@ -2,7 +2,7 @@ package com.scraper.ui;
 
 import com.scraper.main.ClassScraper;
 import com.scraper.main.DatabaseOperations;
-import com.scraper.main.Term;
+import com.scraper.main.pojo.Term;
 
 import javax.swing.*;
 import java.awt.*;
