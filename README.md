@@ -26,9 +26,38 @@ int year = 2016;
 String semester = "Fall";
 ClassScraper classScraper = new ClassScraper(year, semester);
 
-//Optionally, a page limit can be set on the ClassScraper. 
-int pageLimit = 10; //Has to be an integer greater than 0.
+
+/**
+ * Optionally, a page limit constraint can be set on the ClassScraper. 
+ * When a page limit constraint is set on the ClassScraper, the scraper 
+ * will only scrape through the number of pages specified.
+ */
+int pageLimit = 10;
 classScraper.setPageLimit(pageLimit);
+
+/**
+ * Optionally, a subject constraint can be set on the ClassScraper. 
+ * When a subject constraint is set on the ClassScraper, the scraper 
+ * will only scrape through the specified subject.
+ */
+Subject mathSubject = Subject.MATH; 
+classScraper.setSubjectOnScraper(mathSubject);
+
+/**
+ * Optionally, a session constraint can be set on the ClassScraper. 
+ * When a session constraint is set on the ClassScraper, the scraper 
+ * will only scrape through the specified session.
+ */
+Session miniSession = Session.MINI_SESSION;
+classScraper.setSessionOnScraper(miniSession);
+
+/**
+ * Optionally, an initial page number constraint can be set on the ClassScraper. 
+ * When a initial page number constraint is set on the ClassScraper, the scraper 
+ * will start at the specified page.
+ */
+int initialPageNumber = 5;
+classScraper.setInitialPageNumber(initialPageNumber);
 
 //Scrapes all of the classes given a term.
 classScraper.startScraper();
