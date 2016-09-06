@@ -62,35 +62,60 @@ public class ClassScraper implements Scraper {
         log.info("Initialized ClassScraper with terms " + terms.toString());
     }
 
+    /**
+     * Sets the class session to be scraped. If left untouched, the scraper will
+     * scrape all classes, regardless of session.
+     *
+     * @param session The session (1, 2, 3, 4, 5, 6, MIN) where the classes fall under.
+     */
     public void setSessionOnScraper(Session session) {
         log.info("Setting session constraint, " + session + " on the scraper.");
         scraperConstraints.sessionConstraint = session;
-
     }
 
+    /**
+     * Applies the session constraint on the scraper.
+     */
     private void applySessionConstraintOnWebsiteURL() {
         log.info("Replacing current term to include session: " +
                 scraperConstraints.sessionConstraint);
         websiteURL = URLBuilder.modifyTermParameterValueForSession(websiteURL, scraperConstraints.sessionConstraint);
     }
 
+    /**
+     * Sets the class subject to be scraped. If left untouched, the scraper will
+     * scrape all classes, regardless of subject.
+     *
+     * @param subject The subject (AAS, COSC, etc.) where the classes fall under.
+     */
     public void setSubjectOnScraper(Subject subject) {
         log.info("Setting subject constraint, " + subject + " on the scraper.");
         scraperConstraints.subjectConstraint = subject;
-
     }
 
+    /**
+     * Applies the subject constraint on the scraper.
+     */
     private void applySubjectConstraintOnWebsiteURL() {
         log.info("Applying subject parameter with value, " +
                 scraperConstraints.subjectConstraint.fullSubjectName + " to website URL.");
         websiteURL = URLBuilder.addSubjectParameterToURL(websiteURL, scraperConstraints.subjectConstraint);
     }
 
-    public void setInitialPageNumberOnScraper(int initialPageNumber) {
+    /**
+     * Sets the initial page number of the scraper. If left untouched, the scraper will
+     * start at page 1.
+     *
+     * @param initialPageNumber The initial page number of the scraper.
+     */
+    public void setInitialPageNumber(int initialPageNumber) {
         log.info("Setting initial page number constraint, " + initialPageNumber + " on the scraper.");
         scraperConstraints.initialPageNumberConstraint = initialPageNumber;
     }
 
+    /**
+     * Applies the initial page number constraint on the scraper.
+     */
     private void applyInitialPageNumberConstraintOnWebsiteURL() {
         log.info("The scraper will now start on page " + scraperConstraints.initialPageNumberConstraint + ".");
         websiteURL = URLBuilder.changePageNumber(websiteURL, scraperConstraints.initialPageNumberConstraint);
