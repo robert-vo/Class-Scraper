@@ -1,6 +1,9 @@
 package com.scraper.main.example;
 
 import com.scraper.main.*;
+import com.scraper.main.pojo.Session;
+import com.scraper.main.pojo.Subject;
+import com.scraper.main.pojo.Term;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
