@@ -1,5 +1,7 @@
 package com.scraper.main;
 
+import org.apache.log4j.Logger;
+
 /**
  * The Term Enum represents a semester and year.
  * Terms are incremented by 10 from the previous term, starting from FALL_2015 -> 1970.
@@ -39,6 +41,7 @@ public enum Term {
 
     private final String    termID;
     private final Semester  semester;
+    private static Logger log = Logger.getLogger(Term.class);
 
     Term(String termID, Semester semester) {
         this.termID = termID;
@@ -74,6 +77,8 @@ public enum Term {
      */
     private static Term returnTermFromBinarySearch(Term[] allTerms, String termToFind, int low, int high) {
         if(high < low) {
+            log.warn("Attempted to search for " + termToFind + " term, but it did not exist in the list of terms. " +
+                    "Returning null for the term.");
             return null;
         }
 
