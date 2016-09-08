@@ -230,6 +230,7 @@ public class DatabaseOperations implements AutoCloseable {
         preparedStatement.setString(2, aClass.getDepartmentCourseNumber());
         preparedStatement.setString(3, aClass.getClassTitle());
         preparedStatement.setString(4, aClass.getDescription());
+        log.debug("Running SQL Query: " + preparedStatement.toString());
         preparedStatement.executeUpdate();
     }
 
@@ -250,8 +251,9 @@ public class DatabaseOperations implements AutoCloseable {
                 "THURSDAY, FRIDAY, SATURDAY, SUNDAY) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
                 ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        PreparedStatement ps = prepareStatementForCommonFields(aClass, connection, insertClassIntoDatabase);
-        ps.executeUpdate();
+        PreparedStatement preparedStatement = prepareStatementForCommonFields(aClass, connection, insertClassIntoDatabase);
+        log.debug("Running SQL Query: " + preparedStatement.toString());
+        preparedStatement.executeUpdate();
     }
 
     /**
@@ -276,6 +278,8 @@ public class DatabaseOperations implements AutoCloseable {
         preparedStatement.setString (31, aClass.getTerm().getTermID());
         preparedStatement.setString (32, aClass.getClassNumber());
         preparedStatement.setString (33, aClass.getDepartmentAbbreviation());
+
+        log.debug("Running SQL Query: " + preparedStatement.toString());
         preparedStatement.executeUpdate();
     }
 
