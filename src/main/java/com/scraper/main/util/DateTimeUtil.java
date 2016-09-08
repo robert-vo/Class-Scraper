@@ -32,6 +32,9 @@ public class DateTimeUtil {
             return new java.sql.Date(date.getTime());
         }
         catch (ParseException | NullPointerException e) {
+            if(stringDate == null) {
+                return null;
+            }
             if(!stringDate.equals("") && !stringDate.equals("A.M.") && !stringDate.equals("P.M.")) {
                 log.warn("Unable to convert date. Given an error of: " + e);
             }
@@ -53,7 +56,10 @@ public class DateTimeUtil {
             return new java.sql.Time(time.getTime());
         }
         catch (ParseException | NullPointerException e) {
-            if(!stringTime.equals("") && !stringTime.equals("A.M.") && !stringTime.equals("P.M.")) {
+            if(stringTime == null) {
+                return null;
+            }
+            else if(!stringTime.equals("") && !stringTime.equals("A.M.") && !stringTime.equals("P.M.")) {
                 log.warn("Unable to convert time. Given an error of: " + e);
             }
             return null;
