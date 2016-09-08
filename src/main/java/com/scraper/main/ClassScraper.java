@@ -130,8 +130,10 @@ public class ClassScraper implements Scraper {
      */
     public void setPageLimit(int pageLimit) {
         if(pageLimit > 0) {
-            log.info("The scraper will only run for " + pageLimit + " pages.");
             scraperConstraints.setPageLimitConstraint(pageLimit);
+            if(pageLimit != Integer.MAX_VALUE) {
+                log.info("The scraper will only run for " + pageLimit + " pages.");
+            }
         }
         else {
             log.warn("Attempted to set a page limit, " + pageLimit + " that is not positive. " +
