@@ -10,10 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.MissingFormatArgumentException;
-import java.util.MissingResourceException;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Robert Vo
  */
+
 public class DatabaseOperations implements AutoCloseable {
 
     Properties properties = new Properties();
@@ -30,6 +28,9 @@ public class DatabaseOperations implements AutoCloseable {
     String userName;
     String passWord;
     String configPropertiesPath;
+    List<Class> listOfUpdatedClasses = new LinkedList<>();
+    List<Class> listOfNewClasses = new LinkedList<>();
+
     private static Logger log = Logger.getLogger(DatabaseOperations.class);
 
     /**
@@ -100,33 +101,39 @@ public class DatabaseOperations implements AutoCloseable {
     }
 
     /**
+     * Generates a message given a current class.
+     *
+     * @param aClass A Class that has been updated/added to the database.
+     * @return A tailored message that prints information about a Class.
+     */
+    private String generateCurrentClassMessage(Class aClass) {
+        return aClass.getClassTitle() + ", " +
+                aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
+                " (" + aClass.getClassNumber() + ") for Term, " +
+                aClass.getTerm() + ", and Session, " + aClass.getSession();
+    }
+
+    /**
      * Performs an update or insert data manipulation language query with a given class.
      *
      * @param aClass A class that will be updated or inserted into the database.
      * @throws SQLException If an error occurs with the java.sql.Connection.
      */
     private void performUpdateOrInsertForClass(Class aClass) throws SQLException {
-        final String currentClass = aClass.getClassTitle() + ", " +
-                aClass.getDepartmentAbbreviation() + " " + aClass.getDepartmentCourseNumber() +
-                "(" + aClass.getClassNumber() + ") for Term, " +
-                aClass.getTerm() + ", and Session, " + aClass.getSession();
-
         try (java.sql.Connection connection = DriverManager.getConnection(databaseURL, userName, passWord)) {
 
             if(isClassInDatabase(aClass, connection)) {
-                log.info("The class, " + currentClass + " exists in database. " +
-                        "Updating class entry if any changes have been made.");
+                listOfUpdatedClasses.add(aClass);
                 updateClassInDatabase(aClass, connection);
             }
             else {
-                log.info("The class, " + currentClass + " does not exist in the database. " +
-                        "Inserting new entry in the database.");
+                listOfNewClasses.add(aClass);
                 insertClassIntoDatabase(aClass, connection);
             }
         }
         catch (SQLException e) {
             log.error("Something has gone wrong during the SQL data manipulation queries. " +
-                    "The class in that caused the exception is: " + currentClass + ". The error is: " + e);
+                    "The class in that caused the exception is: " + generateCurrentClassMessage(aClass) + ". The error is: " + e);
         }
     }
 
@@ -156,9 +163,7 @@ public class DatabaseOperations implements AutoCloseable {
                 }
             });
 
-            log.debug("Time taken to perform database operations for " + allClasses.size() +
-                    " classes is " + retrieveTimeTakenFromStart(startTime));
-            log.info("Database operations complete!");
+            printReportForNewAndUpdatedClasses(startTime);
         }
         catch (ClassNotFoundException cnfe) {
             log.error("The jdbc driver is not valid. Error message is: " + cnfe);
@@ -384,5 +389,36 @@ public class DatabaseOperations implements AutoCloseable {
         long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS);
 
         return hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
+    }
+
+    /**
+     * Prints a report for the completed database operations.
+     *
+     * @param startTime The time which the database operations started.
+     */
+    private void printReportForNewAndUpdatedClasses(long startTime) {
+
+        if(listOfNewClasses.size() > 0) {
+            log.debug("Printing new classes...");
+            listOfNewClasses
+                    .stream()
+                    .map(this::generateCurrentClassMessage)
+                    .forEach(e -> log.debug(e));
+        }
+
+        if(listOfUpdatedClasses.size() > 0) {
+            log.debug("Printing updated classes...");
+            listOfUpdatedClasses
+                    .stream()
+                    .map(this::generateCurrentClassMessage)
+                    .forEach(e -> log.debug(e));
+        }
+        log.debug("Number of new classes = " + listOfNewClasses.size());
+        log.debug("Number of updated classes = " + listOfUpdatedClasses.size());
+
+        log.debug("Time taken to perform database operations for " +
+                (listOfUpdatedClasses.size() + listOfNewClasses.size()) +
+                " classes is " + retrieveTimeTakenFromStart(startTime));
+        log.info("Database operations complete!");
     }
 }
