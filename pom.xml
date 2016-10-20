@@ -21,7 +21,7 @@
 
     <groupId>com.robert.scraper</groupId>
     <artifactId>ClassScraper</artifactId>
-    <version>v1.32</version>
+    <version>v1.321</version>
     <packaging>jar</packaging>
 
     <dependencies>
