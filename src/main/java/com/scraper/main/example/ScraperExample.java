@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class ScraperExample {
 
-    private final static String JDBC_DRIVER         = "com.mysql.jdbc.Driver";
-    private final static String DATABASE_URL        = "jdbc:mysql://localhost/class";
-    private final static String USER_NAME           = "root";
-    private final static String PASS_WORD           = "password";
+    private static String JDBC_DRIVER         = "com.mysql.jdbc.Driver";
+    private static String DATABASE_URL        = "jdbc:mysql://localhost/class";
+    private static String USER_NAME           = "root";
+    private static String PASS_WORD           = "password";
     private final static int    PAGE_LIMIT          = 1;
     private final static int    INITIAL_PAGE_LIMIT  = 5;
     private static       Logger log                 = Logger.getLogger(ScraperExample.class);
@@ -185,6 +185,13 @@ public class ScraperExample {
         long hours = TimeUnit.HOURS.convert(endTime, TimeUnit.MILLISECONDS);
         long minutes = TimeUnit.MINUTES.convert(endTime, TimeUnit.MILLISECONDS);
         long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS);
+
+        if(hours > 0) {
+            minutes = minutes - hours * 60;
+        }
+        if(minutes > 0) {
+            seconds = seconds - minutes * 60;
+        }
 
         return "The time taken to perform the scraping and database operations was: " +
                 hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
