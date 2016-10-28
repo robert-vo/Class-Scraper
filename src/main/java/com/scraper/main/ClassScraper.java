@@ -32,6 +32,12 @@ public class ClassScraper implements Scraper {
     private static Logger       log = Logger.getLogger(ClassScraper.class);
 
     /**
+     * Empty Constructor.
+     */
+    public ClassScraper() {
+    }
+
+    /**
      * Constructs the ClassScraper using the Term enum.
      *
      * @param term The Term enum that represents a year and semester.
@@ -62,6 +68,15 @@ public class ClassScraper implements Scraper {
     public ClassScraper(List<Term> terms) {
         this.terms = terms;
         log.info("Initialized ClassScraper with terms " + terms.toString());
+    }
+
+    /**
+     * Sets the terms to be scraped on.
+     *
+     * @param terms The List of Term that represents multiple years and semesters.
+     */
+    public void setTerms(List<Term> terms) {
+        this.terms = terms;
     }
 
     /**
