@@ -182,16 +182,9 @@ public class ScraperExample {
      */
     private static String retrieveTimeTakenFromStart(long startTime) {
         long endTime = System.currentTimeMillis() - startTime;
-        long hours = TimeUnit.HOURS.convert(endTime, TimeUnit.MILLISECONDS);
-        long minutes = TimeUnit.MINUTES.convert(endTime, TimeUnit.MILLISECONDS);
-        long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS);
-
-        if(hours > 0) {
-            minutes = minutes - hours * 60;
-        }
-        if(minutes > 0) {
-            seconds = seconds - minutes * 60;
-        }
+        long hours = TimeUnit.HOURS.convert(endTime, TimeUnit.MILLISECONDS) % 24;
+        long minutes = TimeUnit.MINUTES.convert(endTime, TimeUnit.MILLISECONDS) % 60;
+        long seconds = TimeUnit.SECONDS.convert(endTime, TimeUnit.MILLISECONDS) % 60;
 
         return "The time taken to perform the scraping and database operations was: " +
                 hours + " hours, " + minutes + " minutes and " + seconds + " seconds.";
